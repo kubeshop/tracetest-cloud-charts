@@ -1,3 +1,9 @@
+postgres:
+  host: "postgres"
+  user: "postgres"
+  password: "postgres"
+  dbname: "tracetest"
+
 certManager:
   commonName: jwt-sign-cert
   secretName: jwt-sign-cert
@@ -32,7 +38,6 @@ config:
   apiUrl: some-url
   controlPlaneUrl: some-value
   mongodbDSN: some-value
-  postgresConn: some-value
   sendgridApiKey: some-value
   githubCredential: some-credential-string
   hubspotApiKey: some-value

@@ -5,6 +5,24 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "tracetest-cloud.postgres_dsn" -}}
+{{- $global := .Values.global.postgres -}}
+{{- $options := $global.options | default dict -}}
+{{- $options_str := "" -}}
+{{- range $key, $value := $options -}}
+  {{- if $options_str }}
+    {{- $options_str = printf "%s&%s=%s" $options_str $key $value -}}
+  {{- else }}
+    {{- $options_str = printf "%s=%s" $key $value -}}
+  {{- end -}}
+{{- end -}}
+{{- if $options_str }}
+  {{- printf "postgresql://%s:%s@%s/%s?%s" $global.user $global.password $global.host $global.dbname $options_str -}}
+{{- else }}
+  {{- printf "postgresql://%s:%s@%s/%s" $global.user $global.password $global.host $global.dbname -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).

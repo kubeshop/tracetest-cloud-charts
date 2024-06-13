@@ -4,6 +4,9 @@ global:
     user: "postgres"
     password: "postgres"
     dbname: "tracetest"
+    # optional list of connection options
+    # options:
+    #   sslmode: "disable"
 
   mongodb:
     dsn: &mongoDSN "mongodsn"
@@ -20,11 +23,9 @@ tracetest-core:
   postgres: *global_postgres
 
 tracetest-cloud:
+  postgres: *global_postgres
   config:
     webUIUrl: *webUrl
     apiUrl: *apiUrl
     controlPlaneUrl: *controlPlaneUrl
     mongodbDSN: *mongoDSN
-    postgresConn: *pgConnString
-
-# postgresConn
