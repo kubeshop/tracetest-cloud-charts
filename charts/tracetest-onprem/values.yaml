@@ -1,3 +1,30 @@
+global:
+  postgres: &global_postgres
+    host: "postgres"
+    user: "postgres"
+    password: "postgres"
+    dbname: "tracetest"
+
+  mongodb:
+    dsn: &mongoDSN "mongodsn"
+
+  urls:
+    webUIUrl: &webUrl "app.tracetest.io"
+    apiUrl: &apiUrl "api.tracetest.io"
+    controlPlaneUrl: &controlPlaneUrl "control-plane.tracetest.io"
+
 nats:
   enabled: true
-  
+
+tracetest-core:
+  postgres: *global_postgres
+
+tracetest-cloud:
+  config:
+    webUIUrl: *webUrl
+    apiUrl: *apiUrl
+    controlPlaneUrl: *controlPlaneUrl
+    mongodbDSN: *mongoDSN
+    postgresConn: *pgConnString
+
+# postgresConn

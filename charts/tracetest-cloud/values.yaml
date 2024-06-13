@@ -23,8 +23,6 @@ deployment:
       cpu: 200m
       memory: 256Mi
 
-imagePullSecrets: ghcr-credentials
-
 image:
   repository: ghcr.io/kubeshop/tracetest-cloud
   tag: v1.0.0
