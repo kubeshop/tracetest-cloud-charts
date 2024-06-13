@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tracetest-cloud.fullname" . }}-config
+  labels:
+    {{- include "tracetest-cloud.labels" . | nindent 4 }}
+data:
+  AGENT_HOST: "{{ .Values.config.controlPlaneUrl }}"
+  AGENT_PORT: "8091"
+  ALLOWED_EXTERNAL_REDIRECT_URIS: "https://{{ .Values.config.webUIUrl }}"
+  API_MONGO_DB: "tracetestcloud"
+  API_PUBLIC_ROUTES: "/webhook/login,/version,/health,/robots.txt"
+  DASHBOARD_ADDRESS: "https://{{ .Values.config.webUIUrl }}"
+  DEBUG: "true"
+  DEV_MODE: "false"
+  ENTERPRISE_MODE: "false"
+  KETO_ADMIN_URL: "http://keto-write.ory"
+  KETO_API_URL: "http://keto-read.ory"
+  KRATOS_ADMIN_API_URL: "http://kratos-admin.ory"
+  KRATOS_PUBLIC_API_URL: "http://kratos-public.ory"
+  NATS_URI: "nats://nats-headless.external:4222"
+  OAUTH_ENABLED: "false"
+  OSS_ENDPOINT: "http://tracetest.oss:11633"
+  ROOT_DOMAIN: "tracetest.io"
+  UI_ENDPOINT: "https://{{ .Values.config.webUIUrl }}"
+  COLLECTOR_ENDPOINT: "collector-opentelemetry-collector.otel:4317"
+  # COLLECTOR_ENDPOINT: ""
+  DEMO_ORG_ID: "{{ .Values.config.demoOrgID }}"
+  DEMO_INVITE_ID: "{{ .Values.config.demoInviteID }}"
+  PROFILER_COLLECTOR_ENDPOINT: "{{ .Values.config.profilerEndpoint }}"
+  PROFILER_SAMPLING_PERCENTAGE: "{{ .Values.config.profilerSamplingRate }}"
+  PROFILER_ENVIRONMENT: "{{ .Values.config.profilerEnvironment }}"

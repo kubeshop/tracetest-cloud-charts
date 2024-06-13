@@ -1,0 +1,213 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tracetest-cloud.fullname" . }}
+  labels:
+    {{- include "tracetest-cloud.labels" . | nindent 4 }}
+spec:
+  # the numbers for replicas and max surge/unavailable are set to speed up deployments.
+  # The idea is that there is one "old" version running and one "new" version in parallel
+  # and once that works the old version is scaled down and the new version is scaled up.
+  # This timeline avoids the need to wait for new nodes to be started to satisfy requirements.
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    {{- toYaml .Values.deployment.strategy | nindent 4 }}
+
+  selector:
+    matchLabels:
+      {{- include "tracetest-cloud.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "tracetest-cloud.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: default
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      containers:
+        - name: tracetestcloud
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+          env:
+            # Variables defined as config maps
+            - name: AGENT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: AGENT_HOST
+            - name: AGENT_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: AGENT_PORT
+            - name: ALLOWED_EXTERNAL_REDIRECT_URIS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: ALLOWED_EXTERNAL_REDIRECT_URIS
+            - name: API_MONGO_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: API_MONGO_DB
+            - name: API_PUBLIC_ROUTES
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: API_PUBLIC_ROUTES
+            - name: DASHBOARD_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: DASHBOARD_ADDRESS
+            - name: DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: DEBUG
+            - name: DEV_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: DEV_MODE
+            - name: ENTERPRISE_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: ENTERPRISE_MODE
+            - name: KETO_ADMIN_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: KETO_ADMIN_URL
+            - name: KETO_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: KETO_API_URL
+            - name: KRATOS_ADMIN_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: KRATOS_ADMIN_API_URL
+            - name: KRATOS_PUBLIC_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: KRATOS_PUBLIC_API_URL
+            - name: NATS_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: NATS_URI
+            - name: OAUTH_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: OAUTH_ENABLED
+            - name: OSS_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: OSS_ENDPOINT
+            - name: ROOT_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: ROOT_DOMAIN
+            - name: UI_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: UI_ENDPOINT
+            - name: COLLECTOR_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: COLLECTOR_ENDPOINT
+            - name: DEMO_ORG_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: DEMO_ORG_ID
+            - name: DEMO_INVITE_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: DEMO_INVITE_ID
+
+            - name: PROFILER_COLLECTOR_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: PROFILER_COLLECTOR_ENDPOINT
+            - name: PROFILER_SAMPLING_PERCENTAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: PROFILER_SAMPLING_PERCENTAGE
+            - name: PROFILER_ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: PROFILER_ENVIRONMENT
+
+            # Variables defined as secrets
+            - name: AGENT_TOKEN_CERTIFICATE
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-sign-cert
+                  key: tls.crt
+            - name: AGENT_TOKEN_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-sign-cert
+                  key: tls.key
+            - name: API_MONGO_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-secrets
+                  key: API_MONGO_DSN
+            - name: POSTGRES_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-secrets
+                  key: POSTGRES_CONN
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-secrets
+                  key: SENDGRID_API_KEY
+            - name: HUBSPOT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-secrets
+                  key: HUBSPOT_API_KEY
+            - name: SEGMENTIO_WRITE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-secrets
+                  key: SEGMENTIO_WRITE_KEY
+          imagePullPolicy: Always
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          ports:
+            - name: cloud-api-grpc
+              protocol: TCP
+              containerPort: {{ .Values.service.grpcPort }}
+            - name: cloud-api-http
+              protocol: TCP
+              containerPort: {{ .Values.service.httpPort }}
+            - name: control-plane
+              protocol: TCP
+              containerPort: {{ .Values.service.controlPlanePort }}
+            - name: metrics
+              protocol: TCP
+              containerPort: {{ .Values.service.metricsPort }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: cloud-api-http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: cloud-api-http

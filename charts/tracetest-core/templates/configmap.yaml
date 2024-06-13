@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tracetest-core.fullname" . }}
+  labels:
+    {{- include "tracetest-core.labels" . | nindent 4 }}
+data:
+  config.yaml: |-
+    nats:
+      endpoint: nats.external:4222
+
+    telemetry:
+      profiler:
+        name: tracetest
+        enabled: true
+        samplingRate: {{ .Values.config.profilerSamplingRate }}
+        endpoint: {{ .Values.config.profilerEndpoint }}
+        environment: {{ .Values.config.profilerEnvironment }}
+      exporters:
+        collector:
+          exporter:
+            collector:
+              endpoint: collector-opentelemetry-collector.otel:4318
+            type: collector
+          metricsReaderInterval: 60s
+          batchTimeout: 5s
+          sampling: 50
+          serviceName: tracetest
+    server:
+      httpPort: 11633
+      telemetry:
+        exporter: collector
+
+  provisioning.yaml: |-
+      ---
+      type: Config
+      spec:
+        analyticsEnabled: false
