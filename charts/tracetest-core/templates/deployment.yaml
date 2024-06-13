@@ -1,0 +1,103 @@
+{{- range $.Values.deployments }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tracetest-core.fullname" $ }}-{{ .name }}
+  labels:
+    {{- include "tracetest-core.labels" $ | nindent 4 }}
+    tracetest/component: {{ .name }}
+spec:
+  replicas: {{ .replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "tracetest-core.selectorLabels" $ | nindent 6 }}
+      tracetest/component: {{ .name }}
+  strategy:
+   type: RollingUpdate
+   rollingUpdate:
+     maxUnavailable: 1
+     maxSurge: 1
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+      labels:
+        {{- include "tracetest-core.selectorLabels" $ | nindent 8 }}
+        tracetest/component: {{ .name }}
+    spec:
+      imagePullSecrets:
+        - name: ghcr-credentials
+      containers:
+        - name: {{ $.Chart.Name }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          env:
+            - name: TRACETEST_POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: oss-postgres-credentials
+                  key: host
+            - name: TRACETEST_POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: oss-postgres-credentials
+                  key: user
+            - name: TRACETEST_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: oss-postgres-credentials
+                  key: password
+            - name: TRACETEST_POSTGRES_DBNAME
+              value: "tracetest"
+            - name: TRACETEST_POSTGRES_PORT
+              value: "5432"
+            - name: TRACETEST_DEV
+              value: ""
+            - name: TRACETEST_OTLPSERVER_ENABLED
+              value: "false"
+            - name: TRACETEST_ANALYTICS_SERVERKEY
+              valueFrom:
+                secretKeyRef:
+                  name: oss-secrets
+                  key: tracetestAnalyticsServerKey
+            - name: TRACETEST_SECURITY_ENCRYPTIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: oss-secrets
+                  key: tracetestSecurityEncryptionKey
+            - name: TRACETEST_ANALYTICS_FRONTENDKEY
+              value: ""
+            - name: TRACETEST_SERVER_TELEMETRY_SERVICE_NAME
+              value: "core-{{ .name }}"
+            {{- range $key, $value := .env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+
+          args:
+          - --config
+          - '/app/config/config.yaml'
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ $.Values.server.httpPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+          volumeMounts:
+          - name: config
+            mountPath: /app/config
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "tracetest-core.fullname" $ }}
+---
+
+{{- end }}

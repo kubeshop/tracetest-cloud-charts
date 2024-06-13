@@ -1,0 +1,75 @@
+postgres:
+  host: ""
+  user: ""
+  password: ""
+  dbname: ""
+
+config:
+  tracetestAnalyticsServerKey: some-value
+  tracetestSecurityEncryptionKey: some-value
+  profilerEndpoint: some-value
+  profilerEnvironment: development
+  profilerSamplingRate: 50
+
+server:
+  httpPort: 11633
+
+
+image:
+  repository: ghcr.io/kubeshop/tracetest-core
+  pullPolicy: IfNotPresent
+  
+
+deployments:
+  - name: api
+    env:
+      TRACETEST_SERVER_API_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_ENABLED: false
+    replicaCount: 2
+    resources:
+      limits:
+        memory: 2048Mi
+      requests:
+        cpu: 500m
+        memory: 1024Mi
+  - name: worker-trigger
+    env:
+      TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_SERVER_WORKFLOW_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_STEPS: trigger_resolver trigger_result
+
+    replicaCount: 2
+    resources:
+      limits:
+        memory: 2048Mi
+      requests:
+        cpu: 500m
+        memory: 1024Mi
+  
+  - name: worker-poller
+    env:
+      TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_SERVER_WORKFLOW_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_STEPS: poll_start poll_evaluate
+
+    replicaCount: 2
+    resources:
+      limits:
+        memory: 2048Mi
+      requests:
+        cpu: 500m
+        memory: 1024Mi
+
+  - name: worker-results
+    env:
+      TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_SERVER_WORKFLOW_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_STEPS: linter_runner assertion_runner
+
+    replicaCount: 2
+    resources:
+      limits:
+        memory: 2048Mi
+      requests:
+        cpu: 500m
+        memory: 1024Mi

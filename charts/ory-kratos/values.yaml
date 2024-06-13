@@ -1,0 +1,156 @@
+kratos:
+  image:
+    tag: "v1.0.0"
+
+  # secret:
+  #   enabled: false
+  # serviceAccount:
+  #   create: false
+  # job:
+  #   serviceAccount:
+  #     create: false
+
+  deployment:
+    extraVolumes:
+      - name: kratos-custom-config
+        configMap:
+          name: kratos-custom-config
+
+    extraVolumeMounts:
+      - name: kratos-custom-config
+        mountPath: /etc/config/kratos
+
+  kratos:
+    automigration:
+      enabled: true
+      type: initContainer
+
+    config:
+      dsn: postgres://user:password@dbaddress:5432/kratos
+
+      log:
+        level: debug
+
+      cookies:
+        path: /
+        same_site: Lax
+        domain: tracetest.io
+
+      serve:
+        public:
+          base_url: https://api.example.com/auth
+          cors:
+            enabled: true
+            allowed_origins: []
+            allowed_methods:
+              - POST
+              - GET
+              - PUT
+              - PATCH
+              - DELETE
+            allowed_headers:
+              - Authorization
+              - Cookie
+              - Content-Type
+            exposed_headers:
+              - Content-Type
+              - Set-Cookie
+        admin:
+          base_url: http://kratos:4434/
+
+      selfservice:
+        default_browser_return_url: https://web.example.com/
+        allowed_return_urls: []
+
+        methods:
+          password:
+            enabled: false
+          totp:
+            config:
+              issuer: Kratos
+            enabled: false
+          lookup_secret:
+            enabled: false
+          link:
+            enabled: false
+          code:
+            enabled: false
+
+        flows:
+          error:
+            ui_url: https://web.example.com/error
+
+          logout:
+            after:
+              default_browser_return_url: https://web.example.com
+
+          login:
+            ui_url: https://web.example.com
+            lifespan: 10m
+            after:
+              oidc:
+                hooks:
+                  ## oidc after login web hook ##
+                  #
+                  # This hook is called after a user has successfully registered.
+                  # It is important to set can_interrupt: false and response.parse = false,
+                  # so the identity ID could be available in the webhook.
+                  # See related issue: https://github.com/ory/kratos/issues/3340
+                  #
+                  - hook: web_hook
+                    config:
+                      url: https://api.example.com/api/webhook/login
+                      method: POST
+                      body: file:///etc/config/kratos/login.jsonnet
+                      can_interrupt: false
+                      response:
+                        ignore: false
+                        parse: false
+
+          registration:
+            after:
+              oidc:
+                hooks:
+                  ## oidc after registration web hook ##
+                  #
+                  # This hook is called after a user has successfully registered.
+                  # It is important to set can_interrupt: false and response.parse = false,
+                  # so the identity ID could be available in the webhook.
+                  # See related issue: https://github.com/ory/kratos/issues/3340
+                  #
+                  - hook: web_hook
+                    config:
+                      url: https://api.example.com/api/webhook/login
+                      method: POST
+                      body: file:///etc/config/kratos/login.jsonnet
+                      can_interrupt: false
+                      response:
+                        ignore: false
+                        parse: false
+                  ## oidc after registration session hook ##
+                  # This hook prevents having to log in after sign-up to get a session
+                  - hook: session
+
+      secrets:
+        cookie:
+          - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+        cipher:
+          - 32-LONG-SECRET-NOT-SECURE-AT-ALL
+
+      ciphers:
+        algorithm: xchacha20-poly1305
+
+      hashers:
+        algorithm: bcrypt
+        bcrypt:
+          cost: 8
+
+      identity:
+        default_schema_id: default
+        schemas:
+          - id: default
+            url: file:///etc/config/kratos/identity.schema.json
+
+      courier:
+        smtp:
+          connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true

@@ -1,0 +1,24 @@
+keto:
+  image:
+    tag: "v0.11.1"
+
+  extraVolumes:
+    - name: keto-namespace-config
+      configMap:
+        name: keto-namespace-config
+
+  extraVolumeMounts:
+    - name: keto-namespace-config
+      mountPath: /home/ory/namespaces.keto.ts
+
+  keto:
+    automigration:
+      enabled: true
+      type: initContainer
+
+    config:
+      dsn: postgres://user:pass@dbhost:5432/dbname
+      namespaces:
+        location: file:///home/ory/namespaces.keto.ts
+      log:
+        level: debug

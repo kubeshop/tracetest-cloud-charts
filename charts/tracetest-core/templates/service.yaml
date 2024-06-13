@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracetest
+  labels:
+    {{- include "tracetest-core.labels" . | nindent 4 }}
+
+spec:
+  type: ClusterIP
+  ports:
+    - name: core-api-http
+      targetPort: http
+      protocol: TCP
+      port: {{ .Values.server.httpPort }}
+  selector:
+    {{- include "tracetest-core.selectorLabels" . | nindent 4 }}
+    tracetest/component: api

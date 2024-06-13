@@ -1,0 +1,36 @@
+config:
+  natsEndpoint: "nats://nats-headless.external:4222"
+  targetVersion: v0.0.0
+  targetNamespace: agents
+  targetServer: https://app.tractest.io
+  targetDomain: agents.example.com
+
+service:
+  type: ClusterIP
+  grpcPort: 8089
+  httpPort: 8090
+  controlPlanePort: 8091
+  metricsPort: 9100
+
+deployment:
+  replicas: 1
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+imagePullSecrets: ghcr-credentials
+
+image:
+  repository: ghcr.io/kubeshop/tracetest-agent-operator
+  # tag: v0.1.0
+
