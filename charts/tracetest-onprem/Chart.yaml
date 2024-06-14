@@ -4,19 +4,19 @@ description: A Helm chart for tracetest On Prem
 type: application
 version: 1.104.0
 dependencies:
-  - name: tracetest-core
-    version: 1.0.0
-    repository: file://../tracetest-core
-  - name: tracetest-cloud
-    version: 1.0.0
-    repository: file://../tracetest-cloud
-  - name: tracetest-agent-operator
-    version: 1.0.0
-    repository: file://../tracetest-agent-operator
-  - name: nats
-    version: 1.1.11
-    repository: https://nats-io.github.io/k8s/helm/charts/
-    condition: nats.enabled
+- name: tracetest-core
+  version: 1.0.0
+  repository: file://../tracetest-core
+- name: tracetest-cloud
+  version: 1.0.0
+  repository: file://../tracetest-cloud
+- name: tracetest-agent-operator
+  version: 1.0.0
+  repository: file://../tracetest-agent-operator
+- name: nats
+  version: 1.1.11
+  repository: https://nats-io.github.io/k8s/helm/charts/
+  condition: nats.enabled
 maintainers:
   - name: tracetest
     url: https://tracetest.io
