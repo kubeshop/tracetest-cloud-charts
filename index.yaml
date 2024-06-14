@@ -48,6 +48,19 @@ entries:
   tracetest-agent-operator:
   - apiVersion: v2
     appVersion: 1.2.0
+    created: "2024-06-14T15:04:24.799763752Z"
+    description: A Helm chart for Tracetest Cloud API
+    digest: 60b0694d6eef20df561c8f957794bd5ba0d426f3ee47add28af145cebd036fb2
+    home: https://github.com/kubeshop/tracetest-cloud-charts
+    name: tracetest-agent-operator
+    sources:
+    - https://github.com/kubeshop/tracetest-cloud-infra/tree/main/helm-charts
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-agent-operator-1.1.0/tracetest-agent-operator-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: 1.2.0
     created: "2024-06-14T14:19:12.900005929Z"
     description: A Helm chart for Tracetest Cloud API
     digest: 626555bc9bd7eda0a2896785c2cd373f9e43587023e5d7cb1465cd7c3b518902
@@ -60,6 +73,19 @@ entries:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-agent-operator-1.0.0/tracetest-agent-operator-1.0.0.tgz
     version: 1.0.0
   tracetest-cloud:
+  - apiVersion: v2
+    appVersion: 1.2.0
+    created: "2024-06-14T15:04:24.939677307Z"
+    description: A Helm chart for Tracetest Cloud API
+    digest: c8db84046203d35fa646510786154e908b422c66903763db3942ef5b596f867f
+    home: https://github.com/kubeshop/tracetest-cloud-charts
+    name: tracetest-cloud
+    sources:
+    - https://github.com/kubeshop/tracetest-cloud-infra/tree/main/helm-charts
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-cloud-1.1.0/tracetest-cloud-1.1.0.tgz
+    version: 1.1.0
   - apiVersion: v2
     appVersion: 1.2.0
     created: "2024-06-14T14:19:13.051110765Z"
@@ -76,6 +102,16 @@ entries:
   tracetest-core:
   - apiVersion: v2
     appVersion: v1.1.0
+    created: "2024-06-14T15:04:25.088508452Z"
+    description: A Helm chart wrapper for tracetest open-source
+    digest: c5e65797ae4d52117c9192672f441934037a165ee3d7277a4ab3381da4c771e0
+    name: tracetest-core
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-core-v1.1.0/tracetest-core-v1.1.0.tgz
+    version: v1.1.0
+  - apiVersion: v2
+    appVersion: v1.1.0
     created: "2024-06-14T14:19:13.199939669Z"
     description: A Helm chart wrapper for tracetest open-source
     digest: c05dd1c7f55c85de4409d70cc740d4eb256d723aba5ca296bbe64e1dc03ff6c3
@@ -85,6 +121,34 @@ entries:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-core-v1.0.0/tracetest-core-v1.0.0.tgz
     version: v1.0.0
   tracetest-onprem:
+  - apiVersion: v2
+    created: "2024-06-14T15:04:25.236468646Z"
+    dependencies:
+    - name: tracetest-core
+      repository: file://../tracetest-core
+      version: v1.1.0
+    - name: tracetest-cloud
+      repository: file://../tracetest-cloud
+      version: 1.1.0
+    - name: tracetest-agent-operator
+      repository: file://../tracetest-agent-operator
+      version: 1.1.0
+    - condition: nats.enabled
+      name: nats
+      repository: https://nats-io.github.io/k8s/helm/charts/
+      version: 1.1.11
+    description: A Helm chart for tracetest On Prem
+    digest: 4acec4ae69a0bf44f89b0104a2af231959b7a4ee06e14ba7141c31be50424987
+    home: https://github.com/kubeshop/tracetest-cloud-charts
+    icon: https://cdn.prod.website-files.com/625f135a8e554e44ad158913/625f1d8ab2348b3c4e3fa870_logo.svg
+    maintainers:
+    - name: tracetest
+      url: https://tracetest.io
+    name: tracetest-onprem
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-onprem-1.105.0/tracetest-onprem-1.105.0.tgz
+    version: 1.105.0
   - apiVersion: v2
     created: "2024-06-14T14:19:13.31708985Z"
     dependencies:
@@ -113,4 +177,4 @@ entries:
     urls:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-onprem-1.104.0/tracetest-onprem-1.104.0.tgz
     version: 1.104.0
-generated: "2024-06-14T14:19:13.317102444Z"
+generated: "2024-06-14T15:04:25.236484676Z"
