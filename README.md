@@ -1,1 +1,23 @@
 # tracetest-cloud-charts
+
+TODO: make this nice
+
+this repo provides a script to create a local kind cluster with an entire tracetest cloud instance. 
+while we have this repo private and all the private images, this is just deploying tracetest cloud.
+we need to use a secret so you need to use the create image pull secret script to configure that in the kind cluster.
+
+once everything is public, we can use kind to validate PRs before merging.
+this can also become the main helm repo for cloud, since it has a much nicer approach, but we'll see if that works out without needing too much customization
+
+## charts
+
+the tracetest-onprem chart is the main umbrella chart. 
+
+tracetest-dependencies is mainly for development/PR validation. it installs cert manager and other dependencies that can be considered "external", like traefik, postgres, etc.
+onprem users will have to configure this externally, so we'll need docs for that (like testkube has for the nginx ingerss controller)
+
+one exception is cert-manager, that is a dependency but is very very hard to install as a subchart, so it's installed in the kind setup script
+
+tracetest-auth is an umbrella for grouping all the ory services toghether
+
+tracetest-core and tracetest-cloud are copypasted from the infra repo so they are a base, but we can modify them as we want without impacting our cloud infra.
