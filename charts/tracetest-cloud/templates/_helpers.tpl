@@ -64,6 +64,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "tracetest-cloud.selectorLabels" -}}
+app.kubernetes.io/package: tracetest
 app.kubernetes.io/name: {{ include "tracetest-cloud.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

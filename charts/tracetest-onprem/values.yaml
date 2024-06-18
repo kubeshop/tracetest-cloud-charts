@@ -1,4 +1,5 @@
 global:
+  imagePullSecret: &global_imagePullSecret "ghcr-secret" # TODO: set to blank
   postgres: &global_postgres
     host: "postgres"
     user: "postgres"
@@ -18,7 +19,6 @@ global:
 
 nats:
   enabled: true
-
 
 tracetest-core:
   postgres: *global_postgres

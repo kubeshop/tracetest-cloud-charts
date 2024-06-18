@@ -1,3 +1,6 @@
+global:
+  imagePullSecret: ""
+  
 postgres:
   host: "postgres"
   user: "postgres"
@@ -35,7 +38,7 @@ deployment:
 
 image:
   repository: ghcr.io/kubeshop/tracetest-cloud
-  tag: v1.0.0
+  # tag: v1.2.0
 
 config:
   webUIUrl: some-url

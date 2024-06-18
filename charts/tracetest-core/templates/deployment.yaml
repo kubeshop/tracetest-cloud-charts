@@ -13,10 +13,10 @@ spec:
       {{- include "tracetest-core.selectorLabels" $ | nindent 6 }}
       tracetest/component: {{ .name }}
   strategy:
-   type: RollingUpdate
-   rollingUpdate:
-     maxUnavailable: 1
-     maxSurge: 1
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   template:
     metadata:
       annotations:
@@ -25,6 +25,9 @@ spec:
         {{- include "tracetest-core.selectorLabels" $ | nindent 8 }}
         tracetest/component: {{ .name }}
     spec:
+      
+      imagePullSecrets:
+        - name: ghcr-credentials
       containers:
         - name: {{ $.Chart.Name }}
           image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
@@ -96,6 +99,11 @@ spec:
       - name: config
         configMap:
           name: {{ include "tracetest-core.fullname" $ }}
+      {{- if $.Values.global.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ $.Values.global.imagePullSecret }}
+      {{- end }}
+
 ---
 
 {{- end }}

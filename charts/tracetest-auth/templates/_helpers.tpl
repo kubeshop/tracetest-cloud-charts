@@ -41,3 +41,22 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "tracetest-auth.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "tracetest-auth.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "tracetest-auth.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "tracetest-auth.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}

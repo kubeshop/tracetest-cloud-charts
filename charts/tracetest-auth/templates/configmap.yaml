@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: keto-custom-config
   labels:
-    {{- include "ory-kratos.labels" . | nindent 4 }}
+    {{- include "tracetest-auth.labels" . | nindent 4 }}
 data:
   {{- range $path, $bytes := .Files.Glob "config/keto/*" }}
   {{ base $path }}: |-
@@ -15,11 +15,11 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: keto-custom-config
+  name: kratos-custom-config
   labels:
-    {{- include "ory-kratos.labels" . | nindent 4 }}
+    {{- include "tracetest-auth.labels" . | nindent 4 }}
 data:
-  {{- range $path, $bytes := .Files.Glob "config/kratos*" }}
+  {{- range $path, $bytes := .Files.Glob "config/kratos/*" }}
   {{ base $path }}: |-
     {{ $.Files.Get $path | nindent 4 }}
   {{- end }}

@@ -10,5 +10,4 @@ data:
   TRACETEST_TARGET_NAMESPACE: "{{ .Values.config.targetNamespace }}"
   TRACETEST_TARGET_SERVER: "{{ .Values.config.targetServer }}"
   TRACETEST_TARGET_DOMAIN: "{{ .Values.config.targetDomain }}"
-  TRACETEST_TRACING_COLLECTORENDPOINT: "collector-opentelemetry-collector.otel:4317"
-  # TRACETEST_TRACING_COLLECTORENDPOINT: ""
+  TRACETEST_TRACING_COLLECTORENDPOINT: ""

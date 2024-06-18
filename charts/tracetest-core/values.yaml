@@ -1,3 +1,7 @@
+global:
+  imagePullSecret: ""
+  replicasPerService: 1
+  
 postgres:
   host: ""
   user: ""
@@ -25,7 +29,6 @@ deployments:
     env:
       TRACETEST_SERVER_API_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_ENABLED: false
-    replicaCount: 2
     resources:
       limits:
         memory: 2048Mi
@@ -38,7 +41,6 @@ deployments:
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: trigger_resolver trigger_result
 
-    replicaCount: 2
     resources:
       limits:
         memory: 2048Mi
@@ -52,7 +54,6 @@ deployments:
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: poll_start poll_evaluate
 
-    replicaCount: 2
     resources:
       limits:
         memory: 2048Mi
@@ -66,7 +67,6 @@ deployments:
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: linter_runner assertion_runner
 
-    replicaCount: 2
     resources:
       limits:
         memory: 2048Mi
