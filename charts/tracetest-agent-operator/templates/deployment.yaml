@@ -62,3 +62,7 @@ spec:
           imagePullPolicy: Always
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
+      {{- if $.Values.global.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ $.Values.global.imagePullSecret }}
+      {{- end }}

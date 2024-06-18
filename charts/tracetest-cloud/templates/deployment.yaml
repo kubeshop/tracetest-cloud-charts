@@ -209,3 +209,7 @@ spec:
             httpGet:
               path: /health
               port: cloud-api-http
+    {{- if $.Values.global.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ $.Values.global.imagePullSecret }}
+    {{- end }}
