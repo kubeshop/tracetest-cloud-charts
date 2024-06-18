@@ -27,9 +27,7 @@ deployment:
     requests:
       cpu: 200m
       memory: 256Mi
-
-imagePullSecrets: ghcr-credentials
-
+      
 image:
   repository: ghcr.io/kubeshop/tracetest-agent-operator
   # tag: v0.1.0

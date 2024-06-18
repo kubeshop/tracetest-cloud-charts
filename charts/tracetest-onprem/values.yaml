@@ -19,6 +19,7 @@ global:
 nats:
   enabled: true
 
+
 tracetest-core:
   postgres: *global_postgres
 

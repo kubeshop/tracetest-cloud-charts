@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "ory-keto.name" -}}
+{{- define "tracetest-dependencies.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "ory-keto.fullname" -}}
+{{- define "tracetest-dependencies.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "ory-keto.chart" -}}
+{{- define "tracetest-dependencies.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "ory-keto.labels" -}}
-helm.sh/chart: {{ include "ory-keto.chart" . }}
-{{ include "ory-keto.selectorLabels" . }}
+{{- define "tracetest-dependencies.labels" -}}
+helm.sh/chart: {{ include "tracetest-dependencies.chart" . }}
+{{ include "tracetest-dependencies.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "ory-keto.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "ory-keto.name" . }}
+{{- define "tracetest-dependencies.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "tracetest-dependencies.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "ory-keto.serviceAccountName" -}}
+{{- define "tracetest-dependencies.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "ory-keto.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "tracetest-dependencies.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

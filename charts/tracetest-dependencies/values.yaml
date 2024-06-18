@@ -1,0 +1,57 @@
+cert-manager:
+  enabled: true
+  crds:
+    enabled: true
+
+traefik:
+  enabled: true
+
+  dnsNames:
+    - "app.tracetest.io"
+    - "api.tracetest.io"
+    - "*.agents.tracetest.io"
+
+  tls:
+    issuerRef:
+      name: issuer-prod
+      kind: ClusterIssuer
+      group: cert-manager.io
+      
+  providers:
+    kubernetesCRD:
+      enabled: true
+
+  ports:
+    controlplane:
+      port: 8091
+      expose: true
+      exposedPort: 8091
+      protocol: TCP
+      http2:
+        maxConcurrentStreams: 250
+
+    agentsgrpc:
+      port: 4317
+      expose: true
+      exposedPort: 4317
+      protocol: TCP
+      tls:
+        enabled: true
+      http2:
+        maxConcurrentStreams: 250
+      proxyProtocol:
+        insecure: true
+      forwardedHeaders:
+        insecure: true
+
+    agentshttp:
+      port: 4318
+      expose: true
+      exposedPort: 4318
+      protocol: TCP
+      tls:
+        enabled: true
+      proxyProtocol:
+        insecure: true
+      forwardedHeaders:
+        insecure: true

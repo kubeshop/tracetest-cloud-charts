@@ -4,9 +4,13 @@ postgres:
   password: "postgres"
   dbname: "tracetest"
 
-certManager:
+jwtSignCert:
   commonName: jwt-sign-cert
   secretName: jwt-sign-cert
+  issuerRef:
+    name: issuer-selfsigned
+    kind: ClusterIssuer
+    group: cert-manager.io
 
 service:
   type: ClusterIP

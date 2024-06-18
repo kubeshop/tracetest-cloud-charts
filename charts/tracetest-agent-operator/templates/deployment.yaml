@@ -24,8 +24,6 @@ spec:
         {{- include "tracetest-agent-operator.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "tracetest-agent-operator.fullname" . }}
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
       containers:
         - name: tracetestcloud
           image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}

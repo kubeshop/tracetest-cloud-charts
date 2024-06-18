@@ -2,15 +2,18 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: jwt-sign-cert
+  labels:
+  {{- include "tracetest-cloud.labels" . | nindent 4 }}
+
 spec:
   isCA: true
-  commonName: {{ .Values.certManager.commonName }}
-  secretName: {{ .Values.certManager.secretName }}
+  commonName: {{ .Values.jwtSignCert.commonName }}
+  secretName: {{ .Values.jwtSignCert.secretName }}
   privateKey:
     algorithm: RSA
     encoding: PKCS1
     size: 2048
   issuerRef:
-    name: issuer-selfsigned
-    kind: ClusterIssuer
-    group: cert-manager.io
+    name: {{ .Values.jwtSignCert.issuerRef.name }}
+    kind: {{ .Values.jwtSignCert.issuerRef.kind }}
+    group: {{ .Values.jwtSignCert.issuerRef.group }}

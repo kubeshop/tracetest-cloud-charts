@@ -1,3 +1,28 @@
+keto:
+  image:
+    tag: "v0.11.1"
+
+  extraVolumes:
+    - name: keto-namespace-config
+      configMap:
+        name: keto-namespace-config
+
+  extraVolumeMounts:
+    - name: keto-namespace-config
+      mountPath: /home/ory/namespaces.keto.ts
+
+  keto:
+    automigration:
+      enabled: true
+      type: initContainer
+
+    config:
+      dsn: postgres://user:pass@dbhost:5432/dbname
+      namespaces:
+        location: file:///home/ory/namespaces.keto.ts
+      log:
+        level: debug
+
 kratos:
   image:
     tag: "v1.0.0"
@@ -154,3 +179,87 @@ kratos:
       courier:
         smtp:
           connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true
+
+oathkeeper:
+  service:
+    proxy:
+      annotations:
+        cloud.google.com/backend-config: '{"default":"oathkeeper-proxy-backendconfig"}'
+
+  ingress:
+    proxy:
+      # ingress rules are handled all toghether in the ingress.yaml file
+      enabled: false
+
+  oathkeeper:
+    config:
+      log:
+        level: debug
+        format: json
+
+      serve:
+        proxy:
+          cors:
+            # we need to disable CORS in the proxy so it doesn't interfer with the upstream headers
+            enabled: false
+
+      errors:
+        fallback:
+          - json
+
+        handlers:
+          redirect:
+            enabled: true
+            config:
+              to: https://api.example.com/oathkeeper/login
+              when:
+                - error:
+                    - unauthorized
+                    - forbidden
+                  request:
+                    header:
+                      accept:
+                        - text/html
+          json:
+            enabled: true
+            config:
+              verbose: true
+
+      access_rules:
+        matching_strategy: glob
+
+      authenticators:
+        anonymous:
+          enabled: true
+          config:
+            subject: guest
+
+        cookie_session:
+          enabled: true
+          config:
+            check_session_url: http://kratos-public.ory/sessions/whoami
+            preserve_path: true
+            extra_from: "@this"
+            subject_from: "identity.id"
+            only:
+              - ory_kratos_session
+
+        noop:
+          enabled: true
+
+      authorizers:
+        allow:
+          enabled: true
+
+      mutators:
+        noop:
+          enabled: true
+
+        id_token:
+          enabled: true
+          config:
+            issuer_url: https://api.example.com/oathkeeper
+            claims: |
+              {
+                "session": {{ .Extra | toJson }}
+              }
