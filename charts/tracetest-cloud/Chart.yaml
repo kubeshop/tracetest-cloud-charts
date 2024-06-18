@@ -4,9 +4,6 @@ description: A Helm chart for Tracetest Cloud API
 
 home: https://github.com/kubeshop/tracetest-cloud-charts
 
-sources:
-  - "https://github.com/kubeshop/tracetest-cloud-infra/tree/main/helm-charts"
-
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives

@@ -1,16 +1,14 @@
 apiVersion: v2
-name: tracetest-onprem
+name: tracetest-dependencies
 description: A Helm chart for tracetest On Prem
 type: application
 version: 1.0.0
+
 dependencies:
-- name: nats
-  version: 1.1.11
-  repository: https://nats-io.github.io/k8s/helm/charts/
-  condition: nats.enabled
-- name: tracetest-core
-  version: 1.0.0
-  repository: file://../tracetest-core
+- name: traefik
+  version: "24.0.0"
+  repository: "https://traefik.github.io/charts"
+  condition: traefik.enabled
 
 maintainers:
   - name: tracetest

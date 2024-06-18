@@ -22,8 +22,6 @@ spec:
         {{- include "tracetest-cloud.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: default
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
       containers:
         - name: tracetestcloud
           image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}

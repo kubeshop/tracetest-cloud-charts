@@ -1,0 +1,14 @@
+traefik:
+  service:
+    type: NodePort
+
+  dnsNames:
+    - "app.local"
+    - "api.local"
+    - "*.agents.local"
+
+  tls:
+    issuerRef:
+      name: issuer-selfsigned
+      kind: ClusterIssuer
+      group: cert-manager.io
