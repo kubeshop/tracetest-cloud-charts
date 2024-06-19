@@ -1,12 +1,15 @@
 global:
   imagePullSecret: ""
   replicasPerService: 1
-  
-postgres:
-  host: ""
-  user: ""
-  password: ""
-  dbname: ""
+
+  nats:
+    endpoint: "nats://nats:4222"
+
+  postgresql:
+    auth:
+      username: ""
+      password: ""
+      database: ""
 
 config:
   tracetestAnalyticsServerKey: some-value

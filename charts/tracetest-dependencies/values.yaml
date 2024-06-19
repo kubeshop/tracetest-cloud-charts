@@ -1,7 +1,17 @@
+global:
+  postgresql:
+    auth:
+      username: ""
+      password: ""
+      database: ""
+
 cert-manager:
   enabled: true
   crds:
     enabled: true
+
+postgresql:
+  enabled: true
 
 traefik:
   enabled: true

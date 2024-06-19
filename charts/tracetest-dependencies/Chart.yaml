@@ -9,6 +9,10 @@ dependencies:
   version: "24.0.0"
   repository: "https://traefik.github.io/charts"
   condition: traefik.enabled
+- name: postgresql
+  version: "15.5.7"
+  repository: "oci://registry-1.docker.io/bitnamicharts"
+  condition: postgresql.enabled
 
 maintainers:
   - name: tracetest

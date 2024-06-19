@@ -31,5 +31,5 @@ helm install \
   --version v1.15.0 \
   --set crds.enabled=true
 
-helm install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/charts/tracetest-dependencies/values-kind.yaml
-helm install tt $PROJECT_ROOT/charts/tracetest-onprem
+helm install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml
+helm install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml
