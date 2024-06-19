@@ -1,3 +1,6 @@
+global:
+  imagePullSecret: ""
+
 config:
   natsEndpoint: "nats://nats-headless.external:4222"
   targetVersion: v0.0.0
@@ -27,7 +30,7 @@ deployment:
     requests:
       cpu: 200m
       memory: 256Mi
-      
+
 image:
   repository: ghcr.io/kubeshop/tracetest-agent-operator
   # tag: v0.1.0
