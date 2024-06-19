@@ -2,19 +2,19 @@ apiVersion: v2
 name: tracetest-onprem
 description: A Helm chart for tracetest On Prem
 type: application
-version: 1.0.0
+version: v1.0.0
 dependencies:
 - name: tracetest-core
-  version: 1.0.0
+  version: v1.0.0
   repository: file://../tracetest-core
 - name: tracetest-cloud
-  version: 1.0.0
+  version: v1.0.0
   repository: file://../tracetest-cloud
 - name: tracetest-agent-operator
-  version: 1.0.0
+  version: v1.0.0
   repository: file://../tracetest-agent-operator
 - name: tracetest-auth
-  version: 1.0.0
+  version: v1.0.0
   repository: file://../tracetest-auth
 - name: nats
   version: 1.1.11
