@@ -1,0 +1,42 @@
+{{- if .Values.mongodb.enabled }}
+---
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: {{ include "tracetest-dependencies.fullname" . }}-mongodb
+spec:
+  members: 1
+  type: ReplicaSet
+  version: "6.0.5"
+  security:
+    authentication:
+      modes: ["SCRAM"]
+  users:
+    - name: {{ .Values.global.mongodb.auth.username }}
+      db: {{ .Values.global.mongodb.auth.database }}
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: {{ include "tracetest-dependencies.fullname" . }}-mongodb-passwd
+      roles:
+        - name: clusterAdmin
+          db: admin
+        - name: userAdminAnyDatabase
+          db: admin
+        - name: readWrite
+          db: {{ .Values.global.mongodb.auth.database }}
+        - name: dbAdmin
+          db: {{ .Values.global.mongodb.auth.database }}
+      scramCredentialsSecretName: {{ include "tracetest-dependencies.fullname" . }}-mongodb-scram
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+
+# the user credentials will be generated from this secret
+# once the credentials are generated, this secret is no longer required
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "tracetest-dependencies.fullname" . }}-mongodb-passwd
+type: Opaque
+stringData:
+  password: {{ .Values.global.mongodb.auth.password }}
+{{- end }}

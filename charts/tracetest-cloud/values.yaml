@@ -1,11 +1,21 @@
 global:
   imagePullSecret: ""
+
+  mongodb:
+    auth:
+      protocol: "mongodb"
+      host: ""
+      username: ""
+      password: ""
+      database: "tracetest"
+      options:
+        retryWrites: "true"
   
-postgres:
-  host: "postgres"
-  user: "postgres"
-  password: "postgres"
-  dbname: "tracetest"
+  postgres:
+    host: "postgres"
+    user: "postgres"
+    password: "postgres"
+    dbname: "tracetest"
 
 jwtSignCert:
   commonName: jwt-sign-cert

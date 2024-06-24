@@ -10,6 +10,15 @@ global:
       password: "postgres"
       database: "tracetest"
 
+  mongodb:
+    auth:
+      protocol: "mongodb"
+      host: "ttdeps-tracetest-dependencies-mongodb-svc"
+      username: "mongodb"
+      password: "mongodb"
+      database: "tracetest"
+      options:
+        retryWrites: "true"
 
 traefik:
   service:

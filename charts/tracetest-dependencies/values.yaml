@@ -4,6 +4,11 @@ global:
       username: ""
       password: ""
       database: ""
+  mongodb:
+    auth:
+      username: "mongodb"
+      password: "mongodb"
+      database: "tracetest"
 
 cert-manager:
   enabled: true
@@ -11,6 +16,9 @@ cert-manager:
     enabled: true
 
 postgresql:
+  enabled: true
+
+mongodb:
   enabled: true
 
 traefik:
