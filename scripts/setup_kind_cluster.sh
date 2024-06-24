@@ -22,6 +22,11 @@ EOF
 
 source $ENV_FILE
 
+# install mongo operator
+helm repo add mongodb https://mongodb.github.io/helm-charts --force-update
+helm install \
+  community-operator mongodb/community-operator 
+
 # install cert manager
 helm repo add jetstack https://charts.jetstack.io --force-update
 helm install \

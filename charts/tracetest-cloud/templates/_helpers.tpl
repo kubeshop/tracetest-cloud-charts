@@ -23,6 +23,24 @@ Expand the name of the chart.
 {{- end -}}
 {{- end -}}
 
+{{- define "tracetest-cloud.mongodb_dsn" -}}
+{{- $global := .Values.global.mongodb.auth -}}
+{{- $options := $global.options | default dict -}}
+{{- $options_str := "" -}}
+{{- range $key, $value := $options -}}
+  {{- if $options_str }}
+    {{- $options_str = printf "%s&%s=%s" $options_str $key $value -}}
+  {{- else }}
+    {{- $options_str = printf "%s=%s" $key $value -}}
+  {{- end -}}
+{{- end -}}
+{{- if $options_str }}
+  {{- printf "%s://%s:%s@%s/%s?%s" $global.protocol $global.username $global.password $global.host $global.database $options_str -}}
+{{- else }}
+  {{- printf "%s://%s:%s@%s/%s" $global.protocol $global.username $global.password $global.host $global.database -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
