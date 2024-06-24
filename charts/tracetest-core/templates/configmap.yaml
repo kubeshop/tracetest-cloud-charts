@@ -12,10 +12,10 @@ data:
     telemetry:
       profiler:
         name: tracetest
-        enabled: true
-        samplingRate: {{ .Values.config.profilerSamplingRate }}
-        endpoint: {{ .Values.config.profilerEndpoint }}
-        environment: {{ .Values.config.profilerEnvironment }}
+        enabled: {{ .Values.config.profiler.enabled }}
+        samplingRate: {{ .Values.config.profiler.samplingRate }}
+        endpoint: {{ .Values.config.profiler.endpoint }}
+        environment: {{ .Values.config.profiler.environment }}
       exporters:
         collector:
           exporter:

@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: configure-nats
+  labels:
+    app: configure-nats
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: script-container
+        image: natsio/nats-box
+        command: ["/bin/sh", "-c"]
+        env:
+        - name: NATS_URL
+          value: {{ .Values.global.nats.endpoint }}
+        args:
+          - |
+            timeout=60
+            while ! nc -z -w1 {{ .Values.global.nats.host }} 4222; do
+              echo "Waiting for NATS connection..."
+              sleep 1
+              timeout=$((timeout-1))
+              if [ $timeout -eq 0 ]; then
+                echo "Timeout waiting for NATS connection"
+                exit 1
+              fi
+            done
+
+            nats stream delete tests --force || echo "stream tests does not exist"
+            nats stream create tests \
+              --subjects 'agent.>' \
+              --subjects 'test.>' \
+              --storage file \
+              --max-age 24h \
+              --defaults
+
+            nats kv add control-flow \
+              --ttl 1h \
+              --storage file
+
+            nats kv add rungroups_cache \
+              --ttl 1s \
+              --storage file
+
+            nats kv add run_filters_cache \
+              --ttl 30s \
+              --storage file
+
+      restartPolicy: Never

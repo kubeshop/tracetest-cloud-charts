@@ -49,8 +49,11 @@ config:
   githubCredential: some-credential-string
   hubspotApiKey: some-value
   segmentWriteKey: some-value
-  profilerEndpoint: some-value
-  profilerEnvironment: development
-  profilerSamplingRate: 50
+
+  profiler:
+    samplingRate: 50
+    endpoint: ""
+    environment: development
+
   demoOrgID: some-value
   demoInviteID: some-value

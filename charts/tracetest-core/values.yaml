@@ -14,9 +14,11 @@ global:
 config:
   tracetestAnalyticsServerKey: some-value
   tracetestSecurityEncryptionKey: some-value
-  profilerEndpoint: some-value
-  profilerEnvironment: development
-  profilerSamplingRate: 50
+  profiler:
+    enabled: false
+    samplingRate: 50
+    endpoint: some-value
+    environment: development
 
 server:
   httpPort: 11633
