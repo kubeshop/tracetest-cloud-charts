@@ -50,10 +50,15 @@ config:
   hubspotApiKey: some-value
   segmentWriteKey: some-value
 
-  profiler:
-    samplingRate: 50
-    endpoint: ""
-    environment: development
+  telemetry:
+    enabled: false
+    collector:
+      endpoint: ""
+    
+    profiler:
+      samplingRate: 50
+      endpoint: ""
+      environment: development
 
   demoOrgID: some-value
   demoInviteID: some-value
