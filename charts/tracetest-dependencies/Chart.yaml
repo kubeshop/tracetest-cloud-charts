@@ -2,7 +2,7 @@ apiVersion: v2
 name: tracetest-dependencies
 description: A Helm chart for tracetest On Prem
 type: application
-version: v1.1.0
+version: v1.2.0
 
 dependencies:
 - name: traefik
