@@ -1,5 +1,6 @@
 global:
   nats:
+    host: "tt-nats-headless"
     endpoint: "nats://tt-nats-headless:4222"
 
   postgresql:
