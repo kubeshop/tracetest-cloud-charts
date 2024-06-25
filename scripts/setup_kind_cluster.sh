@@ -6,7 +6,7 @@ function show_help() {
   echo "Usage: setup_kind_cluster.sh [OPTIONS]"
   echo "Options:"
   echo "  --reset     Reset the existing kind cluster"
-  echo "  --private   Create image pull secret"
+  echo "  --private   Use private repositories. Requires a PAT with read:packages scope."
   echo "  --help      Show this help message"
 }
 
