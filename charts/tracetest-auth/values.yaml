@@ -181,6 +181,14 @@ kratos:
           connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true
 
 oathkeeper:
+  extraVolumes:
+    - name: oathkeeper-jwks
+      secret:
+        name: oathkeeper-custom-config
+
+  extraVolumeMounts:
+    - name: id_token.jwks.json
+      mountPath: /home/ory/id_token.jwks.json
   service:
     proxy:
       annotations:
@@ -192,6 +200,7 @@ oathkeeper:
       enabled: false
 
   oathkeeper:
+    mutatorIdTokenJWKs: '$ID_TOKEN_JSON'
     config:
       log:
         level: debug
@@ -263,3 +272,23 @@ oathkeeper:
               {
                 "session": {{ .Extra | toJson }}
               }
+    accessRules: |-
+      - id: "ory:kratos:public"
+        upstream:
+          preserve_host: true
+          url: "http://kratos-public.ory"
+          strip_path: /auth
+        match:
+          url: "https://$API_URL/auth/<**>"
+          methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+            - PATCH
+        authenticators:
+          - handler: noop
+        authorizer:
+          handler: allow
+        mutators:
+          - handler: noop
