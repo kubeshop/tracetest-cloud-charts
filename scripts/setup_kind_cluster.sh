@@ -1,11 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -e
+
+function show_help() {
+  echo "Usage: setup_kind_cluster.sh [OPTIONS]"
+  echo "Options:"
+  echo "  --reset     Reset the existing kind cluster"
+  echo "  --private   Create image pull secret"
+  echo "  --help      Show this help message"
+}
+
+if [[ "$@" == *"--help"* ]]; then
+  show_help
+  exit 0
+fi
 
 PROJECT_ROOT=$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")
 KUBECONFIG_FILE=$(pwd)/tracetest.kubeconfig
 ENV_FILE=$PROJECT_ROOT/cluster.env
 
-
-if [[ "$1" == "--reset" ]]; then
+if [[ "$@" == *"--reset"* ]]; then
   kind delete cluster --name tracetest
 fi
 
@@ -21,6 +35,12 @@ kubectl config use-context kind-tracetest
 EOF
 
 source $ENV_FILE
+
+if [[ "$@" == *"--private"* ]]; then
+  printf "\e[41mPrivate version requested. Please provide your credentials.\e[0m\n"
+  
+  $PROJECT_ROOT/scripts/create_image_pull_secret.sh
+fi
 
 # install mongo operator
 helm repo add mongodb https://mongodb.github.io/helm-charts --force-update
@@ -38,3 +58,4 @@ helm install \
 
 helm install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml
 helm install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml
+
