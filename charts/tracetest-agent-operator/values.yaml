@@ -1,12 +1,16 @@
 global:
-  imagePullSecret: ""
+  nats:
+    endpoint: &natsEndpoint "nats://nats:4222"
+  urls:
+    controlPlaneUrl: &controlPlaneUrl "https://control-plane.tracetest.io"
+    agentsDomain: &agentsDomain "agents.example.com"
 
 config:
-  natsEndpoint: "nats://nats-headless.external:4222"
+  natsEndpoint: *natsEndpoint
   targetVersion: v0.0.0
   targetNamespace: agents
-  targetServer: https://app.tractest.io
-  targetDomain: agents.example.com
+  targetServer: *controlPlaneUrl
+  targetDomain: *agentsDomain
 
 service:
   type: ClusterIP

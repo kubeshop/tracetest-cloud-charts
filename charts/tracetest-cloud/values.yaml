@@ -1,6 +1,11 @@
 global:
   imagePullSecret: ""
 
+  urls:
+    webUIUrl: &webUrl "app.tracetest.io"
+    apiUrl: &apiUrl "api.tracetest.io"
+    controlPlaneUrl: &controlPlaneUrl "control-plane.tracetest.io"
+
   mongodb:
     auth:
       protocol: "mongodb"
@@ -16,6 +21,7 @@ global:
     user: "postgres"
     password: "postgres"
     dbname: "tracetest"
+    port: "5432"
 
 jwtSignCert:
   commonName: jwt-sign-cert
@@ -51,9 +57,9 @@ image:
   # tag: v1.2.0
 
 config:
-  webUIUrl: some-url
-  apiUrl: some-url
-  controlPlaneUrl: some-value
+  webUIUrl: *webUrl
+  apiUrl: *apiUrl
+  controlPlaneUrl: *controlPlaneUrl
   mongodbDSN: some-value
   sendgridApiKey: some-value
   githubCredential: some-credential-string

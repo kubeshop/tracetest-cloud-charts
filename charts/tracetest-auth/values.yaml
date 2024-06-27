@@ -1,3 +1,19 @@
+global:
+  cookieDomain: &cookieDomain ".example.com"
+  urls:
+    issuerUrl: &issuerUrl https://api.example.com/auth
+    baseAuthUrl: &baseAuthUrl https://api.example.com/auth
+    defaultBrowserReturnUrl: &defaultBrowserReturnUrl https://web.example.com/
+    errorUiUrl: &errorUiUrl https://web.example.com/error
+    loginUrl: &loginUrl https://api.example.com/oathkeeper/login
+    loginAfterHookUrl: &loginAfterHookUrl https://api.example.com/api/webhook/login
+  
+  secrets:
+    cookie: &authSecretCookie
+      - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+    cipher: &authSecretCipher
+      - 32-LONG-SECRET-NOT-SECURE-AT-ALL
+
 keto:
   image:
     tag: "v0.11.1"
@@ -59,11 +75,11 @@ kratos:
       cookies:
         path: /
         same_site: Lax
-        domain: tracetest.io
+        domain: *cookieDomain
 
       serve:
         public:
-          base_url: https://api.example.com/auth
+          base_url: *baseAuthUrl
           cors:
             enabled: true
             allowed_origins: []
@@ -84,7 +100,7 @@ kratos:
           base_url: http://kratos:4434/
 
       selfservice:
-        default_browser_return_url: https://web.example.com/
+        default_browser_return_url: *defaultBrowserReturnUrl
         allowed_return_urls: []
 
         methods:
@@ -103,14 +119,14 @@ kratos:
 
         flows:
           error:
-            ui_url: https://web.example.com/error
+            ui_url: *errorUiUrl
 
           logout:
             after:
-              default_browser_return_url: https://web.example.com
+              default_browser_return_url: *defaultBrowserReturnUrl
 
           login:
-            ui_url: https://web.example.com
+            ui_url: *defaultBrowserReturnUrl
             lifespan: 10m
             after:
               oidc:
@@ -124,7 +140,7 @@ kratos:
                   #
                   - hook: web_hook
                     config:
-                      url: https://api.example.com/api/webhook/login
+                      url: *loginAfterHookUrl
                       method: POST
                       body: file:///etc/config/kratos/login.jsonnet
                       can_interrupt: false
@@ -145,7 +161,7 @@ kratos:
                   #
                   - hook: web_hook
                     config:
-                      url: https://api.example.com/api/webhook/login
+                      url: *loginAfterHookUrl
                       method: POST
                       body: file:///etc/config/kratos/login.jsonnet
                       can_interrupt: false
@@ -157,10 +173,8 @@ kratos:
                   - hook: session
 
       secrets:
-        cookie:
-          - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
-        cipher:
-          - 32-LONG-SECRET-NOT-SECURE-AT-ALL
+        cookie: *authSecretCookie
+        cipher: *authSecretCipher
 
       ciphers:
         algorithm: xchacha20-poly1305
@@ -220,7 +234,7 @@ oathkeeper:
           redirect:
             enabled: true
             config:
-              to: https://api.example.com/oathkeeper/login
+              to: *loginUrl
               when:
                 - error:
                     - unauthorized
@@ -267,7 +281,7 @@ oathkeeper:
         id_token:
           enabled: true
           config:
-            issuer_url: https://api.example.com/oathkeeper
+            issuer_url: *issuerUrl
             claims: |
               {
                 "session": {{ .Extra | toJson }}
@@ -279,7 +293,7 @@ oathkeeper:
           url: "http://kratos-public.ory"
           strip_path: /auth
         match:
-          url: "https://$API_URL/auth/<**>"
+          url: "https://api.example.org/auth/<**>"
           methods:
             - GET
             - POST

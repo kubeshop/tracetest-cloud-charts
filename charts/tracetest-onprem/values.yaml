@@ -10,14 +10,30 @@ global:
       username: "postgres"
       password: "postgres"
       database: "tracetest"
+      port: "5432"
     
   mongodb:
     dsn: &mongoDSN "mongodsn"
 
+  cookieDomain: &cookieDomain ".example.com"
+  
   urls:
-    webUIUrl: &webUrl "app.tracetest.io"
-    apiUrl: &apiUrl "api.tracetest.io"
-    controlPlaneUrl: &controlPlaneUrl "control-plane.tracetest.io"
+    issuerUrl: &issuerUrl https://api.example.com/auth
+    baseAuthUrl: &baseAuthUrl https://api.example.com/auth
+    defaultBrowserReturnUrl: &defaultBrowserReturnUrl https://web.example.com/
+    errorUiUrl: &errorUiUrl https://web.example.com/error
+    loginUrl: &loginUrl https://api.example.com/oathkeeper/login
+    loginAfterHookUrl: &loginAfterHookUrl https://api.example.com/api/webhook/login
+    webUIUrl: &webUrl "https://app.tracetest.io"
+    apiUrl: &apiUrl "https://api.tracetest.io"
+    controlPlaneUrl: &controlPlaneUrl "https://control-plane.tracetest.io"
+    agentsDomain: &agentsDomain "agents.example.com"
+  
+  secrets:
+    cookie: &authSecretCookie
+      - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+    cipher: &authSecretCipher
+      - 32-LONG-SECRET-NOT-SECURE-AT-ALL
 
 nats:
   enabled: true

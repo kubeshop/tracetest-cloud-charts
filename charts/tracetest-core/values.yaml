@@ -10,6 +10,7 @@ global:
       username: ""
       password: ""
       database: ""
+      port: "5432"
 
 config:
   tracetestAnalyticsServerKey: some-value
@@ -36,10 +37,10 @@ deployments:
       TRACETEST_SERVER_WORKFLOW_ENABLED: false
     resources:
       limits:
-        memory: 2048Mi
+        memory: 512Mi
       requests:
-        cpu: 500m
-        memory: 1024Mi
+        cpu: 100m
+        memory: 512Mi
   - name: worker-trigger
     env:
       TRACETEST_SERVER_API_ENABLED: false
@@ -48,10 +49,10 @@ deployments:
 
     resources:
       limits:
-        memory: 2048Mi
+        memory: 512Mi
       requests:
-        cpu: 500m
-        memory: 1024Mi
+        cpu: 100m
+        memory: 512Mi
   
   - name: worker-poller
     env:
@@ -61,10 +62,10 @@ deployments:
 
     resources:
       limits:
-        memory: 2048Mi
+        memory: 512Mi
       requests:
-        cpu: 500m
-        memory: 1024Mi
+        cpu: 100m
+        memory: 512Mi
 
   - name: worker-results
     env:
@@ -74,7 +75,7 @@ deployments:
 
     resources:
       limits:
-        memory: 2048Mi
+        memory: 512Mi
       requests:
-        cpu: 500m
-        memory: 1024Mi
+        cpu: 100m
+        memory: 512Mi
