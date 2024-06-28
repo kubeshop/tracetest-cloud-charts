@@ -49,9 +49,9 @@ spec:
                   name: oss-postgres-credentials
                   key: password
             - name: TRACETEST_POSTGRES_DBNAME
-              value: "{{ .Values.global.postgresql.auth.database}}"
+              value: "{{ $.Values.global.postgresql.auth.database}}"
             - name: TRACETEST_POSTGRES_PORT
-              value: "{{ .Values.global.postgresql.auth.port}}"
+              value: "{{ $.Values.global.postgresql.auth.port}}"
             - name: TRACETEST_DEV
               value: ""
             - name: TRACETEST_OTLPSERVER_ENABLED
