@@ -1,4 +1,7 @@
 global:
+  urls:
+    webHostname: "tracetest.localdev"
+
   nats:
     host: "tt-nats-headless"
     endpoint: "nats://tt-nats-headless:4222"
@@ -25,9 +28,7 @@ traefik:
     type: NodePort
 
   dnsNames:
-    - "app.local"
-    - "api.local"
-    - "*.agents.local"
+    - "tracetest.localdev"
 
   tls:
     issuerRef:

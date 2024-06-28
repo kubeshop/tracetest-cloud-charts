@@ -1,5 +1,11 @@
 global:
+  urls:
+    webHostname: ""
+
   imagePullSecret: ""
+
+ingress:
+  enabled: true
 
 replicaCount: 1
 
@@ -63,5 +69,6 @@ volumeMounts: []
 nodeSelector: {}
 
 tolerations: []
+
 
 affinity: {}
