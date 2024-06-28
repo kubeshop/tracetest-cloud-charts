@@ -9,6 +9,17 @@ we need to use a secret so you need to use the create image pull secret script t
 once everything is public, we can use kind to validate PRs before merging.
 this can also become the main helm repo for cloud, since it has a much nicer approach, but we'll see if that works out without needing too much customization
 
+## TLDR
+
+```
+./scripts/setup_kind_cluster.sh --reset --private
+sudo sh -c 'echo "127.0.0.1 tracetest.localdev" >> /etc/hosts'
+source ./cluster.env
+kubectl get pods
+```
+
+now you can access the app at https://tracetest.localdev
+
 ## charts
 
 the tracetest-onprem chart is the main umbrella chart. 
