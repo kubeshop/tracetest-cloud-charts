@@ -199,6 +199,16 @@ entries:
   tracetest-core:
   - apiVersion: v2
     appVersion: v1.1.0
+    created: "2024-06-28T16:34:00.197974572Z"
+    description: A Helm chart wrapper for tracetest open-source
+    digest: fa6dec2c6335570af766aa862d75ac28819ae6b9277a828fcd491160c9f67340
+    name: tracetest-core
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-core-v1.4.0/tracetest-core-v1.4.0.tgz
+    version: v1.4.0
+  - apiVersion: v2
+    appVersion: v1.1.0
     created: "2024-06-27T18:55:05.85187097Z"
     description: A Helm chart wrapper for tracetest open-source
     digest: e7febea4248b414eb66209f86f91172b1e3ddcb3df7a46614c7e027c7c97e09a
@@ -326,6 +336,17 @@ entries:
     urls:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-dependencies-1.0.0/tracetest-dependencies-1.0.0.tgz
     version: 1.0.0
+  tracetest-frontend:
+  - apiVersion: v2
+    appVersion: v1.0.0
+    created: "2024-06-28T16:34:00.332529718Z"
+    description: A Helm chart for Kubernetes
+    digest: cda6dd4ebd5133ba5cd0eab12a87e0a1d3bb0f56ce3b98b875f5d9cdf5611835
+    name: tracetest-frontend
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-frontend-v1.1.0/tracetest-frontend-v1.1.0.tgz
+    version: v1.1.0
   tracetest-onprem:
   - apiVersion: v2
     created: "2024-06-14T15:04:25.236468646Z"
@@ -383,6 +404,40 @@ entries:
     urls:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-onprem-1.104.0/tracetest-onprem-1.104.0.tgz
     version: 1.104.0
+  - apiVersion: v2
+    created: "2024-06-28T16:34:00.455887977Z"
+    dependencies:
+    - name: tracetest-frontend
+      repository: file://../tracetest-frontend
+      version: v1.1.0
+    - name: tracetest-core
+      repository: file://../tracetest-core
+      version: v1.4.0
+    - name: tracetest-cloud
+      repository: file://../tracetest-cloud
+      version: v1.3.0
+    - name: tracetest-agent-operator
+      repository: file://../tracetest-agent-operator
+      version: v1.2.0
+    - name: tracetest-auth
+      repository: file://../tracetest-auth
+      version: v1.4.0
+    - condition: nats.enabled
+      name: nats
+      repository: https://nats-io.github.io/k8s/helm/charts/
+      version: 1.1.11
+    description: A Helm chart for tracetest On Prem
+    digest: 63456bbaf11d767346b3c7616db59682cc3fb57f597ec9989f310c087e5d3aef
+    home: https://github.com/kubeshop/tracetest-cloud-charts
+    icon: https://cdn.prod.website-files.com/625f135a8e554e44ad158913/625f1d8ab2348b3c4e3fa870_logo.svg
+    maintainers:
+    - name: tracetest
+      url: https://tracetest.io
+    name: tracetest-onprem
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-onprem-v1.8.0/tracetest-onprem-v1.8.0.tgz
+    version: v1.8.0
   - apiVersion: v2
     created: "2024-06-28T16:20:22.580862189Z"
     dependencies:
@@ -569,4 +624,4 @@ entries:
     urls:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-onprem-1.0.0/tracetest-onprem-1.0.0.tgz
     version: 1.0.0
-generated: "2024-06-28T16:20:22.580930988Z"
+generated: "2024-06-28T16:34:00.455972274Z"
