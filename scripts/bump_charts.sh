@@ -34,7 +34,7 @@ for chart in $changed_charts; do
     exit 1
   fi
 
-  git add "$chart/Chart.yaml"
+  git add "$chart/Chart.*"
 done
 
 echo "Bumping version of $ONPREM_CHART_FILE"
