@@ -1,3 +1,4 @@
+**/*/Chart.lock
 **/*/charts/*
 cluster.env
 tracetest.kubeconfig

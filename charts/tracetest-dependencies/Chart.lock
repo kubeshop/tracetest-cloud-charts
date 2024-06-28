@@ -1,9 +1,0 @@
-dependencies:
-- name: traefik
-  repository: https://traefik.github.io/charts
-  version: 24.0.0
-- name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.5.7
-digest: sha256:88d4511c6fb4a10c79a4c351333ea26876239752ed8d793ecc7ee62c335066d8
-generated: "2024-06-24T16:05:11.400548-03:00"
