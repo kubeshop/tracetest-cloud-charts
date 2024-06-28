@@ -1,0 +1,12 @@
+dependencies:
+- name: keto
+  repository: https://k8s.ory.sh/helm/charts
+  version: 0.36.0
+- name: kratos
+  repository: https://k8s.ory.sh/helm/charts
+  version: 0.36.0
+- name: oathkeeper
+  repository: https://k8s.ory.sh/helm/charts
+  version: 0.36.0
+digest: sha256:96c90b9813667b52fcfe3a5b3129a316d5db5552143d843ef21a5a3ff43e505c
+generated: "2024-06-18T18:37:57.592409-03:00"
