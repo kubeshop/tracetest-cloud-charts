@@ -24,7 +24,7 @@ if [[ "$@" == *"--reset"* ]]; then
 fi
 
 if ! k3d cluster list | grep -q $CLUSTER_NAME; then
-  k3d cluster create $CLUSTER_NAME --servers=$SERVERS
+  k3d cluster create $CLUSTER_NAME --servers=$SERVERS --port "8080:80@loadbalancer"
 else 
   echo "Cluster already exists"
 fi
