@@ -1,4 +1,7 @@
 global:
+  smtp:
+    uri: "smtps://test:test@mailslurper:1025/?skip_ssl_verify=true"
+
   postgresql:
     auth:
       host: "postgres"
@@ -7,20 +10,10 @@ global:
       dbname: "tracetest"
       port: "5432"
 
-  cookieDomain: &cookieDomain ".example.com"
   urls:
-    issuerUrl: &issuerUrl https://api.example.com/auth
-    baseAuthUrl: &baseAuthUrl https://api.example.com/auth
-    defaultBrowserReturnUrl: &defaultBrowserReturnUrl https://web.example.com/
-    errorUiUrl: &errorUiUrl https://web.example.com/error
-    loginUrl: &loginUrl https://api.example.com/oathkeeper/login
-    loginAfterHookUrl: &loginAfterHookUrl https://api.example.com/api/webhook/login
-  
-  secrets:
-    cookie: &authSecretCookie
-      - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
-    cipher: &authSecretCipher
-      - 32-LONG-SECRET-NOT-SECURE-AT-ALL
+    cookieDomain: ".example.com"
+    apiDomain: "api.example.com"
+    webDomain: &webDomain "web.example.com"  
 
 keto:
   image:
@@ -74,12 +67,85 @@ kratos:
     extraVolumeMounts:
       - name: kratos-custom-config
         mountPath: /etc/config/kratos
+    
     extraEnv:
-        - name: DSN
-          valueFrom:
-            secretKeyRef:
-              name: kratos-secrets
-              key: DSN
+      - name: COOKIES_DOMAIN
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: COOKIES_DOMAIN
+
+      - name: SERVE_PUBLIC_BASE_URL
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: BASE_AUTH_URL
+
+      - name: SERVE_PUBLIC_CORS_ALLOWED_ORIGINS
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: CORS_ALLOWED_ORIGINS
+
+      - name: SELFSERVICE_DEFAULT_BROWSER_RETURN_URL
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: DEFAULT_BROWSER_RETURN_URL
+
+      - name: SELFSERVICE_FLOWS_ERROR_UI_URL
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: ERROR_UI_URL
+
+      - name: SELFSERVICE_FLOWS__LOGOUT_AFTER_DEFAULT_BROWSER_RETURN_URL
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: DEFAULT_BROWSER_RETURN_URL
+
+      - name: SELFSERVICE_FLOWS_LOGIN_UI_URL
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: DEFAULT_BROWSER_RETURN_URL
+
+      - name: SELFSERVICE_FLOWS_LOGIN_AFTER_OIDC_HOOKS_0_CONFIG_URL
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: LOGIN_AFTER_HOOK_URL
+
+      - name: SELFSERVICE_FLOWS_REGISTRATION_AFTER_OIDC_HOOKS_0_CONFIG_URL
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: LOGIN_AFTER_HOOK_URL
+
+      - name: SECRETS_COOKIE
+        valueFrom:
+          secretKeyRef:
+            name: kratos-secrets
+            key: COOKIE
+          
+      - name: SECRETS_COOKIE
+        valueFrom:
+          secretKeyRef:
+            name: kratos-secrets
+            key: CIPHER
+
+      - name: DSN
+        valueFrom:
+          secretKeyRef:
+            name: kratos-secrets
+            key: DSN
+
+      - name: COURIER_SMTP_CONNECTION_URI
+        valueFrom:
+          secretKeyRef:
+            name: kratos-secrets
+            key: SMTP_URI
 
   kratos:
     automigration:
@@ -87,17 +153,10 @@ kratos:
       type: initContainer
 
     config:
-      log:
-        level: debug
-
-      cookies:
-        path: /
-        same_site: Lax
-        domain: *cookieDomain
-
+      version: v0.13.0
       serve:
         public:
-          base_url: *baseAuthUrl
+          base_url: http://localhost:4433/
           cors:
             enabled: true
             allowed_origins: []
@@ -118,8 +177,9 @@ kratos:
           base_url: http://kratos:4434/
 
       selfservice:
-        default_browser_return_url: *defaultBrowserReturnUrl
-        allowed_return_urls: []
+        default_browser_return_url: http://localhost:3000
+        allowed_return_urls:
+          - http://localhost:3000
 
         methods:
           password:
@@ -134,17 +194,42 @@ kratos:
             enabled: false
           code:
             enabled: false
+          oidc:
+            config:
+              providers:
+                - id: github
+                  provider: github
+                  mapper_url: file:///etc/config/kratos/github.jsonnet
+                  scope:
+                    - user:email
+                - id: google
+                  provider: google
+                  mapper_url: file:///etc/config/kratos/google.jsonnet
+                  scope:
+                    - email
+                    - profile
+                  requested_claims:
+                    id_token:
+                      email:
+                        essential: true
+                      email_verified:
+                        essential: true
+                      given_name:
+                        essential: true
+                      family_name: null
+                      hd: null
+            enabled: true
 
         flows:
           error:
-            ui_url: *errorUiUrl
+            ui_url: http://localhost:3000/error
 
           logout:
             after:
-              default_browser_return_url: *defaultBrowserReturnUrl
+              default_browser_return_url: http://localhost:3000
 
           login:
-            ui_url: *defaultBrowserReturnUrl
+            ui_url: http://localhost:3000
             lifespan: 10m
             after:
               oidc:
@@ -158,7 +243,7 @@ kratos:
                   #
                   - hook: web_hook
                     config:
-                      url: *loginAfterHookUrl
+                      url: http://host.docker.internal:8090/webhook/login
                       method: POST
                       body: file:///etc/config/kratos/login.jsonnet
                       can_interrupt: false
@@ -179,7 +264,7 @@ kratos:
                   #
                   - hook: web_hook
                     config:
-                      url: *loginAfterHookUrl
+                      url: http://host.docker.internal:8090/webhook/login
                       method: POST
                       body: file:///etc/config/kratos/login.jsonnet
                       can_interrupt: false
@@ -187,12 +272,21 @@ kratos:
                         ignore: false
                         parse: false
                   ## oidc after registration session hook ##
+                  #
                   # This hook prevents having to log in after sign-up to get a session
+                  #
                   - hook: session
 
+      log:
+        level: debug
+        format: text
+        leak_sensitive_values: true
+
       secrets:
-        cookie: *authSecretCookie
-        cipher: *authSecretCipher
+        cookie:
+          - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+        cipher:
+          - 32-LONG-SECRET-NOT-SECURE-AT-ALL
 
       ciphers:
         algorithm: xchacha20-poly1305
@@ -212,19 +306,36 @@ kratos:
         smtp:
           connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true
 
-oathkeeper:
-  extraVolumes:
-    - name: oathkeeper-jwks
-      secret:
-        name: oathkeeper-custom-config
 
-  extraVolumeMounts:
-    - name: id_token.jwks.json
-      mountPath: /home/ory/id_token.jwks.json
-  service:
-    proxy:
-      annotations:
-        cloud.google.com/backend-config: '{"default":"oathkeeper-proxy-backendconfig"}'
+oathkeeper:
+  deployment:
+    extraVolumes:
+      - name: oathkeeper-jwks
+        secret:
+          secretName: oathkeeper-secrets
+
+    extraVolumeMounts:
+      - name: oathkeeper-jwks
+        mountPath: /home/ory/id_token.jwks.json
+
+    extraEnv:
+      - name: SERVE_PROXY_CORS_ALLOWED_ORIGINS
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: CORS_ALLOWED_ORIGINS
+
+      - name: ERRORS_HANDLERS_REDIRECT_CONFIG_TO
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: LOGIN_URL
+
+      - name: MUTATORS_ID_TOKEN_CONFIG_ISSUER_URL
+        valueFrom:
+          configMapKeyRef:
+            name: tracetest-auth-config
+            key: ISSUER_URL
 
   ingress:
     proxy:
@@ -241,8 +352,22 @@ oathkeeper:
       serve:
         proxy:
           cors:
-            # we need to disable CORS in the proxy so it doesn't interfer with the upstream headers
-            enabled: false
+            enabled: true
+            allowed_origins:
+              - "*"
+            allowed_methods:
+              - POST
+              - GET
+              - PUT
+              - PATCH
+              - DELETE
+            allowed_headers:
+              - Authorization
+              - Content-Type
+            exposed_headers:
+              - Content-Type
+            allow_credentials: true
+            debug: true
 
       errors:
         fallback:
@@ -252,7 +377,7 @@ oathkeeper:
           redirect:
             enabled: true
             config:
-              to: *loginUrl
+              to: http://localhost:4455/login
               when:
                 - error:
                     - unauthorized
@@ -268,7 +393,7 @@ oathkeeper:
 
       access_rules:
         matching_strategy: glob
-
+        
       authenticators:
         anonymous:
           enabled: true
@@ -278,7 +403,7 @@ oathkeeper:
         cookie_session:
           enabled: true
           config:
-            check_session_url: http://kratos-public.ory/sessions/whoami
+            check_session_url: http://kratos:4433/sessions/whoami
             preserve_path: true
             extra_from: "@this"
             subject_from: "identity.id"
@@ -299,28 +424,9 @@ oathkeeper:
         id_token:
           enabled: true
           config:
-            issuer_url: *issuerUrl
+            issuer_url: http://localhost:4455/
+            jwks_url: file:///etc/config/oathkeeper/id_token.jwks.json
             claims: |
               {
                 "session": {{ .Extra | toJson }}
               }
-    accessRules: |-
-      - id: "ory:kratos:public"
-        upstream:
-          preserve_host: true
-          url: "http://kratos-public.ory"
-          strip_path: /auth
-        match:
-          url: "https://api.example.org/auth/<**>"
-          methods:
-            - GET
-            - POST
-            - PUT
-            - DELETE
-            - PATCH
-        authenticators:
-          - handler: noop
-        authorizer:
-          handler: allow
-        mutators:
-          - handler: noop
