@@ -11,6 +11,8 @@ this can also become the main helm repo for cloud, since it has a much nicer app
 
 ## TLDR
 
+[kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) is requried to run and test this repo
+
 ```
 ./scripts/setup_kind_cluster.sh --reset --private
 sudo sh -c 'echo "127.0.0.1 tracetest.localdev" >> /etc/hosts'
