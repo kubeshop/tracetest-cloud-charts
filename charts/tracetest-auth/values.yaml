@@ -1,4 +1,12 @@
 global:
+  postgresql:
+    auth:
+      host: "postgres"
+      user: "postgres"
+      password: "postgres"
+      dbname: "tracetest"
+      port: "5432"
+
   cookieDomain: &cookieDomain ".example.com"
   urls:
     issuerUrl: &issuerUrl https://api.example.com/auth
@@ -28,12 +36,18 @@ keto:
       mountPath: /home/ory/namespaces.keto.ts
 
   keto:
+    deployment:
+      extraEnv:
+        - name: DSN
+          valueFrom:
+            secretKeyRef:
+              name: keto-secrets
+              key: DSN
     automigration:
       enabled: true
       type: initContainer
 
     config:
-      dsn: postgres://user:pass@dbhost:5432/dbname
       namespaces:
         location: file:///home/ory/namespaces.keto.ts
       log:
@@ -60,6 +74,12 @@ kratos:
     extraVolumeMounts:
       - name: kratos-custom-config
         mountPath: /etc/config/kratos
+    extraEnv:
+        - name: DSN
+          valueFrom:
+            secretKeyRef:
+              name: kratos-secrets
+              key: DSN
 
   kratos:
     automigration:
@@ -67,8 +87,6 @@ kratos:
       type: initContainer
 
     config:
-      dsn: postgres://user:password@dbaddress:5432/kratos
-
       log:
         level: debug
 

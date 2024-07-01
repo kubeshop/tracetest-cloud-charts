@@ -6,7 +6,7 @@ Expand the name of the chart.
 {{- end }}
 
 {{- define "tracetest-cloud.postgres_dsn" -}}
-{{- $global := .Values.global.postgres -}}
+{{- $global := .Values.global.postgresql.auth -}}
 {{- $options := $global.options | default dict -}}
 {{- $options_str := "" -}}
 {{- range $key, $value := $options -}}

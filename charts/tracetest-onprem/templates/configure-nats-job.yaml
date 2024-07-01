@@ -6,7 +6,7 @@ metadata:
     app: configure-nats
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded
+    # "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     spec:

@@ -16,12 +16,13 @@ global:
       options:
         retryWrites: "true"
   
-  postgres:
-    host: "postgres"
-    user: "postgres"
-    password: "postgres"
-    dbname: "tracetest"
-    port: "5432"
+  postgresql:
+    auth:
+      host: "postgres"
+      user: "postgres"
+      password: "postgres"
+      dbname: "tracetest"
+      port: "5432"
 
 jwtSignCert:
   commonName: jwt-sign-cert
