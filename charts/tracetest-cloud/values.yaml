@@ -12,9 +12,8 @@ global:
       host: ""
       username: ""
       password: ""
-      database: "tracetest"
-      options:
-        retryWrites: "true"
+      database: ""
+      options: {}
   
   postgresql:
     auth:

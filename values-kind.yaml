@@ -16,12 +16,14 @@ global:
   mongodb:
     auth:
       protocol: "mongodb"
-      host: "ttdeps-tracetest-dependencies-mongodb-svc"
+      host: "ttdeps-tracetest-dependencies-mongodb"
       username: "mongodb"
       password: "mongodb"
       database: "tracetest"
       options:
         retryWrites: "true"
+        authSource: admin
+
 
 traefik:
   service:

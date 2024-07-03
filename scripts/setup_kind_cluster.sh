@@ -45,10 +45,10 @@ if [[ "$@" == *"--private"* ]]; then
   $PROJECT_ROOT/scripts/create_image_pull_secret.sh
 fi
 
-# install mongo operator
-helm repo add mongodb https://mongodb.github.io/helm-charts --force-update
-helm upgrade --install \
-  community-operator mongodb/community-operator 
+# # install mongo operator
+# helm repo add mongodb https://mongodb.github.io/helm-charts --force-update
+# helm upgrade --install \
+#   community-operator mongodb/community-operator 
 
 # install cert manager
 helm repo add jetstack https://charts.jetstack.io --force-update
