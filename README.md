@@ -2,8 +2,8 @@
 
 TODO: make this nice
 
-this repo provides a script to create a local kind cluster with an entire tracetest cloud instance. 
-while we have this repo private and all the private images, this is just deploying tracetest cloud.
+this repo provides a script to create a local kind cluster with an entire Tracetest cloud instance. 
+while we have this repo private and all the private images, this is just deploying Tracetest cloud.
 we need to use a secret so you need to use the create image pull secret script to configure that in the kind cluster.
 
 once everything is public, we can use kind to validate PRs before merging.
@@ -11,9 +11,23 @@ this can also become the main helm repo for cloud, since it has a much nicer app
 
 ## TLDR
 
-[kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) is requried to run and test this repo
+[kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) and [helm](https://helm.sh/docs/intro/install/) are required to run and test this repo
 
 ```
+helm repo add traefik https://traefik.github.io/charts
+helm repo add ory https://k8s.ory.sh/helm/charts
+helm repo add jetstack https://charts.jetstack.io
+
+export CURRENT_FOLDER=$PWD
+export TT_CHARTS=("tracetest-agent-operator" "tracetest-auth" "tracetest-cloud" "tracetest-core" "tracetest-frontend" "tracetest-onprem" "tracetest-dependencies")
+
+for chart_name in $TT_CHARTS; do 
+    cd $CURRENT_FOLDER/charts/$chart_name
+    helm dependency build
+done
+ 
+cd $CURRENT_FOLDER
+
 ./scripts/setup_kind_cluster.sh --reset --private
 sudo sh -c 'echo "127.0.0.1 tracetest.localdev" >> /etc/hosts'
 source ./cluster.env
