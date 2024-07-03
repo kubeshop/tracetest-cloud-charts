@@ -1,6 +1,26 @@
 global:
   urls:
-    webHostname: ""
+    web:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+    
+    api:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+
+    auth:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+    
+    agents:
+      hostname: "tracetest.localdev"
+      port: "30000"
 
   imagePullSecret: ""
 
@@ -13,7 +33,7 @@ image:
   repository: ghcr.io/kubeshop/tracetest-frontend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.0.0"
+  # tag: "v1.0.0"
 
 nameOverride: ""
 fullnameOverride: ""

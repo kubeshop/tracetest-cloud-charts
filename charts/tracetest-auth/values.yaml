@@ -199,11 +199,15 @@ kratos:
               providers:
                 - id: github
                   provider: github
+                  client_id: a9a1d2beefeeee0d26a3
+                  client_secret: 6c2ba791ef510ce7aaee975b91d0be73eea0c497
                   mapper_url: file:///etc/config/kratos/github.jsonnet
                   scope:
                     - user:email
                 - id: google
                   provider: google
+                  client_id: 1033713203382-rkjklei8gl8l9876gl9cru4ootd7a7gd.apps.googleusercontent.com
+                  client_secret: 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
                   mapper_url: file:///etc/config/kratos/google.jsonnet
                   scope:
                     - email

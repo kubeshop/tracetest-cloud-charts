@@ -18,23 +18,38 @@ global:
   cookieDomain: &cookieDomain ".example.com"
   
   urls:
-    webHostname: "tracetest.local"
-    issuerUrl: &issuerUrl https://api.example.com/auth
-    baseAuthUrl: &baseAuthUrl https://api.example.com/auth
-    defaultBrowserReturnUrl: &defaultBrowserReturnUrl https://web.example.com/
-    errorUiUrl: &errorUiUrl https://web.example.com/error
-    loginUrl: &loginUrl https://api.example.com/oathkeeper/login
-    loginAfterHookUrl: &loginAfterHookUrl https://api.example.com/api/webhook/login
-    webUIUrl: &webUrl "https://app.tracetest.io"
-    apiUrl: &apiUrl "https://api.tracetest.io"
-    controlPlaneUrl: &controlPlaneUrl "https://control-plane.tracetest.io"
-    agentsDomain: &agentsDomain "agents.example.com"
-  
-  secrets:
-    cookie: &authSecretCookie
-      - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
-    cipher: &authSecretCipher
-      - 32-LONG-SECRET-NOT-SECURE-AT-ALL
+    web:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+    
+    api:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+
+    auth:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+    
+    agents:
+      hostname: "tracetest.localdev"
+      port: "30000"
+
+    issuerUrl:  https://tracetest.localdev:30000/auth
+    baseAuthUrl:  https://tracetest.localdev:30000/auth
+    defaultBrowserReturnUrl:  https://tracetest.localdev:30000/
+    errorUiUrl:  https://tracetest.localdev:30000/error
+    loginUrl:  https://tracetest.localdev:30000/oathkeeper/login
+    loginAfterHookUrl:  https://tracetest.localdev:30000/api/webhook/login
+    webUIUrl: &webUrl "https://tracetest.localdev:30000"
+    apiUrl: &apiUrl "https://tracetest.localdev:30000"
+    controlPlaneUrl: &controlPlaneUrl "https://tracetest.localdev:30000"
+    agentsDomain: "tracetest.localdev"
 
 nats:
   enabled: true
