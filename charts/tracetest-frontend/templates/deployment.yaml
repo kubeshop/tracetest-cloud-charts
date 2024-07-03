@@ -13,10 +13,11 @@ spec:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         {{- toYaml . | nindent 8 }}
-        tracetest/component: frontend
       {{- end }}
       labels:
+        tracetest/component: frontend
         {{- include "tracetest-frontend.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -34,6 +35,27 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: REACT_APP_BASE_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-frontend.fullname" . }}
+                  key: REACT_APP_BASE_API_URL
+            - name: REACT_APP_ORY_KRATOS_PUBLIC_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-frontend.fullname" . }}
+                  key: REACT_APP_ORY_KRATOS_PUBLIC_API_URL
+            - name: REACT_APP_AGENT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-frontend.fullname" . }}
+                  key: REACT_APP_AGENT_URL
+            - name: REACT_APP_UI_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-frontend.fullname" . }}
+                  key: REACT_APP_UI_URL
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
