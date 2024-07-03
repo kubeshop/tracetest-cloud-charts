@@ -17,6 +17,7 @@ this can also become the main helm repo for cloud, since it has a much nicer app
 helm repo add traefik https://traefik.github.io/charts
 helm repo add ory https://k8s.ory.sh/helm/charts
 helm repo add jetstack https://charts.jetstack.io
+helm repo add nats https://nats-io.github.io/k8s/helm/charts/
 
 export CURRENT_FOLDER=$PWD
 export TT_CHARTS=("tracetest-agent-operator" "tracetest-auth" "tracetest-cloud" "tracetest-core" "tracetest-frontend" "tracetest-onprem" "tracetest-dependencies")
