@@ -1,42 +1,68 @@
 {{- if .Values.mongodb.enabled }}
 ---
-apiVersion: mongodbcommunity.mongodb.com/v1
-kind: MongoDBCommunity
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: {{ include "tracetest-dependencies.fullname" . }}-mongodb
+  labels:
+    {{- include "tracetest-dependencies.labels" . | nindent 4 }}
 spec:
-  members: 1
-  type: ReplicaSet
-  version: "6.0.5"
-  security:
-    authentication:
-      modes: ["SCRAM"]
-  users:
-    - name: {{ .Values.global.mongodb.auth.username }}
-      db: {{ .Values.global.mongodb.auth.database }}
-      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
-        name: {{ include "tracetest-dependencies.fullname" . }}-mongodb-passwd
-      roles:
-        - name: clusterAdmin
-          db: admin
-        - name: userAdminAnyDatabase
-          db: admin
-        - name: readWrite
-          db: {{ .Values.global.mongodb.auth.database }}
-        - name: dbAdmin
-          db: {{ .Values.global.mongodb.auth.database }}
-      scramCredentialsSecretName: {{ include "tracetest-dependencies.fullname" . }}-mongodb-scram
-  additionalMongodConfig:
-    storage.wiredTiger.engineConfig.journalCompressor: zlib
-
-# the user credentials will be generated from this secret
-# once the credentials are generated, this secret is no longer required
+  serviceName: "mongodb"
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "tracetest-dependencies.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/mongodb-credentials.yaml") . | sha256sum }}
+      labels:
+        {{- include "tracetest-dependencies.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:7.0.12
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "tracetest-dependencies.fullname" . }}-mongodb-credentials
+              key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "tracetest-dependencies.fullname" . }}-mongodb-credentials
+              key: password
+        - name: MONGO_INITDB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "tracetest-dependencies.fullname" . }}-mongodb-credentials
+              key: database
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ include "tracetest-dependencies.fullname" . }}-mongodb-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
 ---
 apiVersion: v1
-kind: Secret
+kind: Service
 metadata:
-  name: {{ include "tracetest-dependencies.fullname" . }}-mongodb-passwd
-type: Opaque
-stringData:
-  password: {{ .Values.global.mongodb.auth.password }}
+  name: {{ include "tracetest-dependencies.fullname" . }}-mongodb
+  labels:
+    {{- include "tracetest-dependencies.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - port: 27017
+    targetPort: 27017
+    protocol: TCP
+    name: mongodb
+  selector:
+    {{- include "tracetest-dependencies.selectorLabels" . | nindent 4 }}
+
 {{- end }}
