@@ -6,7 +6,7 @@ metadata:
 spec:
   stripPrefix:
     prefixes:
-      - /api
+      - {{ .Values.global.urls.api.path }}
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -17,7 +17,7 @@ spec:
     - websecure
   routes:
   - kind: Rule
-    match: Host(`{{ .Values.config.apiUrl }}`)
+    match: Host(`{{ .Values.global.urls.api.hostname }}`) && PathPrefix(`{{ .Values.global.urls.api.path }}`)
     middlewares:
     - name: {{ include "tracetest-cloud.fullname" . }}-stripprefix
     services:
@@ -35,26 +35,7 @@ spec:
     - websecure
   routes:
   - kind: Rule
-    match: Host(`{{ .Values.config.apiUrl }}`) && Headers(`Content-Type`, `application/grpc`)
-    services:
-    - kind: Service
-      name: {{ include "tracetest-cloud.fullname" . }}
-      passHostHeader: true
-      port: control-plane
-      scheme: h2c
-
-
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: control-plane-custom-port
-spec:
-  entryPoints:
-    - controlplane
-  routes:
-  - kind: Rule
-    match: Host(`{{ .Values.config.apiUrl }}`)
+    match: Host(`{{ .Values.global.urls.api.hostname }}`) && Headers(`Content-Type`, `application/grpc`)
     services:
     - kind: Service
       name: {{ include "tracetest-cloud.fullname" . }}

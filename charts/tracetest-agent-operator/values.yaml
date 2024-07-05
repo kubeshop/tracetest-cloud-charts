@@ -1,0 +1,46 @@
+global:
+  nats:
+    endpoint: &natsEndpoint "nats://nats:4222"
+  
+  urls:
+    agents:
+      domain: "tracetest.localdev"
+      port: "30000"
+    
+    controlPlane:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+
+config:
+  targetVersion: v0.0.0
+  targetNamespace: agents
+
+service:
+  type: ClusterIP
+  grpcPort: 8089
+  httpPort: 8090
+  controlPlanePort: 8091
+  metricsPort: 9100
+
+deployment:
+  replicas: 1
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+image:
+  repository: ghcr.io/kubeshop/tracetest-agent-operator
+  # tag: v0.1.0
+

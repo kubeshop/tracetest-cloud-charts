@@ -1,0 +1,81 @@
+global:
+  imagePullSecret: ""
+  replicasPerService: 1
+
+  nats:
+    endpoint: "nats://nats:4222"
+
+  postgresql:
+    auth:
+      username: ""
+      password: ""
+      database: ""
+      port: "5432"
+
+config:
+  tracetestAnalyticsServerKey: some-value
+  tracetestSecurityEncryptionKey: some-value
+  profiler:
+    enabled: false
+    samplingRate: 50
+    endpoint: some-value
+    environment: development
+
+server:
+  httpPort: 11633
+
+
+image:
+  repository: ghcr.io/kubeshop/tracetest-core
+  pullPolicy: IfNotPresent
+  
+
+deployments:
+  - name: api
+    env:
+      TRACETEST_SERVER_API_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_ENABLED: false
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 512Mi
+  - name: worker-trigger
+    env:
+      TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_SERVER_WORKFLOW_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_STEPS: trigger_resolver trigger_result
+
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 512Mi
+  
+  - name: worker-poller
+    env:
+      TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_SERVER_WORKFLOW_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_STEPS: poll_start poll_evaluate
+
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 512Mi
+
+  - name: worker-results
+    env:
+      TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_SERVER_WORKFLOW_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_STEPS: linter_runner assertion_runner
+
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 512Mi

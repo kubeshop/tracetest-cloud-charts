@@ -31,14 +31,14 @@ metadata:
   labels:
     {{- include "tracetest-auth.labels" . | nindent 4 }}
 data:
-  COOKIES_DOMAIN: {{ .Values.oathkeeper.global.cookieDomain }}
-  ISSUER_URL: https://{{ .Values.global.urls.apiDomain }}/auth
-  BASE_AUTH_URL: https://{{ .Values.global.urls.apiDomain }}/auth
-  DEFAULT_BROWSER_RETURN_URL: https://{{ .Values.global.urls.webDomain }}/
-  ERROR_UI_URL: https://{{ .Values.global.urls.webDomain }}/error
-  LOGIN_URL: https://{{ .Values.global.urls.apiDomain }}/oathkeeper/login
-  LOGIN_AFTER_HOOK_URL: https://{{ .Values.global.urls.apiDomain }}/api/webhook/login
-  CORS_ALLOWED_ORIGINS: '["https://{{ .Values.global.urls.webDomain }}"]' #this must be in json format
+  COOKIES_DOMAIN: {{ .Values.global.urls.cookieDomain }}
+  ISSUER_URL: {{ include "tracetest-common.url" .Values.global.urls.auth }}
+  BASE_AUTH_URL: {{ include "tracetest-common.url" .Values.global.urls.auth }}
+  DEFAULT_BROWSER_RETURN_URL: {{ include "tracetest-common.url" .Values.global.urls.web }}
+  ERROR_UI_URL: {{ include "tracetest-common.url" .Values.global.urls.web }}error
+  LOGIN_URL: {{ include "tracetest-common.url" .Values.global.urls.auth }}/oathkeeper/login
+  LOGIN_AFTER_HOOK_URL: {{ include "tracetest-common.url" .Values.global.urls.api }}/webhook/login
+  CORS_ALLOWED_ORIGINS: '["{{ include "tracetest-common.url" .Values.global.urls.web }}"]' #this must be in json format
 
 ---
 apiVersion: v1
@@ -52,10 +52,10 @@ data:
     - id: "ory:kratos:public"
       upstream:
         preserve_host: true
-        url: "http://kratos-public.ory"
+        url: "http://{{ .Release.Name }}-kratos-public.{{ .Release.Namespace }}"
         strip_path: /auth
       match:
-        url: "https://{{ .Values.global.urls.apiDomain }}/auth/<**>"
+        url: "{{ include "tracetest-common.url" .Values.global.urls.auth }}/<**>"
         methods:
           - GET
           - POST

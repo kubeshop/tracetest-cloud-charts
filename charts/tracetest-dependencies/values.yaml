@@ -1,0 +1,94 @@
+global:
+  postgresql:
+    auth:
+      username: ""
+      password: ""
+      database: ""
+  mongodb:
+    auth:
+      username: "mongodb"
+      password: "mongodb"
+      database: "tracetest"
+
+cert-manager:
+  enabled: true
+  crds:
+    enabled: true
+
+postgresql:
+  enabled: true
+
+mongodb:
+  enabled: true
+
+traefik:
+  enabled: true
+
+  dnsNames:
+    - "tracetest.io"
+
+  tls:
+    issuerRef:
+      name: issuer-selfsigned
+      kind: ClusterIssuer
+      group: cert-manager.io
+      
+  providers:
+    kubernetesCRD:
+      enabled: true
+
+  service:
+    type: NodePort
+
+  ports:
+    websecure:
+      port: 30000
+      expose: true
+      exposedPort: 30000
+      nodePort: 30000
+      protocol: TCP
+      tls:
+        enabled: true
+      http2:
+        maxConcurrentStreams: 250
+    # controlplane:
+    #   port: 8091
+    #   expose: true
+    #   exposedPort: 8091
+    #   protocol: TCP
+    #   http2:
+    #     maxConcurrentStreams: 250
+
+    # agentsgrpc:
+    #   port: 4317
+    #   expose: true
+    #   exposedPort: 4317
+    #   protocol: TCP
+    #   tls:
+    #     enabled: true
+    #   http2:
+    #     maxConcurrentStreams: 250
+    #   proxyProtocol:
+    #     insecure: true
+    #   forwardedHeaders:
+    #     insecure: true
+
+    # agentshttp:
+    #   port: 4318
+    #   expose: true
+    #   exposedPort: 4318
+    #   protocol: TCP
+    #   tls:
+    #     enabled: true
+    #   proxyProtocol:
+    #     insecure: true
+    #   forwardedHeaders:
+    #     insecure: true
+
+  logs:
+    general:
+      # DEBUG, PANIC, FATAL, ERROR, WARN, and INFO.
+      level: DEBUG
+    access:
+      enabled: true
+

@@ -6,8 +6,8 @@ metadata:
     {{- include "tracetest-agent-operator.labels" . | nindent 4 }}
 data:
   TRACETEST_NATS_ENDPOINT: "{{ .Values.global.nats.endpoint }}"
-  TRACETEST_TARGET_VERSION: "{{ .Values.global.targetVersion }}"
+  TRACETEST_TARGET_VERSION: "{{ .Values.config.targetVersion }}"
   TRACETEST_TARGET_NAMESPACE: "{{ .Values.config.targetNamespace }}"
-  TRACETEST_TARGET_SERVER: "{{ .Values.config.targetServer }}"
-  TRACETEST_TARGET_DOMAIN: "{{ .Values.config.targetDomain }}"
+  TRACETEST_TARGET_SERVER: "{{ include "tracetest-common.url" .Values.global.urls.controlPlane }}"
+  TRACETEST_TARGET_DOMAIN: "{{ .Values.global.urls.agents.domain }}"
   TRACETEST_TRACING_COLLECTORENDPOINT: ""
