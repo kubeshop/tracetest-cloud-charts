@@ -45,20 +45,16 @@ if [[ "$@" == *"--private"* ]]; then
   $PROJECT_ROOT/scripts/create_image_pull_secret.sh
 fi
 
-# # install mongo operator
-# helm repo add mongodb https://mongodb.github.io/helm-charts --force-update
-# helm upgrade --install \
-#   community-operator mongodb/community-operator 
-
-# install cert manager
-helm repo add jetstack https://charts.jetstack.io --force-update
-helm upgrade --install \
-  cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.15.0 \
-  --set crds.enabled=true
+if [[ "$@" == *"--reset"* ]]; then
+  # install cert manager
+  helm repo add jetstack https://charts.jetstack.io --force-update
+  helm upgrade --install \
+    cert-manager jetstack/cert-manager \
+    --namespace cert-manager \
+    --create-namespace \
+    --version v1.15.0 \
+    --set crds.enabled=true
+fi
 
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml
-
