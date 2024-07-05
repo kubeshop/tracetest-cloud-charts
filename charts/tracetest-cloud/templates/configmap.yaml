@@ -5,12 +5,12 @@ metadata:
   labels:
     {{- include "tracetest-cloud.labels" . | nindent 4 }}
 data:
-  AGENT_HOST: "{{ .Values.config.controlPlaneUrl }}"
+  AGENT_HOST: "{{ .Values.global.urls.controlPlane.hostname }}"
   AGENT_PORT: "8091"
-  ALLOWED_EXTERNAL_REDIRECT_URIS: "{{ .Values.config.webUIUrl }}"
+  ALLOWED_EXTERNAL_REDIRECT_URIS: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
   API_MONGO_DB: "{{ .Values.global.mongodb.auth.database }}"
   API_PUBLIC_ROUTES: "/webhook/login,/version,/health,/robots.txt"
-  DASHBOARD_ADDRESS: "{{ .Values.config.webUIUrl }}"
+  DASHBOARD_ADDRESS: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
   DEBUG: "true"
   DEV_MODE: "false"
   ENTERPRISE_MODE: "true"
@@ -22,7 +22,7 @@ data:
   OAUTH_ENABLED: "false"
   OSS_ENDPOINT: "http://tracetest.oss:11633"
   ROOT_DOMAIN: "tracetest.io"
-  UI_ENDPOINT: "{{ .Values.config.webUIUrl }}"
+  UI_ENDPOINT: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
   DEMO_ORG_ID: "{{ .Values.config.demoOrgID }}"
   DEMO_INVITE_ID: "{{ .Values.config.demoInviteID }}"
   DISABLE_TELEMETRY: "{{ not .Values.config.telemetry.enabled }}"

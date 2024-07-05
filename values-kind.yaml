@@ -1,6 +1,27 @@
 global:
   urls:
-    webHostname: "tracetest.localdev"
+    cookieDomain: "tracetest.localdev"
+    web:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+    
+    api:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+
+    auth:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/auth"
+    
+    agents:
+      domain: "tracetest.localdev"
+      port: "30000"
 
   nats:
     host: "tt-nats-headless"

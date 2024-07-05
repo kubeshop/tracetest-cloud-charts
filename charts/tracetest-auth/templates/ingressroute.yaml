@@ -1,0 +1,19 @@
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "tracetest-auth.fullname" . }}
+  labels:
+    {{- include "tracetest-auth.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.global.urls.auth.hostname }}`) && PathPrefix(`{{ .Values.global.urls.auth.path }}`)
+    services:
+    - kind: Service
+      name: {{ .Release.Name }}-oathkeeper-proxy
+      passHostHeader: true
+      port: http
