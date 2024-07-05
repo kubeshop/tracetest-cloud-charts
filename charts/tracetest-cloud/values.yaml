@@ -1,0 +1,92 @@
+global:
+  imagePullSecret: ""
+
+  urls:
+    web:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+    
+    api:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+    
+    agents:
+      domain: "tracetest.localdev"
+      port: "30000"
+
+    controlPlane:
+      hostname: "tracetest.localdev"
+      port: "30000"
+
+  mongodb:
+    auth:
+      protocol: "mongodb"
+      host: ""
+      username: ""
+      password: ""
+      database: ""
+      options: {}
+  
+  postgresql:
+    auth:
+      host: "postgres"
+      user: "postgres"
+      password: "postgres"
+      dbname: "tracetest"
+      port: "5432"
+
+jwtSignCert:
+  commonName: jwt-sign-cert
+  secretName: jwt-sign-cert
+  issuerRef:
+    name: issuer-selfsigned
+    kind: ClusterIssuer
+    group: cert-manager.io
+
+service:
+  type: ClusterIP
+  grpcPort: 8089
+  httpPort: 8090
+  controlPlanePort: 8091
+  metricsPort: 9100
+
+deployment:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  resources:
+    limits:
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+image:
+  repository: ghcr.io/kubeshop/tracetest-cloud
+  # tag: v1.2.0
+
+config:
+  sendgridApiKey: some-value
+  githubCredential: some-credential-string
+  hubspotApiKey: some-value
+  segmentWriteKey: some-value
+
+  telemetry:
+    enabled: false
+    collector:
+      endpoint: ""
+    
+    profiler:
+      samplingRate: 50
+      endpoint: ""
+      environment: development
+
+  demoOrgID: some-value
+  demoInviteID: some-value

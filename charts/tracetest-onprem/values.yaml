@@ -1,0 +1,93 @@
+global:
+  imagePullSecret: "ghcr-secret" # TODO: set to blank
+
+  sso:
+    google:
+      clientID: ""
+      clientSecret: ""
+    github:
+      clientID: "Ov23li8WMwQlvjFNNiCy"
+      clientSecret: "e317c15e43909757d1e75e78373d130c374f6601"
+
+  nats:
+    endpoint: "nats://nats:4222"
+
+  postgresql:
+    auth:
+      host: "postgres"
+      username: "postgres"
+      password: "postgres"
+      database: "tracetest"
+      port: "5432"
+    
+  mongodb:
+    auth:
+      protocol: "mongodb"
+      host: ""
+      username: ""
+      password: ""
+      database: ""
+      options: {}
+
+  
+  urls:
+    cookieDomain: "tracetest.localdev"
+    web:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+    
+    api:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+
+    auth:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+    
+    agents:
+      domain: "tracetest.localdev"
+      port: "30000"
+    
+    controlPlane:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+
+nats:
+  enabled: true
+  
+  config:
+    jetstream:
+      enabled: true
+      fileStore:
+        enabled: true
+        dir: /data
+        pvc:
+          enabled: true
+          size: 10Gi
+      memoryStore:
+          enabled: true
+          maxSize: 1Gi
+
+    natsBox:
+      container:
+        env:
+          # different from k8s units, suffix must be B, KiB, MiB, GiB, or TiB
+          # should be ~90% of memory limit
+          GOMEMLIMIT: 900MiB
+        merge:
+          # recommended limit is at least 2 CPU cores and 8Gi Memory for production JetStream clusters
+          resources:
+            requests:
+              cpu: 250m # one entire CPU
+              memory: 1Gi
+            limits:
+              memory: 1Gi
+
