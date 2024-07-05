@@ -60,21 +60,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-{{- define "tracetest-auth.postgres_dsn" -}}
-{{- $global := .Values.global.postgresql.auth -}}
-{{- $options := $global.options | default dict -}}
-{{- $options_str := "" -}}
-{{- range $key, $value := $options -}}
-  {{- if $options_str }}
-    {{- $options_str = printf "%s&%s=%s" $options_str $key $value -}}
-  {{- else }}
-    {{- $options_str = printf "%s=%s" $key $value -}}
-  {{- end -}}
-{{- end -}}
-{{- if $options_str }}
-  {{- printf "postgresql://%s:%s@%s:%s/%s?%s" $global.user $global.password $global.host $global.port $global.dbname $options_str -}}
-{{- else }}
-  {{- printf "postgresql://%s:%s@%s:%s/%s" $global.user $global.password $global.host $global.port $global.dbname -}}
-{{- end -}}
-{{- end -}}

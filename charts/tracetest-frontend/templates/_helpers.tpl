@@ -61,19 +61,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-
-{{/*
-Create a URI from a given object containing protocol, hostname, port, and path.
-*/}}
-{{- define "tracetest-frontend.URL" -}}
-{{- $protocol := default "http" .protocol }}
-{{- $hostname := .hostname }}
-{{- $port := default "80" .port }}
-{{- $path := .path }}
-{{- if and (or (and (eq $protocol "https") (eq $port "443")) (and (eq $protocol "http") (eq $port "80"))) }}
-{{- printf "%s://%s%s" $protocol $hostname $path }}
-{{- else }}
-{{- printf "%s://%s:%s%s" $protocol $hostname $port $path }}
-{{- end }}
-{{- end }}
