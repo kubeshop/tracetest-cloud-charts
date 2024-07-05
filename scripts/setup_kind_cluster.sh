@@ -56,5 +56,14 @@ if [[ "$@" == *"--reset"* ]]; then
     --set crds.enabled=true
 fi
 
+if [[ "$@" == *"--build-deps"* ]]; then
+  for dir in $PROJECT_ROOT/charts/*; do
+    if [[ -d "$dir" ]]; then
+      echo "Building dependencies for $dir"
+      helm dependency build "$dir"
+    fi
+  done
+fi
+
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml
