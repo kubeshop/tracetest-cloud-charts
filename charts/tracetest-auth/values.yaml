@@ -330,7 +330,7 @@ kratos:
 oathkeeper:
   secret:
     nameOverride: "oathkeeper-secrets"
-    enable: false
+    enabled: false
     
   deployment:
     extraVolumes:
