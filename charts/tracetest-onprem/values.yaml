@@ -1,6 +1,14 @@
 global:
   imagePullSecret: "ghcr-secret" # TODO: set to blank
 
+  sso:
+    google:
+      clientID: ""
+      clientSecret: ""
+    github:
+      clientID: "Ov23li8WMwQlvjFNNiCy"
+      clientSecret: "e317c15e43909757d1e75e78373d130c374f6601"
+
   nats:
     endpoint: "nats://nats:4222"
 
