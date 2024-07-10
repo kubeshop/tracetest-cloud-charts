@@ -48,7 +48,7 @@ if [[ "$SETUP_CLUSTER" == true ]]; then
     
     $PROJECT_ROOT/scripts/create_image_pull_secret.sh
   fi
-  
+
   # install cert manager
   helm repo add jetstack https://charts.jetstack.io --force-update
   helm upgrade --install \

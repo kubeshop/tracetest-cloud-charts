@@ -1,7 +1,19 @@
 global:
   imagePullSecret: ""
 
+  tracetestCore:
+    service:
+      httpPort: 11633
+
+  tracetestCloud:
+    service:
+      grpcPort: &grpcPort 8089
+      httpPort: &httpPort 8090
+      controlPlanePort: &controlPlanePort 8091
+      metricsPort: &metricsPort 9100
+
   urls:
+    rootDomain: "tracetest.localdev"
     web:
       protocol: "https"
       hostname: "tracetest.localdev"
@@ -49,10 +61,10 @@ jwtSignCert:
 
 service:
   type: ClusterIP
-  grpcPort: 8089
-  httpPort: 8090
-  controlPlanePort: 8091
-  metricsPort: 9100
+  grpcPort: *grpcPort
+  httpPort: *httpPort
+  controlPlanePort: *controlPlanePort
+  metricsPort: *metricsPort
 
 deployment:
   replicas: 1

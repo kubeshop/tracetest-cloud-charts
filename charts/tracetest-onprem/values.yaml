@@ -3,8 +3,8 @@ global:
 
   sso:
     google:
-      clientID: ""
-      clientSecret: ""
+      clientID: "123"
+      clientSecret: "123"
     github:
       clientID: "Ov23li8WMwQlvjFNNiCy"
       clientSecret: "e317c15e43909757d1e75e78373d130c374f6601"
@@ -31,6 +31,7 @@ global:
 
   
   urls:
+    rootDomain: "tracetest.localdev"
     cookieDomain: "tracetest.localdev"
     web:
       protocol: "https"

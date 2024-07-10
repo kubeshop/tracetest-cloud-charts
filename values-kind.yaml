@@ -1,5 +1,6 @@
 global:
   urls:
+    rootDomain: "tracetest.localdev"
     cookieDomain: "tracetest.localdev"
     web:
       protocol: "https"

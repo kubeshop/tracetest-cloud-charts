@@ -30,6 +30,9 @@ spec:
               fi
             done
 
+            # a bit more delay just to be sure
+            sleep 10 
+
             nats stream delete tests --force || echo "stream tests does not exist"
             nats stream create tests \
               --subjects 'agent.>' \
