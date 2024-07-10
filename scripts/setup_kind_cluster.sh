@@ -19,11 +19,14 @@ PROJECT_ROOT=$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")
 KUBECONFIG_FILE=$(pwd)/tracetest.kubeconfig
 ENV_FILE=$PROJECT_ROOT/cluster.env
 
+SETUP_CLUSTER=false
+
 if [[ "$@" == *"--reset"* ]]; then
   kind delete cluster --name tracetest
 fi
 
 if ! kind get clusters | grep -q tracetest; then
+  SETUP_CLUSTER=true
   kind create cluster \
     --name tracetest \
     --config $PROJECT_ROOT/kind-config.yaml \
@@ -39,13 +42,13 @@ EOF
 
 source $ENV_FILE
 
-if [[ "$@" == *"--private"* ]]; then
-  printf "\e[41mPrivate version requested. Please provide your credentials.\e[0m\n"
+if [[ "$SETUP_CLUSTER" == true ]]; then
+  if [[ "$@" == *"--private"* ]]; then
+    printf "\e[41mPrivate version requested. Please provide your credentials.\e[0m\n"
+    
+    $PROJECT_ROOT/scripts/create_image_pull_secret.sh
+  fi
   
-  $PROJECT_ROOT/scripts/create_image_pull_secret.sh
-fi
-
-if [[ "$@" == *"--reset"* ]]; then
   # install cert manager
   helm repo add jetstack https://charts.jetstack.io --force-update
   helm upgrade --install \
