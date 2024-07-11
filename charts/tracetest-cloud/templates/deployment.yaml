@@ -188,6 +188,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "tracetest-cloud.fullname" . }}-secrets
                   key: SEGMENTIO_WRITE_KEY
+            - name: TRACETEST_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-secrets
+                  key: LICENSE
           imagePullPolicy: Always
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
