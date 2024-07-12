@@ -42,5 +42,3 @@ deployment:
 
 image:
   repository: kubeshop/tracetest-agent-operator
-  tag: v1.4.2
-

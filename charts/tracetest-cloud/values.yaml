@@ -82,7 +82,6 @@ deployment:
 
 image:
   repository: kubeshop/tracetest-cloud
-  tag: v1.4.2
 
 config:
   sendgridApiKey: some-value
