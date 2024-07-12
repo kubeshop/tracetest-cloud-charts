@@ -27,7 +27,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: tracetestcloud
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+          image: "{{ $.Values.image.base }}{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           env:
             # Variables defined as config maps
             - name: AGENT_HOST
