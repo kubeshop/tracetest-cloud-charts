@@ -1,4 +1,8 @@
 global:
+  tracetestFrontend:
+    service:
+      httpPort: 3000
+  
   nats:
     endpoint: &natsEndpoint "nats://nats:4222"
   
@@ -14,15 +18,8 @@ global:
       path: "/"
 
 config:
-  targetVersion: v0.0.0
+  targetVersion: v1.4.1
   targetNamespace: agents
-
-service:
-  type: ClusterIP
-  grpcPort: 8089
-  httpPort: 8090
-  controlPlanePort: 8091
-  metricsPort: 9100
 
 deployment:
   replicas: 1
@@ -42,5 +39,5 @@ deployment:
 
 image:
   repository: ghcr.io/kubeshop/tracetest-agent-operator
-  # tag: v0.1.0
+  tag: v1.4.3
 

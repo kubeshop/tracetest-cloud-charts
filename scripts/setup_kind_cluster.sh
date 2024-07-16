@@ -22,17 +22,19 @@ ENV_FILE=$PROJECT_ROOT/cluster.env
 SETUP_CLUSTER=false
 
 if [[ "$@" == *"--reset"* ]]; then
+  printf "\e[41m\e[1mDeleting existing cluster\e[0m\e[0m\n"
   kind delete cluster --name tracetest
 fi
 
 if ! kind get clusters | grep -q tracetest; then
+  printf "\e[42m\e[1mCreate new cluster\e[0m\e[0m\n"
   SETUP_CLUSTER=true
   kind create cluster \
     --name tracetest \
     --config $PROJECT_ROOT/kind-config.yaml \
     --kubeconfig $KUBECONFIG_FILE
 else 
-  echo "Cluster already exists"
+  printf "\e[1mCluster already exists\e[0m\n"
 fi
 
 cat <<EOF > $ENV_FILE
@@ -70,3 +72,6 @@ fi
 
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml
+
+printf "\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
+$PROJECT_ROOT/scripts/coredns_config.sh tracetest.localdev ttdeps-traefik.default.svc.cluster.local

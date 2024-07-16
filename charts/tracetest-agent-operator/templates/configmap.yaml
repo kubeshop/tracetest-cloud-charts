@@ -8,6 +8,8 @@ data:
   TRACETEST_NATS_ENDPOINT: "{{ .Values.global.nats.endpoint }}"
   TRACETEST_TARGET_VERSION: "{{ .Values.config.targetVersion }}"
   TRACETEST_TARGET_NAMESPACE: "{{ .Values.config.targetNamespace }}"
-  TRACETEST_TARGET_SERVER: "{{ include "tracetest-common.url" .Values.global.urls.controlPlane }}"
+  TRACETEST_TARGET_SERVER: {{ include "tracetest-common.url" .Values.global.urls.web }}
   TRACETEST_TARGET_DOMAIN: "{{ .Values.global.urls.agents.domain }}"
+  TRACETEST_AGENT_EXTRA_ENV: |
+    TRACETEST_DEV_FORCE_URL=true
   TRACETEST_TRACING_COLLECTORENDPOINT: ""
