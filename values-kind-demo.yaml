@@ -1,0 +1,9 @@
+opentelemetry-collector:
+  config:
+    receivers:
+      otlp:
+        protocols:
+          http:
+            cors:
+              allowed_origins:
+                - "https://pokeshop.localdev:30000"

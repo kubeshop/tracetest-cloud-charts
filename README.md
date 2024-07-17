@@ -16,6 +16,7 @@ this can also become the main helm repo for cloud, since it has a much nicer app
 ```
 ./scripts/setup_kind_cluster.sh --reset --private --build-deps
 sudo sh -c 'echo "127.0.0.1 tracetest.localdev" >> /etc/hosts'
+sudo sh -c 'echo "127.0.0.1 pokeshop.localdev" >> /etc/hosts'
 source ./cluster.env
 kubectl get pods
 ```

@@ -76,5 +76,9 @@ echo "Starting Tracetest OnPrem installation on Kind"
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml
 
+if [[ "$@" == *"--install-demo"* ]]; then
+  helm upgrade --install ttdemo -n demo --create-namespace $PROJECT_ROOT/charts/pokeshop-demo -f $PROJECT_ROOT/values-kind-demo.yaml
+fi
+
 printf "\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
-$PROJECT_ROOT/scripts/coredns_config.sh tracetest.localdev ttdeps-traefik.default.svc.cluster.local
+$PROJECT_ROOT/scripts/coredns_config.sh ttdeps-traefik.default.svc.cluster.local tracetest.localdev pokeshop.localdev

@@ -1,16 +1,18 @@
 #!/bin/bash
 
-# Check that exactly two arguments are passed
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <hostname> <namespace/serviceName>"
+# Check that at least two arguments are passed
+if [ "$#" -lt 2 ]; then
+    echo "Usage: $0 <internalHostname> <hostname1> [<hostname2> ...]"
     exit 1
 fi
 
-# Assign arguments to variables
-HOSTNAME=$1
-INTERNAL_HOSTNAME=$2
+# Assign the internal hostname to a variable
+INTERNAL_HOSTNAME=$1
 
-# Default CoreDNS configuration with the custom entry
+# Shift the arguments to process the hostnames
+shift
+
+# Initialize the CoreDNS configuration with the default settings
 DEFAULT_COREDNS_CONFIG=$(cat <<EOF
 .:53 {
     errors
@@ -18,7 +20,17 @@ DEFAULT_COREDNS_CONFIG=$(cat <<EOF
         lameduck 5s
     }
     ready
-    rewrite name $HOSTNAME $INTERNAL_HOSTNAME
+EOF
+)
+
+# Iterate over each hostname to add rewrite rules
+for HOSTNAME in "$@"; do
+    DEFAULT_COREDNS_CONFIG+=$'\n'"    rewrite name $HOSTNAME $INTERNAL_HOSTNAME"
+done
+
+# Continue with the rest of the CoreDNS configuration
+DEFAULT_COREDNS_CONFIG+=$(cat <<EOF
+
     kubernetes cluster.local in-addr.arpa ip6.arpa {
         pods insecure
         fallthrough in-addr.arpa ip6.arpa
@@ -40,4 +52,9 @@ EOF
 kubectl create configmap -n kube-system coredns --from-literal=Corefile="$DEFAULT_COREDNS_CONFIG" -o yaml --dry-run=client | kubectl apply -f -
 kubectl rollout restart -n kube-system deployment/coredns
 
-printf "\e[42m\e[1mCoreDNS configuration has been updated. The hostname %s is now replaced to %s\e[0m\e[0m\n" "$HOSTNAME" "$INTERNAL_HOSTNAME"
+printf "\e[42m\e[1mCoreDNS configuration has been updated.\e[0m\e[0m\n"
+
+# Print each rewrite rule added
+for HOSTNAME in "$@"; do
+    printf "\e[42m\e[1mThe hostname %s is now replaced with %s\e[0m\e[0m\n" "$HOSTNAME" "$INTERNAL_HOSTNAME"
+done
