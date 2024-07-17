@@ -5,9 +5,10 @@ set -e
 function show_help() {
   echo "Usage: setup_kind_cluster.sh [OPTIONS]"
   echo "Options:"
-  echo "  --reset     Reset the existing kind cluster"
-  echo "  --private   Use private repositories. Requires a PAT with read:packages scope."
-  echo "  --help      Show this help message"
+  echo "  --reset      Reset the existing kind cluster"
+  echo "  --private    Use private repositories. Requires a PAT with read:packages scope."
+  echo "  --build-deps Build dependencies for all charts"
+  echo "  --help       Show this help message"
 }
 
 if [[ "$@" == *"--help"* ]]; then
@@ -22,12 +23,12 @@ ENV_FILE=$PROJECT_ROOT/cluster.env
 SETUP_CLUSTER=false
 
 if [[ "$@" == *"--reset"* ]]; then
-  printf "\e[41m\e[1mDeleting existing cluster\e[0m\e[0m\n"
+  printf "\n\e[41m\e[1mDeleting existing cluster\e[0m\e[0m\n"
   kind delete cluster --name tracetest
 fi
 
 if ! kind get clusters | grep -q tracetest; then
-  printf "\e[42m\e[1mCreate new cluster\e[0m\e[0m\n"
+  printf "\n\e[42m\e[1mCreate new cluster\e[0m\e[0m\n"
   SETUP_CLUSTER=true
   kind create cluster \
     --name tracetest \
@@ -46,7 +47,7 @@ source $ENV_FILE
 
 if [[ "$SETUP_CLUSTER" == true ]]; then
   if [[ "$@" == *"--private"* ]]; then
-    printf "\e[41mPrivate version requested. Please provide your credentials.\e[0m\n"
+    printf "\n\e[41mPrivate version requested. Please provide your credentials.\e[0m\n"
     
     $PROJECT_ROOT/scripts/create_image_pull_secret.sh
   fi
@@ -69,6 +70,8 @@ if [[ "$@" == *"--build-deps"* ]]; then
     fi
   done
 fi
+
+echo "Starting Tracetest OnPrem installation on Kind"
 
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml

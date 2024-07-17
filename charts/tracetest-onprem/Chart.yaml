@@ -16,6 +16,9 @@ dependencies:
 - name: tracetest-agent-operator
   version: v1.4.0
   repository: file://../tracetest-agent-operator
+- name: tracetest-monitor-operator
+  version: v1.0.0
+  repository: file://../tracetest-monitor-operator
 - name: tracetest-auth
   version: v1.11.0
   repository: file://../tracetest-auth

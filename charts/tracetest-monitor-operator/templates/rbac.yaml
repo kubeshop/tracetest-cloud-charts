@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "tracetest-monitor-operator.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "tracetest-monitor-operator.fullname" . }}
+rules:
+  - apiGroups: ["batch"]
+    resources: ["cronjobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "tracetest-monitor-operator.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "tracetest-monitor-operator.fullname" . }}
+  namespace: {{.Release.Namespace}}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "tracetest-monitor-operator.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io

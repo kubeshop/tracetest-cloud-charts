@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tracetest-monitor-operator.fullname" . }}
+  labels:
+    {{- include "tracetest-monitor-operator.labels" . | nindent 4 }}
+spec:
+  # the numbers for replicas and max surge/unavailable are set to speed up deployments.
+  # The idea is that there is one "old" version running and one "new" version in parallel
+  # and once that works the old version is scaled down and the new version is scaled up.
+  # This timeline avoids the need to wait for new nodes to be started to satisfy requirements.
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    {{- toYaml .Values.deployment.strategy | nindent 4 }}
+
+  selector:
+    matchLabels:
+      {{- include "tracetest-monitor-operator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      labels:
+        {{- include "tracetest-monitor-operator.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "tracetest-monitor-operator.fullname" . }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      containers:
+        - name: tracetestcloud
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+          env:
+          - name: TRACETEST_NATS_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "tracetest-monitor-operator.fullname" . }}-config
+                key: TRACETEST_NATS_ENDPOINT
+          - name: TRACETEST_TARGET_NAMESPACE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "tracetest-monitor-operator.fullname" . }}-config
+                key: TRACETEST_TARGET_NAMESPACE
+          - name: TRACETEST_TARGET_SERVERURL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "tracetest-monitor-operator.fullname" . }}-config
+                key: TRACETEST_TARGET_SERVERURL
+          - name: TRACETEST_TRACING_COLLECTORENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "tracetest-monitor-operator.fullname" . }}-config
+                key: TRACETEST_TRACING_COLLECTORENDPOINT
+
+          imagePullPolicy: Always
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}

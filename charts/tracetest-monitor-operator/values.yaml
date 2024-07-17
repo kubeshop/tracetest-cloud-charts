@@ -1,0 +1,25 @@
+config:
+  natsEndpoint: "nats://nats-headless.external:4222"
+  targetNamespace: monitors
+  targetServerUrl: "http://tracetest-cloud.tracetest-cloud:8090"
+
+deployment:
+  replicas: 1
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+image:
+  repository: ghcr.io/kubeshop/tracetest-monitor-operator
+  tag: v1.4.3
+
