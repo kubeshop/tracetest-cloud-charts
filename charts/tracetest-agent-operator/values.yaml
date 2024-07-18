@@ -1,12 +1,21 @@
 global:
+  imagePullSecret: ""
+  tracetestImageRegistry: ""
+  
   tracetestFrontend:
     service:
       httpPort: 3000
   
   nats:
-    endpoint: &natsEndpoint "nats://nats:4222"
+    endpoint: "nats://nats:4222"
   
   urls:
+    web:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+
     agents:
       domain: "tracetest.localdev"
       port: "30000"

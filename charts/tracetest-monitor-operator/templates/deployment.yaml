@@ -25,10 +25,10 @@ spec:
     spec:
       serviceAccountName: {{ include "tracetest-monitor-operator.fullname" . }}
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
+        - name: {{ .Values.global.imagePullSecret }}
       containers:
         - name: tracetestcloud
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+          image: "{{ .Values.global.tracetestImageRegistry }}{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           env:
           - name: TRACETEST_NATS_ENDPOINT
             valueFrom:

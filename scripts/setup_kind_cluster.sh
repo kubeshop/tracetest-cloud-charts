@@ -5,10 +5,12 @@ set -e
 function show_help() {
   echo "Usage: setup_kind_cluster.sh [OPTIONS]"
   echo "Options:"
-  echo "  --reset      Reset the existing kind cluster"
-  echo "  --private    Use private repositories. Requires a PAT with read:packages scope."
-  echo "  --build-deps Build dependencies for all charts"
-  echo "  --help       Show this help message"
+  echo "  --reset         Reset the existing kind cluster"
+  echo "  --private       Use private repositories. Requires a PAT with read:packages scope."
+  echo "  --build-deps    Build dependencies for all charts"
+  echo "  --install-demo  Install the Pokeshop demo"
+  echo "  --debug         Enable Helm debug output"
+  echo "  --help          Show this help message"
 }
 
 if [[ "$@" == *"--help"* ]]; then
@@ -19,6 +21,12 @@ fi
 PROJECT_ROOT=$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")
 KUBECONFIG_FILE=$(pwd)/tracetest.kubeconfig
 ENV_FILE=$PROJECT_ROOT/cluster.env
+HELM_EXTRA_FLAGS=()
+
+if [[ "$@" == *"--debug"* ]]; then
+  set -x
+  HELM_EXTRA_FLAGS+=(--debug)
+fi
 
 SETUP_CLUSTER=false
 
@@ -62,6 +70,11 @@ if [[ "$SETUP_CLUSTER" == true ]]; then
     --set crds.enabled=true
 fi
 
+if [[ "$@" == *"--private"* ]]; then
+  HELM_EXTRA_FLAGS+=(--set global.imagePullSecret=ghcr-secret)
+  HELM_EXTRA_FLAGS+=(--set global.tracetestImageRegistry=ghcr.io/)
+fi
+
 if [[ "$@" == *"--build-deps"* ]]; then
   for dir in $PROJECT_ROOT/charts/*; do
     if [[ -d "$dir" ]]; then
@@ -73,8 +86,8 @@ fi
 
 echo "Starting Tracetest OnPrem installation on Kind"
 
-helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml
-helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml
+helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
+helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
 
 if [[ "$@" == *"--install-demo"* ]]; then
   helm upgrade --install ttdemo -n demo --create-namespace $PROJECT_ROOT/charts/pokeshop-demo -f $PROJECT_ROOT/values-kind-demo.yaml

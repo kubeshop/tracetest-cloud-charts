@@ -1,5 +1,7 @@
 global:
+  licenseKey: &license ""
   imagePullSecret: ""
+  tracetestImageRegistry: ""
 
   tracetestCore:
     service:
@@ -88,7 +90,7 @@ config:
   githubCredential: some-credential-string
   hubspotApiKey: some-value
   segmentWriteKey: some-value
-  license: your-license-here
+  license: *license
 
   telemetry:
     enabled: false

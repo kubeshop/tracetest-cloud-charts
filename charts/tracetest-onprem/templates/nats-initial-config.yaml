@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: configure-nats
+  name: nats-initial-config
   labels:
-    app: configure-nats
+    app: nats-initial-config
   annotations:
-    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook": post-install
     # "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
@@ -33,7 +33,6 @@ spec:
             # a bit more delay just to be sure
             sleep 10 
 
-            nats stream delete tests --force || echo "stream tests does not exist"
             nats stream create tests \
               --subjects 'agent.>' \
               --subjects 'test.>' \

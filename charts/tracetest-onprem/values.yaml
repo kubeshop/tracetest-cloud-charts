@@ -1,5 +1,8 @@
 global:
-  imagePullSecret: "ghcr-secret" # TODO: set to blank
+  licenseKey: ""
+  
+  imagePullSecret: ""
+  tracetestImageRegistry: ""
 
   sso:
     google:

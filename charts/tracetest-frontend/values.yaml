@@ -1,4 +1,7 @@
 global:
+  imagePullSecret: ""
+  tracetestImageRegistry: ""
+
   tracetestFrontend:
     service:
       httpPort: &httpPort 3000
@@ -25,8 +28,6 @@ global:
     agents:
       domain: "tracetest.localdev"
       port: "30000"
-
-  imagePullSecret: ""
 
 ingress:
   enabled: true

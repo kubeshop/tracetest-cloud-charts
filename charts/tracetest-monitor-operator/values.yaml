@@ -1,7 +1,21 @@
+global:
+  imagePullSecret: ""
+  tracetestImageRegistry: ""
+  
+  nats:
+    endpoint: "nats://nats:4222"
+
+  urls:
+    web:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+
 config:
-  natsEndpoint: "nats://nats-headless.external:4222"
   targetNamespace: monitors
-  targetServerUrl: "http://tracetest-cloud.tracetest-cloud:8090"
+  # collectorEndpoint: "collector-opentelemetry-collector.otel:4317"
+  collectorEndpoint: ""
 
 deployment:
   replicas: 1
@@ -20,6 +34,6 @@ deployment:
       memory: 128Mi
 
 image:
-  repository: ghcr.io/kubeshop/tracetest-monitor-operator
-  tag: v1.4.3
+  repository: kubeshop/tracetest-monitor-operator
+
 

@@ -26,7 +26,7 @@ spec:
       serviceAccountName: {{ include "tracetest-agent-operator.fullname" . }}
       containers:
         - name: tracetestcloud
-          image: "{{ $.Values.image.base }}{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          image: "{{ $.Values.global.tracetestImageRegistry }}{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           env:
           - name: TRACETEST_NATS_ENDPOINT
             valueFrom:

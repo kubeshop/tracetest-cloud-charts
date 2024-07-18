@@ -32,7 +32,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ $.Chart.Name }}
-          image: "{{ $.Values.image.base }}{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          image: "{{ $.Values.global.tracetestImageRegistry }}{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           env:
             - name: TRACETEST_POSTGRES_HOST
               valueFrom:
@@ -71,11 +71,13 @@ spec:
               value: ""
             - name: TRACETEST_SERVER_TELEMETRY_SERVICE_NAME
               value: "core-{{ .name }}"
+            {{- if $.Values.global.licenseKey }}
             - name: TRACETEST_LICENSE
               valueFrom:
                 secretKeyRef:
                   name: oss-secrets
                   key: license
+            {{- end }}
             {{- range $key, $value := .env }}
             - name: {{ $key }}
               value: "{{ $value }}"
