@@ -73,15 +73,23 @@ fi
 if [[ "$@" == *"--private"* ]]; then
   HELM_EXTRA_FLAGS+=(--set global.imagePullSecret=ghcr-secret)
   HELM_EXTRA_FLAGS+=(--set global.tracetestImageRegistry=ghcr.io/)
+else 
+  if [[ -z "$TRACETEST_LICENCE" ]]; then
+    read -p $'\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENCE
+  else 
+    printf "\e[1;32mreading Tracetest license username from env.\e[0m\n"
+  fi
+
+  HELM_EXTRA_FLAGS+=(--set global.licenseKey=$TRACETEST_LICENCE)
 fi
 
 if [[ "$@" == *"--build-deps"* ]]; then
-  for dir in $PROJECT_ROOT/charts/*; do
-    if [[ -d "$dir" ]]; then
-      echo "Building dependencies for $dir"
-      helm dependency build "$dir"
-    fi
-  done
+  helm dependency update "$PROJECT_ROOT/charts/tracetest-dependencies"
+  helm dependency update "$PROJECT_ROOT/charts/tracetest-onprem"
+
+  if [[ "$@" == *"--install-demo"* ]]; then
+    helm dependency update $PROJECT_ROOT/charts/pokeshop-demo
+  fi
 fi
 
 echo "Starting Tracetest OnPrem installation on Kind"
@@ -94,4 +102,10 @@ if [[ "$@" == *"--install-demo"* ]]; then
 fi
 
 printf "\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
-$PROJECT_ROOT/scripts/coredns_config.sh ttdeps-traefik.default.svc.cluster.local tracetest.localdev pokeshop.localdev
+
+hosts=(tracetest.localdev)
+if [[ "$@" == *"--install-demo"* ]]; then
+  hosts+=(pokeshop.localdev)
+fi
+
+$PROJECT_ROOT/scripts/coredns_config.sh ttdeps-traefik.default.svc.cluster.local "${hosts[@]}"
