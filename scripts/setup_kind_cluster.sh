@@ -74,13 +74,13 @@ if [[ "$@" == *"--private"* ]]; then
   HELM_EXTRA_FLAGS+=(--set global.imagePullSecret=ghcr-secret)
   HELM_EXTRA_FLAGS+=(--set global.tracetestImageRegistry=ghcr.io/)
 else 
-  if [[ -z "$TRACETEST_LICENCE" ]]; then
-    read -p $'\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENCE
+  if [[ -z "$TRACETEST_LICENSE" ]]; then
+    read -p $'\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENSE
   else 
     printf "\e[1;32mreading Tracetest license username from env.\e[0m\n"
   fi
 
-  HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENCE")
+  HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENSE")
 fi
 
 if [[ "$@" == *"--build-deps"* ]]; then
