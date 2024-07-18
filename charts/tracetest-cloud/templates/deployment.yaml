@@ -27,7 +27,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: tracetestcloud
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+          image: "{{ $.Values.image.base }}{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           env:
             # Variables defined as config maps
             - name: AGENT_HOST
@@ -188,6 +188,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "tracetest-cloud.fullname" . }}-secrets
                   key: SEGMENTIO_WRITE_KEY
+            - name: TRACETEST_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-secrets
+                  key: LICENSE
           imagePullPolicy: Always
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}

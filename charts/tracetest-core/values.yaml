@@ -19,6 +19,7 @@ global:
 config:
   tracetestAnalyticsServerKey: some-value
   tracetestSecurityEncryptionKey: some-value
+  license: your-license-here
   profiler:
     enabled: false
     samplingRate: 50
@@ -30,9 +31,8 @@ server:
 
 
 image:
-  repository: ghcr.io/kubeshop/tracetest-core
+  repository: kubeshop/tracetest-core
   tag: v1.5.0-rc.3
-  pullPolicy: IfNotPresent
   
 
 deployments:

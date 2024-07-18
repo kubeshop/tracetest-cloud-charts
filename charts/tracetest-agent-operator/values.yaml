@@ -38,6 +38,4 @@ deployment:
       memory: 256Mi
 
 image:
-  repository: ghcr.io/kubeshop/tracetest-agent-operator
-  tag: v1.4.3
-
+  repository: kubeshop/tracetest-agent-operator
