@@ -80,7 +80,7 @@ else
     printf "\e[1;32mreading Tracetest license username from env.\e[0m\n"
   fi
 
-  HELM_EXTRA_FLAGS+=(--set global.licenseKey=$TRACETEST_LICENCE)
+  HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENCE")
 fi
 
 if [[ "$@" == *"--build-deps"* ]]; then

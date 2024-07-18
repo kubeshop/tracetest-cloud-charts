@@ -1,5 +1,5 @@
 global:
-  licenseKey: &license ""
+  licenseKey: ""
   imagePullSecret: ""
   tracetestImageRegistry: ""
   replicasPerService: 1
@@ -21,7 +21,6 @@ global:
 config:
   tracetestAnalyticsServerKey: some-value
   tracetestSecurityEncryptionKey: some-value
-  license: *license
   profiler:
     enabled: false
     samplingRate: 50

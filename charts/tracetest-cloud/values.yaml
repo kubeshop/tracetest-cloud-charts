@@ -1,5 +1,5 @@
 global:
-  licenseKey: &license ""
+  licenseKey: ""
   imagePullSecret: ""
   tracetestImageRegistry: ""
 
@@ -90,8 +90,7 @@ config:
   githubCredential: some-credential-string
   hubspotApiKey: some-value
   segmentWriteKey: some-value
-  license: *license
-
+  
   telemetry:
     enabled: false
     collector:
