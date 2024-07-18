@@ -1,4 +1,8 @@
 global:
+  tracetestFrontend:
+    service:
+      httpPort: &httpPort 3000
+      
   urls:
     web:
       protocol: "https"
@@ -54,7 +58,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 3000
+  port: *httpPort
 
 resources: 
   limits:

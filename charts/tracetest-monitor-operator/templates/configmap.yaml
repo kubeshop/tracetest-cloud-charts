@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tracetest-monitor-operator.fullname" . }}-config
+  labels:
+    {{- include "tracetest-monitor-operator.labels" . | nindent 4 }}
+data:
+  TRACETEST_NATS_ENDPOINT: "{{ .Values.config.natsEndpoint }}"
+  TRACETEST_TARGET_NAMESPACE: "{{ .Values.config.targetNamespace }}"
+  TRACETEST_TARGET_SERVERURL: {{ include "tracetest-common.url" .Values.global.urls.web }}
+  TRACETEST_TRACING_COLLECTORENDPOINT: "collector-opentelemetry-collector.otel:4317"

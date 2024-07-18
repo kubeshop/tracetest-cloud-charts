@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pokeshop-demo.fullname" . }}-api
+  labels:
+    {{- include "pokeshop-demo.api.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.pokeshop.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pokeshop-demo.api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pokeshop-demo.api.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: pokeshop-api
+          image: "{{ .Values.pokeshop.image.repository }}:{{ .Values.pokeshop.image.tag }}"
+          imagePullPolicy: {{ .Values.pokeshop.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.pokeshop.resources | nindent 12 }}
+          env:
+            - name: NPM_RUN_COMMAND
+              value: api
+            - name: SERVICE_NAME
+              value: pokeshop
+            {{- toYaml .Values.pokeshop.env | nindent 12 }}
+
+        - name: pokeshop-rpc
+          image: "{{ .Values.pokeshop.image.repository }}:{{ .Values.pokeshop.image.tag }}"
+          imagePullPolicy: {{ .Values.pokeshop.image.pullPolicy }}
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.pokeshop.service.rpcPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.pokeshop.resources | nindent 12 }}
+          env:
+            - name: NPM_RUN_COMMAND
+              value: rpc
+            - name: SERVICE_NAME
+              value: pokeshop-rpc
+            {{- toYaml .Values.pokeshop.env | nindent 12 }}

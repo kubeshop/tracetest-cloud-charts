@@ -53,6 +53,7 @@ traefik:
 
   dnsNames:
     - "tracetest.localdev"
+    - "pokeshop.localdev"
 
   tls:
     issuerRef:

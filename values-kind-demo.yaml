@@ -1,0 +1,15 @@
+opentelemetry-collector:
+  config:
+    receivers:
+      otlp:
+        protocols:
+          http:
+            cors:
+              allowed_origins:
+                - "https://pokeshop.localdev:30000"
+
+    exporters:
+      otlp/jaeger:
+        endpoint: ttdemo-jaeger-collector:4317
+        tls:
+          insecure: true

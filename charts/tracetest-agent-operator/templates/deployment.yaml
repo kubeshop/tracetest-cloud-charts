@@ -58,6 +58,11 @@ spec:
               configMapKeyRef:
                 name: {{ include "tracetest-agent-operator.fullname" . }}-config
                 key: TRACETEST_TRACING_COLLECTORENDPOINT
+          - name: TRACETEST_AGENT_EXTRA_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "tracetest-agent-operator.fullname" . }}-config
+                key: TRACETEST_AGENT_EXTRA_ENV
 
           imagePullPolicy: Always
           resources:

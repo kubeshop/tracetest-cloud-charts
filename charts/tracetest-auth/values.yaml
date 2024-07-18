@@ -168,12 +168,6 @@ kratos:
           secretKeyRef:
             name: kratos-secrets
             key: GOOGLE_CLIENT_SECRET
-
-      - name: SECRETS_COOKIE
-        valueFrom:
-          secretKeyRef:
-            name: kratos-secrets
-            key: COOKIE
           
       - name: SECRETS_COOKIE
         valueFrom:

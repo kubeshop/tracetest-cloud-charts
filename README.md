@@ -14,13 +14,15 @@ this can also become the main helm repo for cloud, since it has a much nicer app
 [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) and [helm](https://helm.sh/docs/intro/install/) are required to run and test this repo
 
 ```
-./scripts/setup_kind_cluster.sh --reset --private --build-deps
+./scripts/setup_kind_cluster.sh --install-demo --reset --private --build-deps
 sudo sh -c 'echo "127.0.0.1 tracetest.localdev" >> /etc/hosts'
+sudo sh -c 'echo "127.0.0.1 pokeshop.localdev" >> /etc/hosts'
 source ./cluster.env
 kubectl get pods
 ```
 
 now you can access the app at https://tracetest.localdev:30000
+The pokeshop demo is available at https://pokeshop.localdev:30000
 
 ## charts
 

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: tracetest-frontend
-description: A Helm chart for Kubernetes
+name: pokeshop-demo
+description: A Helm chart wrapper for Pokeshop + Tracetest Agent
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -15,15 +15,27 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: v1.4.0
+version: v1.1.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: v1.0.5
+appVersion: v1.0.0
 
 dependencies:
-- name: tracetest-common
-  version: v1.0.0
-  repository: file://../tracetest-common
+- name: postgresql
+  version: 12.1.6
+  repository: https://charts.bitnami.com/bitnami
+- name: rabbitmq
+  version: 11.2.2
+  repository: https://charts.bitnami.com/bitnami
+- name: redis
+  version: 17.3.17
+  repository: https://charts.bitnami.com/bitnami
+- name: opentelemetry-collector
+  version: 0.92.0
+  repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+- name: jaeger
+  version: 3.0.10
+  repository: https://jaegertracing.github.io/helm-charts
