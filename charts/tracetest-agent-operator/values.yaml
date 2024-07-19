@@ -27,7 +27,7 @@ global:
       path: "/"
 
 config:
-  targetVersion: v1.4.1
+  targetVersion: v1.4.2
   targetNamespace: agents
 
 deployment:
