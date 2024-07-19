@@ -188,7 +188,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "tracetest-cloud.fullname" . }}-secrets
                   key: SEGMENTIO_WRITE_KEY
-            - name: TRACETEST_LICENSE
+            - name: ENTERPRISE_LICENSE_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "tracetest-cloud.fullname" . }}-secrets
