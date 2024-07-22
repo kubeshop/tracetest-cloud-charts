@@ -40,47 +40,29 @@ deployments:
     env:
       TRACETEST_SERVER_API_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_ENABLED: false
-    resources:
-      limits:
-        memory: 512Mi
-      requests:
-        cpu: 100m
-        memory: 512Mi
+
   - name: worker-trigger
     env:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: trigger_resolver trigger_result
-
-    resources:
-      limits:
-        memory: 512Mi
-      requests:
-        cpu: 100m
-        memory: 512Mi
-  
   - name: worker-poller
     env:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: poll_start poll_evaluate
-
-    resources:
-      limits:
-        memory: 512Mi
-      requests:
-        cpu: 100m
-        memory: 512Mi
-
   - name: worker-results
     env:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: linter_runner assertion_runner
-
-    resources:
-      limits:
-        memory: 512Mi
-      requests:
-        cpu: 100m
-        memory: 512Mi
+  - name: worker-monitors
+    env:
+      TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_SERVER_WORKFLOW_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_STEPS: monitor_runner monitor_alerts
+  - name: worker-suites
+    env:
+      TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_SERVER_WORKFLOW_ENABLED: true
+      TRACETEST_SERVER_WORKFLOW_STEPS: suite_runner

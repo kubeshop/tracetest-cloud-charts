@@ -6,7 +6,7 @@ metadata:
     app: nats-initial-config
   annotations:
     "helm.sh/hook": post-install
-    # "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     spec:
@@ -19,7 +19,7 @@ spec:
           value: {{ .Values.global.nats.endpoint }}
         args:
           - |
-            timeout=60
+            timeout=600
             while ! nc -z -w1 {{ .Values.global.nats.host }} 4222; do
               echo "Waiting for NATS connection..."
               sleep 1
@@ -35,6 +35,8 @@ spec:
 
             nats stream create tests \
               --subjects 'agent.>' \
+              --subjects 'monitors.>' \
+              --subjects 'suites.>' \
               --subjects 'test.>' \
               --storage file \
               --max-age 24h \

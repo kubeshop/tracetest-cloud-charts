@@ -101,11 +101,12 @@ if [[ "$@" == *"--install-demo"* ]]; then
   helm upgrade --install ttdemo -n demo --create-namespace $PROJECT_ROOT/charts/pokeshop-demo -f $PROJECT_ROOT/values-kind-demo.yaml
 fi
 
-printf "\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
+if [[ "$@" == *"--reset"* ]]; then
+  printf "\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
+  hosts=(tracetest.localdev)
+  if [[ "$@" == *"--install-demo"* ]]; then
+    hosts+=(pokeshop.localdev)
+  fi
 
-hosts=(tracetest.localdev)
-if [[ "$@" == *"--install-demo"* ]]; then
-  hosts+=(pokeshop.localdev)
+  $PROJECT_ROOT/scripts/coredns_config.sh ttdeps-traefik.default.svc.cluster.local "${hosts[@]}"
 fi
-
-$PROJECT_ROOT/scripts/coredns_config.sh ttdeps-traefik.default.svc.cluster.local "${hosts[@]}"
