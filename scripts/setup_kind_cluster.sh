@@ -28,6 +28,18 @@ if [[ "$@" == *"--debug"* ]]; then
   HELM_EXTRA_FLAGS+=(--debug)
 fi
 
+if [[ "$@" == *"--build-deps"* ]]; then
+  printf "\e[42m\e[1mBuilding dependencies for tracetest-dependencies\e[0m\e[0m\n"
+  helm dependency update "$PROJECT_ROOT/charts/tracetest-dependencies"
+  printf "\e[42m\e[1mBuilding dependencies for tracetest-onprem\e[0m\e[0m\n"
+  helm dependency update "$PROJECT_ROOT/charts/tracetest-onprem"
+
+  if [[ "$@" == *"--install-demo"* ]]; then
+    printf "\e[42m\e[1mBuilding dependencies for pokeshop-demo\e[0m\e[0m\n"
+    helm dependency update $PROJECT_ROOT/charts/pokeshop-demo
+  fi
+fi
+
 SETUP_CLUSTER=false
 
 if [[ "$@" == *"--reset"* ]]; then
@@ -54,6 +66,13 @@ EOF
 source $ENV_FILE
 
 if [[ "$SETUP_CLUSTER" == true ]]; then
+
+    for chart_dir in $PROJECT_ROOT/charts/*; do
+      printf "\e[42m\e[1mBuilding dependencies for $(basename "$chart_dir")\e[0m\e[0m\n"
+      helm dependency update "$chart_dir"
+    done
+
+
   if [[ "$@" == *"--private"* ]]; then
     printf "\n\e[41mPrivate version requested. Please provide your credentials.\e[0m\n"
     
@@ -81,15 +100,6 @@ else
   fi
 
   HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENSE")
-fi
-
-if [[ "$@" == *"--build-deps"* ]]; then
-  helm dependency update "$PROJECT_ROOT/charts/tracetest-dependencies"
-  helm dependency update "$PROJECT_ROOT/charts/tracetest-onprem"
-
-  if [[ "$@" == *"--install-demo"* ]]; then
-    helm dependency update $PROJECT_ROOT/charts/pokeshop-demo
-  fi
 fi
 
 echo "Starting Tracetest OnPrem installation on Kind"
