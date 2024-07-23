@@ -628,6 +628,16 @@ entries:
   tracetest-common:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2024-07-23T20:59:30.039630589Z"
+    description: A Helm chart for Kubernetes
+    digest: 9fe12ff745acc772cc29e432b54e67d4a1d6ef7932cb0a28cb66d925cb4dfbc2
+    name: tracetest-common
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-common-v1.1.0/tracetest-common-v1.1.0.tgz
+    version: v1.1.0
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2024-07-05T22:23:49.487663714Z"
     description: A Helm chart for Kubernetes
     digest: c7601cd78a5899246b7ebb3093ea07112e8e9e212d376e7e67350f3538609278
@@ -1926,4 +1936,4 @@ entries:
     urls:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-onprem-1.0.0/tracetest-onprem-1.0.0.tgz
     version: 1.0.0
-generated: "2024-07-23T20:13:53.04943013Z"
+generated: "2024-07-23T20:59:30.645535152Z"
