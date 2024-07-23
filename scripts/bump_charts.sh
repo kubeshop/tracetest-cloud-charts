@@ -11,6 +11,10 @@ if [[ -z "$changed_charts" ]]; then
   exit 0
 fi
 
+# Assuming TRACETEST_COMMON_NAME is the name of the tracetest-common chart
+TRACETEST_COMMON_NAME="tracetest-common"
+TRACETEST_COMMON_NEW_VERSION=""
+
 # Loop through the unique charts and run pybump on each Chart.yaml
 for chart in $changed_charts; do
   chartName=$(basename "$chart")
@@ -26,6 +30,11 @@ for chart in $changed_charts; do
     exit 1
   fi
 
+  # Store the new version of tracetest-common
+  if [[ "$chartName" == "$TRACETEST_COMMON_NAME" ]]; then
+    TRACETEST_COMMON_NEW_VERSION=$newChartVersion
+  fi
+
   echo "Update $chartName to $newChartVersion in $ONPREM_CHART_FILE"
   yq eval '.dependencies[] |= (select(.name == "'"$chartName"'").version = "'"$newChartVersion"'")' "$ONPREM_CHART_FILE" -i
 
@@ -36,6 +45,24 @@ for chart in $changed_charts; do
 
   git add "$chart/Chart.*"
 done
+
+# If tracetest-common was updated, loop through all charts to update its version
+if [[ -n "$TRACETEST_COMMON_NEW_VERSION" ]]; then
+  for chart in $all_charts; do
+    chartName=$(basename "$chart")
+    # Skip updating tracetest-common itself
+    if [[ "$chartName" == "$TRACETEST_COMMON_NAME" ]]; then
+      continue
+    fi
+
+    # Check if the chart has tracetest-common as a dependency and update its version
+    if yq eval '.dependencies[] | select(.name == "'"$TRACETEST_COMMON_NAME"'")' "$chart/Chart.yaml" -e; then
+      echo "Updating $TRACETEST_COMMON_NAME version in $chartName to $TRACETEST_COMMON_NEW_VERSION"
+      yq eval '.dependencies[] |= (select(.name == "'"$TRACETEST_COMMON_NAME"'").version = "'"$TRACETEST_COMMON_NEW_VERSION"'")' "$chart/Chart.yaml" -i
+      git add "$chart/Chart.yaml"
+    fi
+  done
+fi
 
 echo "Bumping version of $ONPREM_CHART_FILE"
 newVersion=$(pybump bump --file "$ONPREM_CHART_FILE" --level minor)
