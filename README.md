@@ -110,7 +110,7 @@ You can enable GitHub and Google SSO by creating corresponding Apps and setting 
 
 ```yaml
 global:
-      google:
+    google:
       clientID: "clientID"
       clientSecret: "clientSecret"
     github:
