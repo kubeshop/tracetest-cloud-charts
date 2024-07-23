@@ -18,7 +18,7 @@ data:
   KETO_API_URL: "http://{{ .Release.Name }}-keto-read.{{ .Release.Namespace }}"
   KRATOS_ADMIN_API_URL: "http://{{ .Release.Name }}-kratos-admin.{{ .Release.Namespace }}"
   KRATOS_PUBLIC_API_URL: "http://{{ .Release.Name }}-kratos-public.{{ .Release.Namespace }}"
-  NATS_URI: "{{ .Values.global.nats.endpoint }}"
+  NATS_URI: {{ include "tracetest-common.nats_endpoint" . }}
   OAUTH_ENABLED: "false"
   OSS_ENDPOINT: "http://{{ .Release.Name }}-tracetest-core.{{ .Release.Namespace }}:{{ .Values.global.tracetestCore.service.httpPort }}"
   ROOT_DOMAIN: "{{ .Values.global.urls.rootDomain }}"
