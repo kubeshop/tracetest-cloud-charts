@@ -39,3 +39,11 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CR_SKIP_EXISTING: true
+      
+      - name: Copy README.md to gh-pages branch
+        run: |
+          git fetch origin gh-pages:gh-pages
+          git checkout gh-pages
+          git checkout main -- README.md
+          git commit -m "Update README.md" README.md || echo "No changes to commit"
+          git push origin gh-pages
