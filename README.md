@@ -1,6 +1,60 @@
 # tracetest-cloud-charts
 
-TODO: make this nice
+## DNS
+
+Tracetest needs to be accesible from outside the cluster, exposed via a [Traefik's](#Traefik) IgressRoute.
+For this, it requires a DNS resolvable name. You can use a public DNS, an intranet DNS, or even hostfile based,
+as long as clients are able to resolve the hostnames to the correct IPs.
+
+You can choose any hostname you want. Tracetest imposes no limitation on this.
+
+If you choose to use a resolving mechanism that is not available within the Kuberetes cluster where Tracetest runs, 
+you can configure the clusters CoreDNS to point the selected hostname to the Traefik Service. We provide a [script for this](./scripts/coredns_config.sh)
+
+
+## Cluster prerequisites
+
+Tracetest expects some preconditions in the environment where it runs.
+
+### Cert manager
+
+Tracetest uses cert-manager to create sign certificates for JWT tokens, and SSL certificates for Ingress.
+
+Quick install:
+```
+helm repo add jetstack https://charts.jetstack.io --force-update
+  helm upgrade --install \
+    cert-manager jetstack/cert-manager \
+    --namespace cert-manager \
+    --create-namespace \
+    --version v1.15.0 \
+    --set crds.enabled=true
+```
+
+Cert Manager defines Issuers. If you have existing Issuers that you want to use, you can configure them in `values.yaml`.
+
+You can also create a SelfSigned issuer and create self signed certificates:
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: issuer-selfsigned
+  labels:
+spec:
+  selfSigned: {}
+EOF
+```
+
+### Traefik
+
+Tracetest relies on Traefik for its exposed web UI and API, as well for the managed 
+
+## External Services
+
+### PostgreSQL
+
+### MongoDB
 
 this repo provides a script to create a local kind cluster with an entire Tracetest cloud instance. 
 while we have this repo private and all the private images, this is just deploying Tracetest cloud.
