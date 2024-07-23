@@ -31,6 +31,8 @@ if [[ "$@" == *"--debug"* ]]; then
   HELM_EXTRA_FLAGS+=(--debug)
 fi
 
+printf "\n\e[42m\e[1mStarting cluster setup...\e[0m\e[0m\n"
+
 if [[ "$@" == *"--build-deps"* ]]; then
   printf "\n\e[42m\e[1mBuilding dependencies for tracetest-dependencies\e[0m\e[0m\n"
   helm dependency update "$PROJECT_ROOT/charts/tracetest-dependencies"
@@ -52,7 +54,7 @@ if [[ "$@" == *"--reset"* ]]; then
 fi
 
 if ! kind get clusters | grep -q tracetest; then
-  printf "\n\e[42m\e[1mCreate new cluster\e[0m\e[0m\n"
+  printf "\n\e[42m\e[1mCreating new cluster\e[0m\e[0m\n"
   SETUP_CLUSTER=true
   kind create cluster \
     --name tracetest \
@@ -106,7 +108,7 @@ else
   HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENSE")
 fi
 
-printf "\n\e[42m\e[1mStarting Tracetest OnPrem installation on Kind\e[0m\e[0m\n"
+printf "\n\e[42m\e[1mStarting Tracetest OnPrem installation\e[0m\e[0m\n"
 
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
@@ -123,4 +125,7 @@ if [[ "$@" == *"--reset"* ]]; then
   fi
 
   $PROJECT_ROOT/scripts/coredns_config.sh ttdeps-traefik.default.svc.cluster.local "${hosts[@]}"
+  printf "\n"
 fi
+
+printf "\e[42m\e[1mDone!\e[0m\e[0m\n"
