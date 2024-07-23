@@ -5,12 +5,15 @@ set -e
 function show_help() {
   echo "Usage: setup_kind_cluster.sh [OPTIONS]"
   echo "Options:"
-  echo "  --reset         Reset the existing kind cluster"
-  echo "  --private       Use private repositories. Requires a PAT with read:packages scope."
-  echo "  --build-deps    Build dependencies for all charts"
-  echo "  --install-demo  Install the Pokeshop demo"
-  echo "  --debug         Enable Helm debug output"
-  echo "  --help          Show this help message"
+  echo "  --reset              Reset the existing kind cluster"
+  echo "  --private            Use private repositories. Requires a PAT with read:packages scope."
+  echo "  --build-deps         Build dependencies for all charts"
+  echo "  --install-demo       Install the Pokeshop demo"
+  echo "  --debug              Enable Helm debug output"
+  echo "  --help               Show this help message"
+  echo ""
+  echo "Environment variables that might be read:"
+  echo "  TRACETEST_LICENSE    OnPrem license key (if not provided, the script will prompt for it)"
 }
 
 if [[ "$@" == *"--help"* ]]; then
@@ -97,7 +100,7 @@ else
   if [[ -z "$TRACETEST_LICENSE" ]]; then
     read -p $'\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENSE
   else 
-    printf "\e[1;32mreading Tracetest license username from env.\e[0m\n"
+    printf "\n\e[1;32mReading Tracetest license username from env.\e[0m\n"
   fi
 
   HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENSE")
