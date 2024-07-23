@@ -29,13 +29,14 @@ if [[ "$@" == *"--debug"* ]]; then
 fi
 
 if [[ "$@" == *"--build-deps"* ]]; then
-  printf "\e[42m\e[1mBuilding dependencies for tracetest-dependencies\e[0m\e[0m\n"
+  printf "\n\e[42m\e[1mBuilding dependencies for tracetest-dependencies\e[0m\e[0m\n"
   helm dependency update "$PROJECT_ROOT/charts/tracetest-dependencies"
-  printf "\e[42m\e[1mBuilding dependencies for tracetest-onprem\e[0m\e[0m\n"
+
+  printf "\n\e[42m\e[1mBuilding dependencies for tracetest-onprem\e[0m\e[0m\n"
   helm dependency update "$PROJECT_ROOT/charts/tracetest-onprem"
 
   if [[ "$@" == *"--install-demo"* ]]; then
-    printf "\e[42m\e[1mBuilding dependencies for pokeshop-demo\e[0m\e[0m\n"
+    printf "\n\e[42m\e[1mBuilding dependencies for pokeshop-demo\e[0m\e[0m\n"
     helm dependency update $PROJECT_ROOT/charts/pokeshop-demo
   fi
 fi
@@ -55,7 +56,7 @@ if ! kind get clusters | grep -q tracetest; then
     --config $PROJECT_ROOT/kind-config.yaml \
     --kubeconfig $KUBECONFIG_FILE
 else 
-  printf "\e[1mCluster already exists\e[0m\n"
+  printf "\n\e[1mCluster already exists\e[0m\n"
 fi
 
 cat <<EOF > $ENV_FILE
@@ -68,7 +69,7 @@ source $ENV_FILE
 if [[ "$SETUP_CLUSTER" == true ]]; then
 
     for chart_dir in $PROJECT_ROOT/charts/*; do
-      printf "\e[42m\e[1mBuilding dependencies for $(basename "$chart_dir")\e[0m\e[0m\n"
+      printf "\n\e[42m\e[1mBuilding dependencies for $(basename "$chart_dir")\e[0m\e[0m\n"
       helm dependency update "$chart_dir"
     done
 
@@ -102,7 +103,7 @@ else
   HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENSE")
 fi
 
-echo "Starting Tracetest OnPrem installation on Kind"
+printf "\n\e[42m\e[1mStarting Tracetest OnPrem installation on Kind\e[0m\e[0m\n"
 
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
@@ -112,7 +113,7 @@ if [[ "$@" == *"--install-demo"* ]]; then
 fi
 
 if [[ "$@" == *"--reset"* ]]; then
-  printf "\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
+  printf "\n\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
   hosts=(tracetest.localdev)
   if [[ "$@" == *"--install-demo"* ]]; then
     hosts+=(pokeshop.localdev)

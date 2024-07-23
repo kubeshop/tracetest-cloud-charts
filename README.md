@@ -33,6 +33,6 @@ onprem users will have to configure this externally, so we'll need docs for that
 
 one exception is cert-manager, that is a dependency but is very very hard to install as a subchart, so it's installed in the kind setup script
 
-tracetest-auth is an umbrella for grouping all the ory services toghether
+tracetest-auth is an umbrella for grouping all the ory services together
 
 tracetest-core and tracetest-cloud are copypasted from the infra repo so they are a base, but we can modify them as we want without impacting our cloud infra.
