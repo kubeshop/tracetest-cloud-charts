@@ -5,7 +5,7 @@ global:
   tracetestFrontend:
     service:
       httpPort: &httpPort 3000
-      
+
   urls:
     web:
       protocol: "https"
