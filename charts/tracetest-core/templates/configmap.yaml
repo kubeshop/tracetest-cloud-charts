@@ -7,7 +7,7 @@ metadata:
 data:
   config.yaml: |-
     nats:
-      endpoint: {{ .Values.global.nats.endpoint }}
+      endpoint: {{ include "tracetest-common.nats_endpoint" . }}
 
     telemetry:
       profiler:

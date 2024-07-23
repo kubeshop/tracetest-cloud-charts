@@ -5,12 +5,15 @@ set -e
 function show_help() {
   echo "Usage: setup_kind_cluster.sh [OPTIONS]"
   echo "Options:"
-  echo "  --reset         Reset the existing kind cluster"
-  echo "  --private       Use private repositories. Requires a PAT with read:packages scope."
-  echo "  --build-deps    Build dependencies for all charts"
-  echo "  --install-demo  Install the Pokeshop demo"
-  echo "  --debug         Enable Helm debug output"
-  echo "  --help          Show this help message"
+  echo "  --reset              Reset the existing kind cluster"
+  echo "  --private            Use private repositories. Requires a PAT with read:packages scope."
+  echo "  --build-deps         Build dependencies for all charts"
+  echo "  --install-demo       Install the Pokeshop demo"
+  echo "  --debug              Enable Helm debug output"
+  echo "  --help               Show this help message"
+  echo ""
+  echo "Environment variables that might be read:"
+  echo "  TRACETEST_LICENSE    OnPrem license key (if not provided, the script will prompt for it)"
 }
 
 if [[ "$@" == *"--help"* ]]; then
@@ -28,14 +31,17 @@ if [[ "$@" == *"--debug"* ]]; then
   HELM_EXTRA_FLAGS+=(--debug)
 fi
 
+printf "\n\e[42m\e[1mStarting cluster setup...\e[0m\e[0m\n"
+
 if [[ "$@" == *"--build-deps"* ]]; then
-  printf "\e[42m\e[1mBuilding dependencies for tracetest-dependencies\e[0m\e[0m\n"
+  printf "\n\e[42m\e[1mBuilding dependencies for tracetest-dependencies\e[0m\e[0m\n"
   helm dependency update "$PROJECT_ROOT/charts/tracetest-dependencies"
-  printf "\e[42m\e[1mBuilding dependencies for tracetest-onprem\e[0m\e[0m\n"
+
+  printf "\n\e[42m\e[1mBuilding dependencies for tracetest-onprem\e[0m\e[0m\n"
   helm dependency update "$PROJECT_ROOT/charts/tracetest-onprem"
 
   if [[ "$@" == *"--install-demo"* ]]; then
-    printf "\e[42m\e[1mBuilding dependencies for pokeshop-demo\e[0m\e[0m\n"
+    printf "\n\e[42m\e[1mBuilding dependencies for pokeshop-demo\e[0m\e[0m\n"
     helm dependency update $PROJECT_ROOT/charts/pokeshop-demo
   fi
 fi
@@ -48,14 +54,14 @@ if [[ "$@" == *"--reset"* ]]; then
 fi
 
 if ! kind get clusters | grep -q tracetest; then
-  printf "\n\e[42m\e[1mCreate new cluster\e[0m\e[0m\n"
+  printf "\n\e[42m\e[1mCreating new cluster\e[0m\e[0m\n"
   SETUP_CLUSTER=true
   kind create cluster \
     --name tracetest \
     --config $PROJECT_ROOT/kind-config.yaml \
     --kubeconfig $KUBECONFIG_FILE
 else 
-  printf "\e[1mCluster already exists\e[0m\n"
+  printf "\n\e[1mCluster already exists\e[0m\n"
 fi
 
 cat <<EOF > $ENV_FILE
@@ -68,7 +74,7 @@ source $ENV_FILE
 if [[ "$SETUP_CLUSTER" == true ]]; then
 
     for chart_dir in $PROJECT_ROOT/charts/*; do
-      printf "\e[42m\e[1mBuilding dependencies for $(basename "$chart_dir")\e[0m\e[0m\n"
+      printf "\n\e[42m\e[1mBuilding dependencies for $(basename "$chart_dir")\e[0m\e[0m\n"
       helm dependency update "$chart_dir"
     done
 
@@ -96,13 +102,13 @@ else
   if [[ -z "$TRACETEST_LICENSE" ]]; then
     read -p $'\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENSE
   else 
-    printf "\e[1;32mreading Tracetest license username from env.\e[0m\n"
+    printf "\n\e[1;32mReading Tracetest license username from env.\e[0m\n"
   fi
 
   HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENSE")
 fi
 
-echo "Starting Tracetest OnPrem installation on Kind"
+printf "\n\e[42m\e[1mStarting Tracetest OnPrem installation\e[0m\e[0m\n"
 
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
@@ -112,11 +118,14 @@ if [[ "$@" == *"--install-demo"* ]]; then
 fi
 
 if [[ "$@" == *"--reset"* ]]; then
-  printf "\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
+  printf "\n\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
   hosts=(tracetest.localdev)
   if [[ "$@" == *"--install-demo"* ]]; then
     hosts+=(pokeshop.localdev)
   fi
 
   $PROJECT_ROOT/scripts/coredns_config.sh ttdeps-traefik.default.svc.cluster.local "${hosts[@]}"
+  printf "\n"
 fi
+
+printf "\e[42m\e[1mDone!\e[0m\e[0m\n"
