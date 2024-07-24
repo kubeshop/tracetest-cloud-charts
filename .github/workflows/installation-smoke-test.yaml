@@ -4,6 +4,9 @@ on:
   # allows the manual trigger
   workflow_dispatch:
 
+  schedule:
+  - cron: '0 0 * * *' # every day
+
 jobs:
   smoke-test:
     name: Run smoke test for Tracetest OnPrem installation
@@ -18,3 +21,15 @@ jobs:
 
       - name: Run installation script
         run: ./scripts/setup_kind_cluster.sh --install-demo --reset --build-deps
+
+      - name: Send message on Slack in case of failure
+        if: ${{ failure() }}
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": ":warning: Smoke test failed for *On Prem installation*. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow>"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.TRACETEST_ONPREM_TEST_SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
