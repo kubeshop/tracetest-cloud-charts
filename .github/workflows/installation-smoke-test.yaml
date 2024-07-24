@@ -15,4 +15,4 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run installation script
-        run: sh ./scripts/setup_kind_cluster.sh --install-demo --reset --build-deps
+        run: ./scripts/setup_kind_cluster.sh --install-demo --reset --build-deps
