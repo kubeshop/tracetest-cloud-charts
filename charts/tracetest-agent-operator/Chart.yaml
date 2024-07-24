@@ -26,5 +26,5 @@ version: v1.9.0
 appVersion: v1.4.4-rc.10
 dependencies:
 - name: tracetest-common
-  version: v1.2.0
+  version: v1.3.1
   repository: file://../tracetest-common
