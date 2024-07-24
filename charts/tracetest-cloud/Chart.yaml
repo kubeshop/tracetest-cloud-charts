@@ -23,7 +23,7 @@ version: v1.19.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: v1.4.4-rc.10
+appVersion: v1.4.4-rc.11
 
 dependencies:
 - name: tracetest-common

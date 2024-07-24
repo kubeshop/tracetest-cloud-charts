@@ -6,11 +6,11 @@ global:
     endpoint: "nats://nats:4222"
 
   urls:
-    web:
+    api:
       protocol: "https"
       hostname: "tracetest.localdev"
       port: "30000"
-      path: "/"
+      path: "/api"
 
 config:
   targetNamespace: monitors

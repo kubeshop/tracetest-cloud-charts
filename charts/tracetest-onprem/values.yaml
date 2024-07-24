@@ -35,7 +35,7 @@ global:
   
   urls:
     protocol: &protocol "https"
-    port: &port "443"
+    port: &port "30000"
     rootDomain: &rootDomain "tracetest.localdev"
     cookieDomain: *rootDomain
     
@@ -55,7 +55,7 @@ global:
       protocol: *protocol
       hostname: *rootDomain
       port: *port
-      path: "/api"
+      path: "/auth"
     
     agents:
       domain: *rootDomain
