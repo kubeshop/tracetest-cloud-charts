@@ -1,0 +1,18 @@
+name: OnPrem installation Smoke Test
+
+on:
+  # allows the manual trigger
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    name: Run smoke test for Tracetest OnPrem installation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run installation script
+        run: sh ./scripts/setup_kind_cluster.sh --install-demo --reset --build-deps
