@@ -1,6 +1,6 @@
 global:
   licenseKey: ""
-  
+
   imagePullSecret: ""
   tracetestImageRegistry: ""
 
@@ -12,8 +12,8 @@ global:
       clientID: "Ov23li8WMwQlvjFNNiCy"
       clientSecret: "e317c15e43909757d1e75e78373d130c374f6601"
 
-  nats:
-    endpoint: "nats://nats:4222"
+  # If you don't want to use the default NATS server, you can specify your own NATS server here
+  # natsEndpointOverride: "://nats:4222"
 
   postgresql:
     auth:
@@ -22,7 +22,7 @@ global:
       password: "postgres"
       database: "tracetest"
       port: "5432"
-    
+
   mongodb:
     auth:
       protocol: "mongodb"
@@ -32,41 +32,43 @@ global:
       database: ""
       options: {}
 
-  
   urls:
-    rootDomain: "tracetest.localdev"
-    cookieDomain: "tracetest.localdev"
+    protocol: &protocol "https"
+    port: &port "443"
+    rootDomain: &rootDomain "tracetest.localdev"
+    cookieDomain: *rootDomain
+
     web:
-      protocol: "https"
-      hostname: "tracetest.localdev"
-      port: "30000"
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
       path: "/"
-    
+
     api:
-      protocol: "https"
-      hostname: "tracetest.localdev"
-      port: "30000"
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
       path: "/api"
 
     auth:
-      protocol: "https"
-      hostname: "tracetest.localdev"
-      port: "30000"
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
       path: "/api"
-    
+
     agents:
-      domain: "tracetest.localdev"
-      port: "30000"
-    
+      domain: *rootDomain
+      port: *port
+
     controlPlane:
-      protocol: "https"
-      hostname: "tracetest.localdev"
-      port: "30000"
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
       path: "/"
 
 nats:
   enabled: true
-  
+
   config:
     jetstream:
       enabled: true
@@ -77,8 +79,8 @@ nats:
           enabled: true
           size: 10Gi
       memoryStore:
-          enabled: true
-          maxSize: 1Gi
+        enabled: true
+        maxSize: 1Gi
 
     natsBox:
       container:
@@ -94,4 +96,3 @@ nats:
               memory: 1Gi
             limits:
               memory: 1Gi
-
