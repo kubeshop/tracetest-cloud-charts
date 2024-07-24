@@ -100,7 +100,7 @@ if [[ "$@" == *"--private"* ]]; then
   HELM_EXTRA_FLAGS+=(--set global.tracetestImageRegistry=ghcr.io/)
 else 
   if [[ -z "$TRACETEST_LICENSE" ]]; then
-    read -p $'\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENSE
+    read -p $'\n\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENSE
   else 
     printf "\n\e[1;32mReading Tracetest license username from env.\e[0m\n"
   fi
@@ -108,12 +108,16 @@ else
   HELM_EXTRA_FLAGS+=(--set global.licenseKey="$TRACETEST_LICENSE")
 fi
 
-printf "\n\e[42m\e[1mStarting Tracetest OnPrem installation\e[0m\e[0m\n"
+printf "\n\e[42m\e[1mStarting Tracetest OnPrem components installation\e[0m\e[0m\n"
 
+printf "\n\e[42m\e[1mInstalling Tracetest dependencies\e[0m\e[0m\n"
 helm upgrade --install ttdeps $PROJECT_ROOT/charts/tracetest-dependencies -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
+
+printf "\n\e[42m\e[1mInstalling Tracetest on-prem\e[0m\e[0m\n"
 helm upgrade --install tt $PROJECT_ROOT/charts/tracetest-onprem -f $PROJECT_ROOT/values-kind.yaml "${HELM_EXTRA_FLAGS[@]}"
 
 if [[ "$@" == *"--install-demo"* ]]; then
+  printf "\n\e[42m\e[1mInstalling Pokeshop demo\e[0m\e[0m\n"
   helm upgrade --install ttdemo -n demo --create-namespace $PROJECT_ROOT/charts/pokeshop-demo -f $PROJECT_ROOT/values-kind-demo.yaml
 fi
 
