@@ -31,6 +31,9 @@ if [[ "$@" == *"--debug"* ]]; then
   HELM_EXTRA_FLAGS+=(--debug)
 fi
 
+# Capturing the start time
+start_time=$(date +%s)
+
 printf "\n\e[42m\e[1mStarting cluster setup...\e[0m\e[0m\n"
 
 if [[ "$@" == *"--build-deps"* ]]; then
@@ -100,7 +103,8 @@ if [[ "$@" == *"--private"* ]]; then
   HELM_EXTRA_FLAGS+=(--set global.tracetestImageRegistry=ghcr.io/)
 else 
   if [[ -z "$TRACETEST_LICENSE" ]]; then
-    read -p $'\n\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENSE
+    printf "\n\e[1;32mTracetest license not found on env. You can set it on \$TRACETEST_LICENSE to save time on installation.\e[0m\n"
+    read -p $'\e[1;32m Enter your Tracetest license key:\e[0m ' TRACETEST_LICENSE
   else 
     printf "\n\e[1;32mReading Tracetest license username from env.\e[0m\n"
   fi
@@ -132,4 +136,10 @@ if [[ "$@" == *"--reset"* ]]; then
   printf "\n"
 fi
 
-printf "\e[42m\e[1mDone!\e[0m\e[0m\n"
+# Capturing the end time
+end_time=$(date +%s)
+
+# Calculating elapsed time
+elapsed=$((end_time - start_time))
+
+printf "\e[42m\e[1mDone in $elapsed seconds!\e[0m\e[0m\n"

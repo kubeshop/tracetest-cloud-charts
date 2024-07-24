@@ -53,6 +53,8 @@ Create a URI from a given object containing protocol, hostname, port, and path.
 {{- if .Values.global.natsEndpointOverride }}
   {{- .Values.global.natsEndpointOverride }}
 {{- else }}
-  {{- printf "nats://{{.Release.Name}}-nats-headless.{{.Release.Namespace}}" }}
+  {{- $releaseName := .Release.Name -}}
+  {{- $releaseNamespace := .Release.Namespace -}}
+  {{- printf "nats://%s-nats-headless.%s" $releaseName $releaseNamespace }}
 {{- end }}
 {{- end }}
