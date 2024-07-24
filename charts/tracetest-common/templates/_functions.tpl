@@ -48,11 +48,3 @@ Create a URI from a given object containing protocol, hostname, port, and path.
 {{- printf "%s://%s:%s%s" $protocol $hostname $port $path }}
 {{- end }}
 {{- end }}
-
-{{- define "tracetest-common.nats_endpoint" -}}
-{{- if .Values.global.natsEndpointOverride }}
-  {{- .Values.global.natsEndpointOverride }}
-{{- else }}
-  {{- printf "nats://{{.Release.Name}}-nats-headless.{{.Release.Namespace}}" }}
-{{- end }}
-{{- end }}

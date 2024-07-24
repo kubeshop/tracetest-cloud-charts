@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "tracetest-monitor-operator.labels" . | nindent 4 }}
 data:
-  TRACETEST_NATS_ENDPOINT: {{ include "tracetest-common.nats_endpoint" . }}
+  TRACETEST_NATS_ENDPOINT: "{{ .Values.global.nats.endpoint }}"
   TRACETEST_TARGET_NAMESPACE: "{{ .Values.config.targetNamespace }}"
-  TRACETEST_TARGET_SERVERURL: {{ include "tracetest-common.url" .Values.global.urls.web }}
+  TRACETEST_TARGET_SERVERURL: {{ include "tracetest-common.url" .Values.global.urls.api }}
   TRACETEST_TRACING_COLLECTORENDPOINT: "{{ .Values.config.collectorEndpoint }}"

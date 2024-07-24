@@ -16,12 +16,11 @@ spec:
         command: ["/bin/sh", "-c"]
         env:
         - name: NATS_URL
-          value: {{ include "tracetest-common.nats_endpoint" . }}
+          value: {{ .Values.global.nats.endpoint }}
         args:
           - |
-            nats
             timeout=600
-            while ! nats rtt --server {{ include "tracetest-common.nats_endpoint" . }}; do
+            while ! nc -z -w1 {{ .Values.global.nats.host }} 4222; do
               echo "Waiting for NATS connection..."
               sleep 1
               timeout=$((timeout-1))

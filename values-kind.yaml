@@ -1,6 +1,32 @@
 global:
   urls:
-    rootDomain: &rootDomain "tracetest.localdev"
+    rootDomain: "tracetest.localdev"
+    cookieDomain: "tracetest.localdev"
+    web:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/"
+    
+    api:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/api"
+
+    auth:
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
+      path: "/auth"
+    
+    agents:
+      domain: "tracetest.localdev"
+      port: "30000"
+
+  nats:
+    host: "tt-nats-headless"
+    endpoint: "nats://tt-nats-headless:4222"
 
   postgresql:
     auth:
@@ -26,7 +52,7 @@ traefik:
     type: NodePort
 
   dnsNames:
-    - *rootDomain
+    - "tracetest.localdev"
     - "pokeshop.localdev"
 
   tls:

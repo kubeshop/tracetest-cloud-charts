@@ -12,8 +12,8 @@ global:
       clientID: "Ov23li8WMwQlvjFNNiCy"
       clientSecret: "e317c15e43909757d1e75e78373d130c374f6601"
 
-  # If you don't want to use the default NATS server, you can specify your own NATS server here
-  # natsEndpointOverride: "://nats:4222"
+  nats:
+    endpoint: "nats://nats:4222"
 
   postgresql:
     auth:
@@ -34,37 +34,34 @@ global:
 
   
   urls:
-    protocol: &protocol "https"
-    port: &port "443"
-    rootDomain: &rootDomain "tracetest.localdev"
-    cookieDomain: *rootDomain
-    
+    rootDomain: "tracetest.localdev"
+    cookieDomain: "tracetest.localdev"
     web:
-      protocol: *protocol
-      hostname: *rootDomain
-      port: *port
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
       path: "/"
     
     api:
-      protocol: *protocol
-      hostname: *rootDomain
-      port: *port
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
       path: "/api"
 
     auth:
-      protocol: *protocol
-      hostname: *rootDomain
-      port: *port
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
       path: "/api"
     
     agents:
-      domain: *rootDomain
-      port: *port
+      domain: "tracetest.localdev"
+      port: "30000"
     
     controlPlane:
-      protocol: *protocol
-      hostname: *rootDomain
-      port: *port
+      protocol: "https"
+      hostname: "tracetest.localdev"
+      port: "30000"
       path: "/"
 
 nats:
