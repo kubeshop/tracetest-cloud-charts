@@ -27,7 +27,7 @@ appVersion: v1.2.0
 
 dependencies:
 - name: tracetest-common
-  version: v1.3.1
+  version: v1.4.0
   repository: file://../tracetest-common
 - name: keto
   version: 0.36.0
