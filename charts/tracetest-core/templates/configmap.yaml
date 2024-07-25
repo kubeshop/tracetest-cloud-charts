@@ -5,6 +5,9 @@ metadata:
   labels:
     {{- include "tracetest-core.labels" . | nindent 4 }}
 data:
+  TRACETEST_ENDPOINT_UI: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
+  TRACETEST_ENDPOINT_API: "{{ include "tracetest-common.url" .Values.global.urls.api }}"
+  TRACETEST_ENDPOINT_AGENTS: "{{ .Values.global.urls.controlPlane.hostname }}:{{ .Values.global.urls.controlPlane.port }}"
   config.yaml: |-
     nats:
       endpoint: {{ include "tracetest-common.nats_endpoint" . }}

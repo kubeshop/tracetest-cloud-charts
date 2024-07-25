@@ -166,9 +166,6 @@ global:
         authSource: admin
 
 traefik:
-  dnsNames:
-    - *rootDomain
-
   tls:
     issuerRef:
       name: issuer-selfsigned
