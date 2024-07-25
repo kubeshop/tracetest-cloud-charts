@@ -110,6 +110,7 @@ You can enable GitHub and Google SSO by creating corresponding Apps and setting 
 
 ```yaml
 global:
+  sso:
     google:
       clientID: "clientID"
       clientSecret: "clientSecret"
@@ -138,6 +139,14 @@ global:
   urls:
     rootDomain: &rootDomain "tracetest.acme.com" #it's important to keep the `&rootDomain` part
 
+  sso:
+    google:
+      clientID: "clientID"
+      clientSecret: "clientSecret"
+    github:
+      clientID: "clientID"
+      clientSecret: "clientSecret"
+
   postgresql:
     auth:
       host: "ttdeps-postgresql"
@@ -155,4 +164,14 @@ global:
       options:
         retryWrites: "true"
         authSource: admin
+
+traefik:
+  dnsNames:
+    - *rootDomain
+
+  tls:
+    issuerRef:
+      name: issuer-selfsigned
+      kind: ClusterIssuer
+      group: cert-manager.io
 ```
