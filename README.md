@@ -2,6 +2,53 @@
 
 This is the helm repository for the On Prem installation of [Tracetest](https://tracetest.io/).
 
+# Basic concepts
+
+Tracetest is composed of a few different internal services. To simplify access to the different parts when using the CLI and Web UI, 
+it relies on the [Traefik Proxy](https://traefik.io/traefik/).
+
+All incoming connections are secured using HTTPS/TLS. Tracetest relies on [cert-manager](https://cert-manager.io) to create and maintain certificates.
+Cert Manager is a complete solution for managing certificates in an automated way. By default, Tracetest comes preconfigured with a self-signed certificate.
+While this is secure enough for testing, it will create warnings to users accessing the Web UI in most browsers.
+
+We recommend configuring a production ready [Issuer](https://cert-manager.io/docs/configuration/issuers/) for CertManager to provide the best user experience and security.
+
+## Exposure to the internet
+
+Tracetest doesn't require to be exposed to the public internet. However, clients will need to be able to communicate with the tracetest services.
+By clients we mean CLI on developer machines, CI/CD actions, and even the Web UI on users machine.
+
+The simplest solution is to rely on [Kubernetes LoadBalancer](https://kubernetes.io/docs/concepts/services-networking/) to expose the Traefik Proxy that tracetest uses.
+
+Does this means that your tracetest instance needs to be accessible from the public internet? No! Depending on your cloud infrastructure, you can have clusters that are only accessible from the VPC,
+allowing permitted clients to access via VPN, for example. There are endless ways to configure Kubernetes, and it is outside the scope of this documentation.
+We are happy to help you deciding what's the best way to expose your on prem deployment, so feel free to reach us at **ADD LINK TO SLACK COMMUNITY**.
+
+## Doing a Test Run.
+
+It's very likely that you want to do a quick test run without dealing with all the complexities of a production level Kuberentes deployment.
+We provide a script that you can use to run Tracetest OnPrem locally on you machine. The only prerequisite is that you have [kind](https://kind.sigs.k8s.io/) and [helm](https://helm.sh/docs/intro/install/) installed.
+
+You can then run the following command:
+```sh
+curl -sSL https://raw.githubusercontent.com/kubeshop/tracetest-cloud-charts/main/scripts/setup_kind_cluster.sh | bash -- --install-install-demo
+```
+
+You need to add the following lines to your hosts file to access Tracetest:
+```sh
+sudo sh -c 'echo "127.0.0.1 tracetest.localdev" >> /etc/hosts'
+sudo sh -c 'echo "127.0.0.1 pokeshop.localdev" >> /etc/hosts'
+```
+
+You can now go to [https://tracetest.localdev:30000] to check tracetest, and run tests against the demo PokeShop App at [https://pokeshop.localdev:30000]
+
+> NOTE
+> This instalation is meant for testing purposes only. It uses self signed certificates, so your browser will show a warning about it.
+> The Traefik Proxy is exposed via NodePort, which is not recommended for production environments.
+> Finally, the required databases are installed within the cluster, and that might not be desireable.
+
+# Installing on a Production Environment
+
 ## DNS
 
 Tracetest needs to be accessible from outside the cluster, exposed via a [Traefik's](#Traefik) IngressRoute.
@@ -14,6 +61,12 @@ If you choose to use a resolving mechanism that is not available within the Kube
 you can configure the cluster's CoreDNS to point the selected hostname to the Traefik Service. We provide a [script for this](./scripts/coredns_config.sh)
 
 If you want to use managed agents and send tracing info to them from outside the cluster, you need to set a wildcard subdomain.
+
+> **Does this mean that Tracetest will be accessible from the internet?**
+> 
+> Not neccesarily. By default, most cloud providers will automatically map LoadBalancer services to public IPs.
+> If you want to make your installation only availble within an intranet or similarly private environment,
+> check how to configure Private IPs with your cloud provider docs.
 
 **Example**
 
@@ -41,8 +94,15 @@ helm repo add jetstack https://charts.jetstack.io --force-update
 
 Cert Manager defines Issuers. If you have existing Issuers that you want to use, you can configure them in `values.yaml`.
 
-You can also create a SelfSigned issuer and create self-signed certificates:
-```
+In order to have a valid certificate, Cert Manager requires you to provide proof of ownership of the DNS domain that you are claiming.
+You can see how to do that on the [Issuers documentation](https://cert-manager.io/docs/configuration/issuers/)
+
+While it is not recommended in a production environment, you can get away by creating a SelfSigned Issuer and create self-signed certificates.
+With Self Signed certificates you will see warnings on the browser when accessing your Tracetest OnPrem instance Web UI.
+
+```sh
+# Create a self signed certificate
+
 cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
