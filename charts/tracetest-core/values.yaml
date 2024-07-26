@@ -22,10 +22,11 @@ config:
   tracetestAnalyticsServerKey: some-value
   tracetestSecurityEncryptionKey: some-value
   profiler:
-    enabled: false
     samplingRate: 50
     endpoint: some-value
     environment: development
+
+  analytics: false
 
 server:
   httpPort: *httpPort
@@ -33,7 +34,6 @@ server:
 
 image:
   repository: kubeshop/tracetest-core
-  tag: v1.5.0-rc.9
 
 deployments:
   - name: api

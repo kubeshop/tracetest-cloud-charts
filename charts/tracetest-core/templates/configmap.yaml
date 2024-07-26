@@ -13,9 +13,10 @@ data:
       endpoint: {{ include "tracetest-common.nats_endpoint" . }}
 
     telemetry:
+      analytics: {{ .Values.config.analytics }}
       profiler:
         name: tracetest
-        enabled: {{ .Values.config.profiler.enabled }}
+        enabled: {{ .Values.config.analytics }}
         samplingRate: {{ .Values.config.profiler.samplingRate }}
         endpoint: {{ .Values.config.profiler.endpoint }}
         environment: {{ .Values.config.profiler.environment }}
