@@ -136,6 +136,11 @@ spec:
                   name: {{ include "tracetest-cloud.fullname" . }}-config
                   key: DEMO_INVITE_ID
 
+            - name: DISABLE_TELEMETRY
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: DISABLE_TELEMETRY
             - name: PROFILER_COLLECTOR_ENDPOINT
               valueFrom:
                 configMapKeyRef:
