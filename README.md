@@ -1,6 +1,6 @@
-# tracetest-cloud-charts
+# Tracetest On-Prem Helm Charts
 
-This is the helm repository for the On-Prem installation of [Tracetest](https://tracetest.io/).
+On this repository, you will find the Helm Charts for the [Tracetest](https://tracetest.io/) installation on-premises (i.e. in your infrastructure).
 
 # Basic concepts
 
