@@ -71,6 +71,21 @@ spec:
               value: ""
             - name: TRACETEST_SERVER_TELEMETRY_SERVICE_NAME
               value: "core-{{ .name }}"
+            - name: TRACETEST_ENDPOINT_UI
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-core.fullname" $ }}
+                  key: TRACETEST_ENDPOINT_UI
+            - name: TRACETEST_ENDPOINT_API
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-core.fullname" $ }}
+                  key: TRACETEST_ENDPOINT_API
+            - name: TRACETEST_ENDPOINT_AGENTS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-core.fullname" $ }}
+                  key: TRACETEST_ENDPOINT_AGENTS
             {{- if $.Values.global.licenseKey }}
             - name: TRACETEST_LICENSE
               valueFrom:

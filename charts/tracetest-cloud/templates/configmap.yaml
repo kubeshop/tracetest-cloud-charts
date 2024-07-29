@@ -9,7 +9,7 @@ data:
   AGENT_PORT: "8091"
   ALLOWED_EXTERNAL_REDIRECT_URIS: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
   API_MONGO_DB: "{{ .Values.global.mongodb.auth.database }}"
-  API_PUBLIC_ROUTES: "/webhook/login,/version,/health,/robots.txt"
+  API_PUBLIC_ROUTES: "/webhook/login,/version,,/version.json,/health,/robots.txt"
   DASHBOARD_ADDRESS: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
   DEBUG: "true"
   DEV_MODE: "true"
