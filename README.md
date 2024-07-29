@@ -1,6 +1,6 @@
 # tracetest-cloud-charts
 
-This is the helm repository for the On Prem installation of [Tracetest](https://tracetest.io/).
+This is the helm repository for the On-Prem installation of [Tracetest](https://tracetest.io/).
 
 # Basic concepts
 
@@ -16,13 +16,13 @@ We recommend configuring a production-ready [Issuer](https://cert-manager.io/doc
 ## Exposure to the Internet
 
 Tracetest doesn't require to be exposed to the public internet. However, clients will need to be able to communicate with the Tracetest services.
-By clients we mean CLI on developer machines, CI/CD actions, and even the Web UI on user's machine.
+By clients we mean CLI on developer machines, CI/CD actions, and even the Web UI on the user's machine.
 
 The simplest solution is to rely on [Kubernetes LoadBalancer](https://kubernetes.io/docs/concepts/services-networking/) to expose the Traefik Proxy that Tracetest uses.
 
 Does this means that your Tracetest instance needs to be accessible from the public internet? No! Depending on your cloud infrastructure, you can have clusters that are only accessible from the VPC,
 allowing permitted clients to access via VPN, for example. There are endless ways to configure Kubernetes, and it is outside the scope of this documentation.
-We are happy to help you deciding what's the best way to expose your on prem deployment, so feel free to reach us at [our Slack](https://dub.sh/tracetest-community).
+We are happy to help you deciding what's the best way to expose your On-prem deployment, so feel free to reach us at [our Slack](https://dub.sh/tracetest-community).
 
 ## Executing a Test Run
 
@@ -57,10 +57,10 @@ as long as clients can resolve the hostnames to the correct IPs.
 
 You can choose any hostname you want. This helm repo imposes no limitation on this.
 
-If you choose to use a resolving mechanism that is not available within the Kubernetes cluster where Tracetest runs, 
+If you choose to use a DNS resolving mechanism that is not available within the Kubernetes cluster where Tracetest runs, 
 you can configure the cluster's CoreDNS to point the selected hostname to the Traefik Service. We provide a [script for this](./scripts/coredns_config.sh)
 
-If you want to use managed agents and send tracing info to them from outside the cluster, you need to set a wildcard subdomain.
+If you want to use managed agents and send OpenTelemetry trace data to them from outside the cluster, you need to set a wildcard subdomain.
 
 > **Does this mean that Tracetest will be accessible from the internet?**
 > 
