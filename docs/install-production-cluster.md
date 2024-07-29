@@ -1,52 +1,4 @@
-# Basic concepts
-
-Tracetest is composed of a few different internal services. To simplify access to the different parts when using the CLI and Web UI, 
-it relies on the [Traefik Proxy](https://traefik.io/traefik/).
-
-All incoming connections are secured using HTTPS/TLS. Tracetest relies on [cert-manager](https://cert-manager.io) to create and maintain certificates.
-Cert Manager is a complete solution for managing certificates in an automated way. By default, Tracetest comes preconfigured with a self-signed certificate.
-While this is secure enough for testing, it will create warnings to users accessing the Web UI in most browsers.
-
-We recommend configuring a production-ready [Issuer](https://cert-manager.io/docs/configuration/issuers/) for CertManager to provide the best user experience and security.
-
-## Exposure to the Internet
-
-Tracetest doesn't require to be exposed to the public internet. However, clients will need to be able to communicate with the Tracetest services.
-By clients we mean CLI on developer machines, CI/CD actions, and even the Web UI on the user's machine.
-
-The simplest solution is to rely on [Kubernetes LoadBalancer](https://kubernetes.io/docs/concepts/services-networking/) to expose the Traefik Proxy that Tracetest uses.
-
-Does this means that your Tracetest instance needs to be accessible from the public internet? No! Depending on your cloud infrastructure, you can have clusters that are only accessible from the VPC,
-allowing permitted clients to access via VPN, for example. There are endless ways to configure Kubernetes, and it is outside the scope of this documentation.
-We are happy to help you deciding what's the best way to expose your On-prem deployment, so feel free to reach us at [our Slack](https://dub.sh/tracetest-community).
-
-## Executing a Test Run
-
-You likely want to do a quick test run without dealing with all the complexities of a production-level Kuberentes deployment.
-We provide a script that you can use to run Tracetest OnPrem locally on your machine. The only prerequisite is that you have [kind](https://kind.sigs.k8s.io/) and [helm](https://helm.sh/docs/intro/install/) installed.
-
-You can then run the following command:
-```sh
-curl -sSL https://raw.githubusercontent.com/kubeshop/tracetest-cloud-charts/main/scripts/setup_kind_cluster.sh | bash -- --install-install-demo
-```
-
-You need to add the following lines to your `/etc/hosts` file to access Tracetest:
-```sh
-sudo sh -c 'echo "127.0.0.1 tracetest.localdev" >> /etc/hosts'
-sudo sh -c 'echo "127.0.0.1 pokeshop.localdev" >> /etc/hosts'
-```
-
-You can now go to [https://tracetest.localdev:30000] to check tracetest, and run tests against the demo PokeShop App at [https://pokeshop.localdev:30000]
-
-> NOTE
-> This instalation is meant for testing purposes only. It uses self signed certificates, so your browser will show a warning about it.
-> The Traefik Proxy is exposed via NodePort, which is not recommended for production environments.
-> Finally, the required databases are installed within the cluster, and that might not be desireable.
-
-# Installing on a Production Environment
-
-<details>
-  <summary>Click here to see more details </summary>
+# Installing in a Production Environment
 
 ## DNS
 
@@ -177,4 +129,3 @@ global:
       clientID: "clientID"
       clientSecret: "clientSecret"
 ```  
-</details>

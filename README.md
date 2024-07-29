@@ -19,8 +19,8 @@ helm install my-tracetest tracetestcloud/tracetest-onprem \
 ```
 
 Here are the detailed instructions to install Tracetest On-prem in your cluster:
- - [Development cluster](./docs/install-on-development-cluster.md)
- - [Production cluster](./docs/install-on-production-cluster.md)
+ - [Development cluster](./docs/install-development-cluster.md)
+ - [Production cluster](./docs/install-production-cluster.md)
 
 ## Configuration (values file specification)
 
@@ -73,6 +73,9 @@ traefik:
 ```
 </details>
 
+## Questions
+
+Feel free to reach us at [our Slack](https://dub.sh/tracetest-community) if you have any questions.
 
 ## License
 
