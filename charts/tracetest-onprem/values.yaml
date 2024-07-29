@@ -1,6 +1,10 @@
 global:
   licenseKey: ""
   
+  # This value defines if clients should expect a valid SSL certificate from the server.
+  # If you are using a self-signed certificate, you should set this to false.
+  validCertificate: true
+  
   imagePullSecret: ""
   tracetestImageRegistry: ""
 

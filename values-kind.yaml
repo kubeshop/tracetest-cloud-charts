@@ -1,4 +1,5 @@
 global:
+  validCertificate: false
   urls:
     rootDomain: &rootDomain "tracetest.localdev"
 
