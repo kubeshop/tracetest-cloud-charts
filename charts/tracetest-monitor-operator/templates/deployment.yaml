@@ -53,6 +53,12 @@ spec:
                 name: {{ include "tracetest-monitor-operator.fullname" . }}-config
                 key: TRACETEST_TRACING_COLLECTORENDPOINT
 
+          - name: TRACETEST_AGENT_SKIP_VERIFY
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "tracetest-monitor-operator.fullname" . }}-config
+                key: TRACETEST_AGENT_SKIP_VERIFY
+
           imagePullPolicy: Always
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}

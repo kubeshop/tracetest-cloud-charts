@@ -64,6 +64,13 @@ spec:
                 name: {{ include "tracetest-agent-operator.fullname" . }}-config
                 key: TRACETEST_AGENT_EXTRA_ENV
 
+          - name: TRACETEST_AGENT_SKIP_VERIFY
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "tracetest-agent-operator.fullname" . }}-config
+                key: TRACETEST_AGENT_SKIP_VERIFY
+          
+
           imagePullPolicy: Always
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}

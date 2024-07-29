@@ -1,6 +1,7 @@
 global:
   imagePullSecret: ""
   tracetestImageRegistry: ""
+  validCertificate: true
   
   nats:
     endpoint: "nats://nats:4222"

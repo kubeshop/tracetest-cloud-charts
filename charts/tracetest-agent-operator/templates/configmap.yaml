@@ -10,6 +10,7 @@ data:
   TRACETEST_TARGET_NAMESPACE: "{{ .Values.config.targetNamespace }}"
   TRACETEST_TARGET_SERVER: {{ include "tracetest-common.url" .Values.global.urls.web }}
   TRACETEST_TARGET_DOMAIN: "{{ .Values.global.urls.agents.domain }}"
+  TRACETEST_AGENT_EXTRA_ENV: ""
   # TRACETEST_AGENT_EXTRA_ENV: |
   #   TRACETEST_ALLOW_INSECUE
   TRACETEST_TRACING_COLLECTORENDPOINT: ""
