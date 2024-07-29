@@ -196,6 +196,7 @@ Here's an example `values.yaml`:
 
 ```yaml
 global:
+  validCertificate: false # using self signed certificates for this example
   urls:
     rootDomain: &rootDomain "tracetest.acme.com" #it's important to keep the `&rootDomain` part
 
