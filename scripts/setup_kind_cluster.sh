@@ -10,6 +10,7 @@ function show_help() {
   echo "  --build-deps         Build dependencies for all charts"
   echo "  --install-demo       Install the Pokeshop demo"
   echo "  --debug              Enable Helm debug output"
+  echo "  --config-coredns     Configure CoreDNS with custom records"
   echo "  --help               Show this help message"
   echo ""
   echo "Environment variables that might be read:"
@@ -125,7 +126,7 @@ if [[ "$@" == *"--install-demo"* ]]; then
   helm upgrade --install ttdemo -n demo --create-namespace $PROJECT_ROOT/charts/pokeshop-demo -f $PROJECT_ROOT/values-kind-demo.yaml
 fi
 
-if [[ "$@" == *"--reset"* ]]; then
+if [[ "$SETUP_CLUSTER" == true || "$@" == *"--config-coredns"* ]]; then
   printf "\n\e[42m\e[1mConfiguring CoreDNS\e[0m\e[0m\n"
   hosts=(tracetest.localdev)
   if [[ "$@" == *"--install-demo"* ]]; then
