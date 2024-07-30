@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "tracetest-frontend.labels" . | nindent 4 }}
 data:
-  REACT_APP_EXPECT_VALID_CERTIFICATES: {{ .Values.global.validCertificate }}
+  REACT_APP_EXPECT_VALID_CERTIFICATES: "{{ .Values.global.validCertificate }}"
   REACT_APP_BASE_API_URL: {{ include "tracetest-common.url" .Values.global.urls.api | quote}}
   REACT_APP_ORY_KRATOS_PUBLIC_API_URL: {{ include "tracetest-common.url" .Values.global.urls.auth | quote}}
   REACT_APP_AGENT_URL:  "{{ .Values.global.urls.agents.domain }}:{{ .Values.global.urls.agents.port }}"
