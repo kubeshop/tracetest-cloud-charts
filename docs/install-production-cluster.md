@@ -35,7 +35,7 @@ Tracetest uses cert-manager to create sign certificates for JWT tokens, and SSL 
 Quick install:
 ```
 helm repo add jetstack https://charts.jetstack.io --force-update
-  helm upgrade --install \
+helm upgrade --install \
     cert-manager jetstack/cert-manager \
     --namespace cert-manager \
     --create-namespace \
