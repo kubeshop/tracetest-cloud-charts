@@ -2,7 +2,7 @@
 
 ## DNS
 
-Tracetest needs to be accessible from outside the cluster, exposed via a [Traefik's](#Traefik) IngressRoute.
+Tracetest needs to be accessible from a DNS route. We recommend you to use an exposed [Traefik's](#Traefik) IngressRoute.
 For this, it requires a DNS-resolvable name. You can use a public DNS, an intranet DNS, or even hostfile based,
 as long as clients can resolve the hostnames to the correct IPs.
 
@@ -21,12 +21,12 @@ If you want to use managed agents and send OpenTelemetry trace data to them from
 
 **Example**
 
-Your main domain is `tracetest.acme.com`. You need to setup `tracetest.acme.com` and `*.tracetest.acme.com` to the LoadBalancer IP.
+Your main domain is `tracetest.mydomain.com`. You need to setup `tracetest.mydomain.com` and `*.tracetest.mydomain.com` to the LoadBalancer IP.
 
 
 ## Cluster prerequisites
 
-Tracetest expects some preconditions in the environment where it runs.
+Tracetest expects some preconditions in the environment where it runs, described [here](./prerequisites.md).
 
 ### Cert manager
 
@@ -73,7 +73,7 @@ See [Install Traefik using Helm Chart](https://doc.traefik.io/traefik/getting-st
 
 ## External Services
 
-Tracetest requires two databases to operate
+Tracetest requires two databases to operate: PostgreSQL and MongoDB. You can use managed services or run them in-cluster.
 
 ### PostgreSQL
 
@@ -85,9 +85,9 @@ You can configure the credentials in `values.yaml`:
 global:
   postgresql:
     auth:
-      host: "ttdeps-postgresql"
-      username: "postgres"
-      password: "postgres"
+      host: "path.to.my.postgres.instance"
+      username: "some-pg-user"
+      password: "some-pg-password"
       database: "tracetest"
 ```
 
@@ -102,9 +102,9 @@ global:
   mongodb:
     auth:
       protocol: "mongodb"
-      host: "ttdeps-tracetest-dependencies-mongodb"
-      username: "mongodb"
-      password: "mongodb"
+      host: "path.to.my.mongodb.instance"
+      username: "some-mongo-user"
+      password: "some-mongo-password"
       database: "tracetest"
       options:
         retryWrites: "true"
@@ -113,9 +113,7 @@ global:
 
 # SSO
 
-This chart comes with a **EXTREMELY INSECURE** default GitHub OAuth App. It is used for demo purposes only, and should not under any circumstances be used in  any real environment.
-
-**TODO: add guides on how to setup oauth apps**
+This chart comes with a **EXTREMELY INSECURE** default GitHub OAuth App. It is used for demo purposes only, and should not under any circumstances be used in any real environment.
 
 You can enable GitHub and Google SSO by creating corresponding Apps and setting the credentials in `values.yaml`:
 
