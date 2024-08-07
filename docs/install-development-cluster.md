@@ -7,9 +7,14 @@ To install Tracetest OnPrem in a development environment, and get a first glimps
 
 We provide a development install via a script that you can use to run Tracetest OnPrem locally on your machine. The only prerequisite is that you have [kind](https://kind.sigs.k8s.io/) installed.
 
-You can then run the following command and follow the instructions when needed:
+You can then do a `git checkout` of the helm chart repo and follow the instructions when needed:
 ```sh
-curl -sSL https://raw.githubusercontent.com/kubeshop/tracetest-cloud-charts/main/scripts/setup_kind_cluster.sh | bash -- --install-demo
+cd ./my-folder
+
+git clone https://github.com/kubeshop/tracetest-cloud-charts.git
+cd ./tracetest-cloud-charts
+
+sh ./scripts/setup_kind_cluster.sh --install-demo
 ```
 
 You need to add the following lines to your `/etc/hosts` file to access Tracetest:
