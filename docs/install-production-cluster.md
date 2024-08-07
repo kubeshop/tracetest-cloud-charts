@@ -3,10 +3,10 @@
 ## DNS
 
 Tracetest needs to be accessible from a DNS route. We recommend you to use an exposed [Traefik's](#Traefik) IngressRoute.
-For this, it requires a DNS-resolvable name. You can use a public DNS, an intranet DNS, or even hostfile based,
-as long as clients can resolve the hostnames to the correct IPs.
+This requires a DNS-resolvable name. You can use a public DNS, an intranet DNS, or even host file based,
+as long as clients can resolve the host names to the correct IPs.
 
-You can choose any hostname you want. This helm repo imposes no limitation on this.
+You can choose any hostname you want. This Helm repo imposes no limitation on this.
 
 If you choose to use a DNS resolving mechanism that is not available within the Kubernetes cluster where Tracetest runs, 
 you can configure the cluster's CoreDNS to point the selected hostname to the Traefik Service. We provide a [script for this](./scripts/coredns_config.sh)
@@ -24,11 +24,11 @@ If you want to use managed agents and send OpenTelemetry trace data to them from
 Your main domain is `tracetest.mydomain.com`. You need to setup `tracetest.mydomain.com` and `*.tracetest.mydomain.com` to the LoadBalancer IP.
 
 
-## Cluster prerequisites
+## Cluster Prerequisites
 
 Tracetest expects some preconditions in the environment where it runs, described [here](./prerequisites.md).
 
-### Cert manager
+### Cert Manager
 
 Tracetest uses cert-manager to create sign certificates for JWT tokens, and SSL certificates for Ingress.
 
@@ -43,13 +43,13 @@ helm upgrade --install \
     --set crds.enabled=true
 ```
 
-Cert Manager defines Issuers. If you have existing Issuers that you want to use, you can configure them in `values.yaml`.
+Cert-manager defines Issuers. If you have existing Issuers that you want to use, you can configure them in `values.yaml`.
 
-In order to have a valid certificate, Cert Manager requires you to provide proof of ownership of the DNS domain that you are claiming.
-You can see how to do that on the [Issuers documentation](https://cert-manager.io/docs/configuration/issuers/)
+In order to have a valid certificate, cert-manager requires you to provide proof of ownership of the DNS domain that you are claiming.
+You can see how to do that in the [Issuers documentation](https://cert-manager.io/docs/configuration/issuers/).
 
-While it is not recommended in a production environment, you can get away by creating a SelfSigned Issuer and create self-signed certificates.
-With Self Signed certificates you will see warnings on the browser when accessing your Tracetest OnPrem instance Web UI.
+While it is not recommended in a production environment, it is possible by creating a SelfSigned Issuer and create self-signed certificates.
+With self-signed certificates you will see warnings on the browser when accessing your Tracetest OnPrem instance Web UI.
 
 ```sh
 # Create a self signed certificate
@@ -69,7 +69,7 @@ EOF
 
 Tracetest relies on Traefik for its exposed web UI and API, as well as for the managed agents.
 The process is simple, but the process for exposing the Traefik deployment might differ depending on the cloud platform.
-See [Install Traefik using Helm Chart](https://doc.traefik.io/traefik/getting-started/install-traefik/#use-the-helm-chart)
+See [Install Traefik using a Helm Chart](https://doc.traefik.io/traefik/getting-started/install-traefik/#use-the-helm-chart)
 
 ## External Services
 
@@ -77,7 +77,7 @@ Tracetest requires two databases to operate: PostgreSQL and MongoDB. You can use
 
 ### PostgreSQL
 
-We recommend using an out-of-cluster instance. Version should not matter a lot, but it is always a good idea to have the latest.
+We recommend using an out-of-cluster instance. The version should not matter, but it is always a good idea to have the latest version.
 
 You can configure the credentials in `values.yaml`:
 
@@ -93,7 +93,7 @@ global:
 
 ### MongoDB
 
-We recommend using an out-of-cluster instance. Version should not matter a lot, but it is always a good idea to have the latest.
+We recommend using an out-of-cluster instance. The version should not matter, but it is always a good idea to have the latest version.
 
 You can configure the credentials in `values.yaml`:
 
@@ -113,7 +113,7 @@ global:
 
 # SSO
 
-This chart comes with a **EXTREMELY INSECURE** default GitHub OAuth App. It is used for demo purposes only, and should not under any circumstances be used in any real environment.
+This chart comes with an **EXTREMELY INSECURE** default GitHub OAuth App. It is used for demo purposes only, and should not under any circumstances be used in any real environment.
 
 You can enable GitHub and Google SSO by creating corresponding Apps and setting the credentials in `values.yaml`:
 

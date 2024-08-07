@@ -9,7 +9,7 @@ We provide a development install via a script that you can use to run Tracetest 
 
 You can then run the following command and follow the instructions when needed:
 ```sh
-curl -sSL https://raw.githubusercontent.com/kubeshop/tracetest-cloud-charts/main/scripts/setup_kind_cluster.sh | bash -- --install-install-demo
+curl -sSL https://raw.githubusercontent.com/kubeshop/tracetest-cloud-charts/main/scripts/setup_kind_cluster.sh | bash -- --install-demo
 ```
 
 You need to add the following lines to your `/etc/hosts` file to access Tracetest:

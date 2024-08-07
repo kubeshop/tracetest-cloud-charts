@@ -220,7 +220,7 @@ global:
 
 ## Questions
 
-Feel free to reach us at [our Slack](https://dub.sh/tracetest-community) if you have any questions.
+Feel free to contact us at [our Slack](https://dub.sh/tracetest-community) if you have any questions.
 
 ## License
 
