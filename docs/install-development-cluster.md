@@ -9,8 +9,6 @@ We provide a development install via a script that you can use to run Tracetest 
 
 You can then do a `git checkout` of the helm chart repo and follow the instructions when needed:
 ```sh
-cd ./my-folder
-
 git clone https://github.com/kubeshop/tracetest-cloud-charts.git
 cd ./tracetest-cloud-charts
 
