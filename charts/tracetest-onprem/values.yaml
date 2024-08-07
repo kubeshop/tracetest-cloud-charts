@@ -1,19 +1,25 @@
 global:
+  # License Key provided by Tracetest team to run this instance. Default: `""`
   licenseKey: ""
   
-  # This value defines if clients should expect a valid SSL certificate from the server.
-  # If you are using a self-signed certificate, you should set this to false.
+  # This value defines if clients should expect a valid SSL certificate from the server. If you are using a self-signed certificate, you should set this to false. Default: `true`
   validCertificate: true
   
+  # Pull secrets name used to fetch images from a private registry if needed. If set empty, this chart will use the public registry. For more details see: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ Default: `""`
   imagePullSecret: ""
+  # Registry name used to fetch images. If set empty, this chart will use the public registry. For more details see: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ Default: `""`
   tracetestImageRegistry: ""
 
   sso:
     google:
-      clientID: "123"
-      clientSecret: "123"
+      # Google OAuth2 client ID. You can get these from the Google Developer Console. Default: `""`
+      clientID: "" 
+      # Google OAuth2 secret. You can get these from the Google Developer Console. Default: `""`
+      clientSecret: ""
     github:
+      # Github OAuth2 client ID. You can get these from the Github Developer Console. Default: `"example client ID"`
       clientID: "Ov23li8WMwQlvjFNNiCy"
+      # Github OAuth2 secret. You can get these from the Github Developer Console. Default: `"example client secret"`
       clientSecret: "e317c15e43909757d1e75e78373d130c374f6601"
 
   # If you don't want to use the default NATS server, you can specify your own NATS server here
@@ -21,22 +27,34 @@ global:
 
   postgresql:
     auth:
-      host: "postgres"
-      username: "postgres"
-      password: "postgres"
+      # Postgres host address. Default: `""`
+      host: ""
+      # Postgres username that Tracetest APIs will use. Default: `""`
+      username: ""
+      # Postgres password that Tracetest APIs will use. Default: `""`
+      password: ""
+      # Postgres database name for Tracetest OnPrem. Default: `"tracetest"`
       database: "tracetest"
+      # Postgres port. Default: `"5432"`
       port: "5432"
     
   mongodb:
     auth:
+      # MongoDB connection protocol. Default: `"mongodb"`
       protocol: "mongodb"
+      # MongoDB host address. Default: `""`
       host: ""
+      # MongoDB username that Tracetest APIs will use. Default: `""`
       username: ""
+      # MongoDB password that Tracetest APIs will use. Default: `""`
       password: ""
+      # MongoDB database name for Tracetest OnPrem. Default: `"tracetest"`
       database: ""
+      # MongoDB connection options as a key-value object. Default: `"{}"`
       options: {}
 
   
+  # URLs section with addresses used by clients to connect to the Tracetest OnPrem instance
   urls:
     protocol: &protocol "https"
     port: &port "30000"

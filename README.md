@@ -1,235 +1,227 @@
-# tracetest-cloud-charts
+# Tracetest On-Prem Helm Charts
 
-This is the helm repository for the On-Prem installation of [Tracetest](https://tracetest.io/).
+This repository contains the Helm Charts for the [Tracetest](https://tracetest.io/) installation on-premises (i.e. in your infrastructure).
 
-# Basic concepts
+## Usage
 
-Tracetest is composed of a few different internal services. To simplify access to the different parts when using the CLI and Web UI, 
-it relies on the [Traefik Proxy](https://traefik.io/traefik/).
+[Helm](https://helm.sh/) must be installed to use the charts. Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 
-All incoming connections are secured using HTTPS/TLS. Tracetest relies on [cert-manager](https://cert-manager.io) to create and maintain certificates.
-Cert Manager is a complete solution for managing certificates in an automated way. By default, Tracetest comes preconfigured with a self-signed certificate.
-While this is secure enough for testing, it will create warnings to users accessing the Web UI in most browsers.
+The main chart for this repository is called `tracetest-onprem` and contains all components necessary to run Tracetest on-premises on a cluster that fits the [prerequisites](./docs/prerequisites.md).
 
-We recommend configuring a production-ready [Issuer](https://cert-manager.io/docs/configuration/issuers/) for CertManager to provide the best user experience and security.
+You will need to have a license key to install Tracetest On-prem. If you don't have one, you can request a trial license key [here](https://tracetest.io/).
 
-## Exposure to the Internet
-
-Tracetest doesn't require to be exposed to the public internet. However, clients will need to be able to communicate with the Tracetest services.
-By clients we mean CLI on developer machines, CI/CD actions, and even the Web UI on the user's machine.
-
-The simplest solution is to rely on [Kubernetes LoadBalancer](https://kubernetes.io/docs/concepts/services-networking/) to expose the Traefik Proxy that Tracetest uses.
-
-Does this means that your Tracetest instance needs to be accessible from the public internet? No! Depending on your cloud infrastructure, you can have clusters that are only accessible from the VPC,
-allowing permitted clients to access via VPN, for example. There are endless ways to configure Kubernetes, and it is outside the scope of this documentation.
-We are happy to help you deciding what's the best way to expose your On-prem deployment, so feel free to reach us at [our Slack](https://dub.sh/tracetest-community).
-
-## Executing a Test Run
-
-You likely want to do a quick test run without dealing with all the complexities of a production-level Kuberentes deployment.
-We provide a script that you can use to run Tracetest OnPrem locally on your machine. The only prerequisite is that you have [kind](https://kind.sigs.k8s.io/) and [helm](https://helm.sh/docs/intro/install/) installed.
-
-You can then run the following command:
-```sh
-curl -sSL https://raw.githubusercontent.com/kubeshop/tracetest-cloud-charts/main/scripts/setup_kind_cluster.sh | bash -- --install-install-demo
-```
-
-You need to add the following lines to your `/etc/hosts` file to access Tracetest:
-```sh
-sudo sh -c 'echo "127.0.0.1 tracetest.localdev" >> /etc/hosts'
-sudo sh -c 'echo "127.0.0.1 pokeshop.localdev" >> /etc/hosts'
-```
-
-You can now go to [https://tracetest.localdev:30000] to check tracetest, and run tests against the demo PokeShop App at [https://pokeshop.localdev:30000]
-
-> NOTE
-> This instalation is meant for testing purposes only. It uses self signed certificates, so your browser will show a warning about it.
-> The Traefik Proxy is exposed via NodePort, which is not recommended for production environments.
-> Finally, the required databases are installed within the cluster, and that might not be desireable.
-
-# Installing on a Production Environment
-
-## DNS
-
-Tracetest needs to be accessible from outside the cluster, exposed via a [Traefik's](#Traefik) IngressRoute.
-For this, it requires a DNS-resolvable name. You can use a public DNS, an intranet DNS, or even hostfile based,
-as long as clients can resolve the hostnames to the correct IPs.
-
-You can choose any hostname you want. This helm repo imposes no limitation on this.
-
-If you choose to use a DNS resolving mechanism that is not available within the Kubernetes cluster where Tracetest runs, 
-you can configure the cluster's CoreDNS to point the selected hostname to the Traefik Service. We provide a [script for this](./scripts/coredns_config.sh)
-
-If you want to use managed agents and send OpenTelemetry trace data to them from outside the cluster, you need to set a wildcard subdomain.
-
-> **Does this mean that Tracetest will be accessible from the internet?**
-> 
-> Not neccesarily. By default, most cloud providers will automatically map LoadBalancer services to public IPs.
-> If you want to make your installation only availble within an intranet or similarly private environment,
-> check how to configure Private IPs with your cloud provider docs.
-
-**Example**
-
-Your main domain is `tracetest.acme.com`. You need to setup `tracetest.acme.com` and `*.tracetest.acme.com` to the LoadBalancer IP.
-
-
-## Cluster prerequisites
-
-Tracetest expects some preconditions in the environment where it runs.
-
-### Cert manager
-
-Tracetest uses cert-manager to create sign certificates for JWT tokens, and SSL certificates for Ingress.
-
-Quick install:
-```
-helm repo add jetstack https://charts.jetstack.io --force-update
-  helm upgrade --install \
-    cert-manager jetstack/cert-manager \
-    --namespace cert-manager \
-    --create-namespace \
-    --version v1.15.0 \
-    --set crds.enabled=true
-```
-
-Cert Manager defines Issuers. If you have existing Issuers that you want to use, you can configure them in `values.yaml`.
-
-In order to have a valid certificate, Cert Manager requires you to provide proof of ownership of the DNS domain that you are claiming.
-You can see how to do that on the [Issuers documentation](https://cert-manager.io/docs/configuration/issuers/)
-
-While it is not recommended in a production environment, you can get away by creating a SelfSigned Issuer and create self-signed certificates.
-With Self Signed certificates you will see warnings on the browser when accessing your Tracetest OnPrem instance Web UI.
+After you have a cluster that fits the prerequisites, you can install Tracetest On-prem by running the following command:
 
 ```sh
-# Create a self signed certificate
-
-cat <<EOF | kubectl apply -f -
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: issuer-selfsigned
-  labels:
-spec:
-  selfSigned: {}
-EOF
-```
-
-### Traefik
-
-Tracetest relies on Traefik for its exposed web UI and API, as well as for the managed agents.
-The process is simple, but the process for exposing the Traefik deployment might differ depending on the cloud platform.
-See [Install Traefik using Helm Chart](https://doc.traefik.io/traefik/getting-started/install-traefik/#use-the-helm-chart)
-
-## External Services
-
-Tracetest requires two databases to operate
-
-### PostgreSQL
-
-We recommend using an out-of-cluster instance. Version should not matter a lot, but it is always a good idea to have the latest.
-
-You can configure the credentials in `values.yaml`:
-
-```yaml
-global:
-  postgresql:
-    auth:
-      host: "ttdeps-postgresql"
-      username: "postgres"
-      password: "postgres"
-      database: "tracetest"
-```
-
-### MongoDB
-
-We recommend using an out-of-cluster instance. Version should not matter a lot, but it is always a good idea to have the latest.
-
-You can configure the credentials in `values.yaml`:
-
-```yaml
-global:
-  mongodb:
-    auth:
-      protocol: "mongodb"
-      host: "ttdeps-tracetest-dependencies-mongodb"
-      username: "mongodb"
-      password: "mongodb"
-      database: "tracetest"
-      options:
-        retryWrites: "true"
-        authSource: admin
-```
-
-# SSO
-
-This chart comes with a **EXTREMELY INSECURE** default GitHub OAuth App. It is used for demo purposes only, and should not under any circumstances be used in  any real environment.
-
-**TODO: add guides on how to setup oauth apps**
-
-You can enable GitHub and Google SSO by creating corresponding Apps and setting the credentials in `values.yaml`:
-
-```yaml
-global:
-  sso:
-    google:
-      clientID: "clientID"
-      clientSecret: "clientSecret"
-    github:
-      clientID: "clientID"
-      clientSecret: "clientSecret"
-```
-
-## Installing the chart.
-
-`tracetest-onprem` is an umbrella chart that simplifies the installation of Tracetest on a cluster that fits the prerequisites.
-
-The basic steps to install are:
-```sh
-helm repo add tracetestcloud https://kubeshop.github.io/tracetest-cloud-charts
+helm repo add tracetestcloud https://kubeshop.github.io/tracetest-cloud-charts --force-update
 
 helm install my-tracetest tracetestcloud/tracetest-onprem \
   --set global.licenseKey=YOUR-TRACETEST-LICENSE \
-  -f values.yaml
+  --values values.yaml
 ```
 
-Here's an example `values.yaml`:
+Here are the detailed instructions to install Tracetest On-prem in your cluster:
+ - [Development cluster](./docs/install-development-cluster.md)
+ - [Production cluster](./docs/install-production-cluster.md)
+
+## Configuration (values file specification)
+
+You can see the main configurable parameters of the Tracetest On-prem chart and their default values here: [values.yaml](./charts/tracetest-onprem/values.yaml).
+
+<details>
+  <summary>Default values.yaml</summary>
 
 ```yaml
 global:
-  validCertificate: false # using self signed certificates for this example
-  urls:
-    rootDomain: &rootDomain "tracetest.acme.com" #it's important to keep the `&rootDomain` part
+  # License Key provided by Tracetest team to run this instance. Default: `""`
+  licenseKey: ""
+  
+  # This value defines if clients should expect a valid SSL certificate from the server. If you are using a self-signed certificate, you should set this to false. Default: `true`
+  validCertificate: true
+  
+  # Pull secrets name used to fetch images from a private registry if needed. If set empty, this chart will use the public registry. For more details see: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ Default: `""`
+  imagePullSecret: ""
+  # Registry name used to fetch images. If set empty, this chart will use the public registry. For more details see: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ Default: `""`
+  tracetestImageRegistry: ""
 
   sso:
     google:
-      clientID: "clientID"
-      clientSecret: "clientSecret"
+      # Google OAuth2 client ID. You can get these from the Google Developer Console. Default: `""`
+      clientID: "" 
+      # Google OAuth2 secret. You can get these from the Google Developer Console. Default: `""`
+      clientSecret: ""
     github:
-      clientID: "clientID"
-      clientSecret: "clientSecret"
+      # Github OAuth2 client ID. You can get these from the Github Developer Console. Default: `"example client ID"`
+      clientID: "Ov23li8WMwQlvjFNNiCy"
+      # Github OAuth2 secret. You can get these from the Github Developer Console. Default: `"example client secret"`
+      clientSecret: "e317c15e43909757d1e75e78373d130c374f6601"
+
+  # If you don't want to use the default NATS server, you can specify your own NATS server here
+  # natsEndpointOverride: "://nats:4222"
 
   postgresql:
     auth:
-      host: "ttdeps-postgresql"
-      username: "postgres"
-      password: "postgres"
+      # Postgres host address. Default: `""`
+      host: ""
+      # Postgres username that Tracetest APIs will use. Default: `""`
+      username: ""
+      # Postgres password that Tracetest APIs will use. Default: `""`
+      password: ""
+      # Postgres database name for Tracetest OnPrem. Default: `"tracetest"`
+      database: "tracetest"
+      # Postgres port. Default: `"5432"`
+      port: "5432"
+    
+  mongodb:
+    auth:
+      # MongoDB connection protocol. Default: `"mongodb"`
+      protocol: "mongodb"
+      # MongoDB host address. Default: `""`
+      host: ""
+      # MongoDB username that Tracetest APIs will use. Default: `""`
+      username: ""
+      # MongoDB password that Tracetest APIs will use. Default: `""`
+      password: ""
+      # MongoDB database name for Tracetest OnPrem. Default: `"tracetest"`
+      database: ""
+      # MongoDB connection options as a key-value object. Default: `"{}"`
+      options: {}
+
+  
+  # URLs section with addresses used by clients to connect to the Tracetest OnPrem instance
+  urls:
+    protocol: &protocol "https"
+    port: &port "30000"
+    rootDomain: &rootDomain "tracetest.localdev"
+    cookieDomain: *rootDomain
+    
+    web:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+      path: "/"
+    
+    api:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+      path: "/api"
+
+    auth:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+      path: "/auth"
+    
+    agents:
+      domain: *rootDomain
+      port: *port
+    
+    controlPlane:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+      path: "/"
+
+nats:
+  enabled: true
+  
+  config:
+    jetstream:
+      enabled: true
+      fileStore:
+        enabled: true
+        dir: /data
+        pvc:
+          enabled: true
+          size: 10Gi
+      memoryStore:
+          enabled: true
+          maxSize: 1Gi
+
+    natsBox:
+      container:
+        env:
+          # different from k8s units, suffix must be B, KiB, MiB, GiB, or TiB
+          # should be ~90% of memory limit
+          GOMEMLIMIT: 900MiB
+        merge:
+          # recommended limit is at least 2 CPU cores and 8Gi Memory for production JetStream clusters
+          resources:
+            requests:
+              cpu: 250m # one entire CPU
+              memory: 1Gi
+            limits:
+              memory: 1Gi
+
+
+```
+
+</details>
+
+### Examples
+
+<details>
+  <summary>Basic values.yaml with SSO and Database defined</summary>
+
+```yaml
+global:
+  validCertificate: false # defines if the certificate is generated by an external issuer of if the self-signed issuer is used
+
+  urls:
+    protocol: &protocol "https"
+    port: &port "30000" 
+    rootDomain: &rootDomain "tracetest.mydomain.com" # DNS that the users will use to access the Tracetest
+    cookieDomain: *rootDomain
+    
+    web:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+    
+    api:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+
+    auth:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+    
+    agents:
+      domain: *rootDomain
+      port: *port
+    
+    controlPlane:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+
+  postgresql:
+    auth:
+      host: "path.to.my.postgres.instance"
+      username: "some-pg-user"
+      password: "some-pg-password"
       database: "tracetest"
 
   mongodb:
     auth:
       protocol: "mongodb"
-      host: "ttdeps-tracetest-dependencies-mongodb"
-      username: "mongodb"
-      password: "mongodb"
+      host: "path.to.my.mongodb.instance"
+      username: "some-mongo-user"
+      password: "some-mongo-password"
       database: "tracetest"
       options:
         retryWrites: "true"
         authSource: admin
-
-traefik:
-  tls:
-    issuerRef:
-      name: issuer-selfsigned
-      kind: ClusterIssuer
-      group: cert-manager.io
 ```
+</details>
+
+## Questions
+
+Feel free to contact us at [our Slack](https://dub.sh/tracetest-community) if you have any questions.
+
+## License
+
+[Tracetest Community License](./LICENSE)
