@@ -1,0 +1,27 @@
+## This job is triggered by the "Release version" of any
+## of the tracetest components. When a new version of any tracetest
+## component is released, this workflow should be triggered and
+## it will update the respective chart with the new release version
+##
+##
+## Required values in the payload:
+## * @string project_name
+## * @string version
+name: Update chart version
+
+on:
+    repository_dispatch:
+        types: [update-chart]
+
+jobs:
+    update-chart:
+        name: Update chart
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Update appVersion
+              run: |
+                ./scripts/update_chart.sh \
+                    ${{ github.event.client_payload.project_name }} \
+                    ${{ github.event.client_payload.version }}
+    
