@@ -20,33 +20,7 @@ source `get_path ./git.sh`
 projectName=$1
 version=$2
 
-affectedCharts=()
-
-populate_affected_charts() {
-    projectName=$1
-
-    if [[ "$projectName" == "core" ]]; then
-        affectedCharts+=("charts/tracetest-core")
-    elif [[ "$projectName" == "cloud" ]]; then
-        affectedCharts+=("charts/tracetest-cloud")
-        affectedCharts+=("charts/tracetest-agent-operator")
-        affectedCharts+=("charts/tracetest-monitor-operator")
-    elif [[ "$projectName" == "frontend" ]]; then
-        affectedCharts+=("charts/tracetest-frontend")
-    elif [[ "$projectName" == "pokeshop" ]]; then
-        affectedCharts+=("charts/pokeshop-demo")
-    fi
-}
-
-populate_affected_charts $projectName
 update_chart_references $projectName $version `get_path ./update_chart_instructions.yaml`
-
-for chart in "${affectedCharts[@]}"
-do
-    path="$chart/Chart.yaml"
-    oldVersion=`yq '.appVersion' $path`
-    sed -i "s/appVersion: $oldVersion/appVersion: $version/g" $path
-done
 
 git add `get_path ../charts`
 git status
