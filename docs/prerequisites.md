@@ -7,40 +7,7 @@ Tracetest is composed of a few different internal services to properly work. The
 - **Tracetest Workers**: A set of workers that manage the test execution.
 - **Nats**: An instance of [nats.io](https://nats.io/) uses a message broker that works as a communication bridge between the different services.
 
-
-```mermaid
-graph LR
-    Postgres[("Postgres")]
-    Mongo[("Mongo")]
-    Nats
-    SMTPServer["SMTP Server"]
-    Ory["Ory Ecosystem\n(AuthZ / AuthN)"]
-    TracetestAPI["Cloud/Core API"]
-    TracetestWorkers["Tracetest\nWorkers"]
-    TracetestFrontend["Frontend"]
-    User
-
-    User --> TracetestFrontend
-    User --> Ory
-    User --> TracetestAPI
-
-    subgraph Tracetest
-        TracetestFrontend --> TracetestAPI      
-
-        TracetestAPI --> Nats
-        TracetestWorkers --> Nats
-
-        TracetestFrontend --> Ory
-        TracetestAPI --> Ory
-    end
-    
-    subgraph ExternalDependencies["External Deps"]
-        TracetestAPI --> SMTPServer
-        Ory --> Postgres
-        TracetestAPI --> Postgres
-        TracetestAPI --> Mongo
-    end
-```
+![](./onprem-architecture.png)
 
 To simplify access to the different parts of Tracetest for a user (that mostly will use the CLI and Web UI), we recommend our users rely on a proxy, like [Traefik](https://traefik.io/traefik/) to have a single entrypoint to handle connections to the Frontend and APIs.
 
