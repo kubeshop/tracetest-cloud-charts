@@ -50,5 +50,6 @@ do
 done
 
 git add `get_path ../charts`
+git status
 git commit -m "Bump chart to version $version"
 git push --force-with-lease
