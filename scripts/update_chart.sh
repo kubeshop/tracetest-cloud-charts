@@ -2,8 +2,6 @@
 
 set -e
 
-
-
 get_path() {
     path=$1
     PWD=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
@@ -13,6 +11,7 @@ get_path() {
 }
 
 source `get_path ./update_chart_references.sh`
+source `get_path ./git.sh`
 
 # Update the `appVersion` in each chart affected by a new release
 # Parameters:
@@ -51,5 +50,5 @@ done
 
 git add `get_path ../charts`
 git status
-git commit -m "Bump chart to version $version"
-git push --force-with-lease
+
+commit_and_push "Bump chart to version $version"
