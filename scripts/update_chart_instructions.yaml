@@ -1,0 +1,25 @@
+# Define what files/paths needs to be updated with new tag for each repository
+# The file paths are relative to `argo/` directory
+oss:
+- file: charts/tracetest-agent-operator/values.yaml
+  jsonpath: .config.targetVersion
+
+core:
+- file: charts/tracetest-core/Chart.yaml
+  jsonpath: .appVersion
+
+cloud:
+- file: charts/tracetest-cloud/Chart.yaml
+  jsonpath: .appVersion
+- file: charts/tracetest-agent-operator/Chart.yaml
+  jsonpath: .appVersion
+- file: charts/tracetest-monitor-operator/Chart.yaml
+  jsonpath: .appVersion
+
+frontend:
+- file: charts/tracetest-frontend/Chart.yaml
+  jsonpath: .appVersion
+
+pokeshop:
+- file: charts/pokeshop-demo/Chart.yaml
+  jsonpath: .appVersion
