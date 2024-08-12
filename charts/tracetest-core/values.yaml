@@ -34,6 +34,7 @@ config:
     sampling: 50
 
   analytics: false
+  # collectorEndpoint: "some-collector.namespace:4317"
 
 server:
   httpPort: *httpPort

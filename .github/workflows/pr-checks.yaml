@@ -1,0 +1,38 @@
+name: Create Cluster
+
+on: pull_request
+
+jobs:
+  create-cluster:
+    runs-on: ubuntu-latest
+    env:
+      TRACETEST_LICENSE: ${{ secrets.TRACETEST_ONPREM_TEST_LICENSE }}
+      AGENT_API_KEY: ${{ secrets.AGENT_API_KEY }}
+      AGENT_ENV_ID: ${{ secrets.AGENT_ENV_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup KinD
+        uses: helm/kind-action@v1
+        with:
+          cluster_name: tracetest
+          # install_only: true
+
+      - name: Test public images
+        run: |
+          kubectl config get-contexts
+          ./scripts/setup_kind_cluster.sh --ci --build-deps  --install-demo --force-setup
+
+          helm install cloudagent -n default ./charts/tracetest-agent --set agent.apiKey="$AGENT_API_KEY" --set agent.environmentId="$AGENT_ENV_ID"
+          
+          kubectl wait --for=condition=available --timeout=60s deployment/cloudagent-tracetest-agent
+          echo "Cloudagent deployed"
+
+          kubectl wait --for=condition=available --timeout=60s deployment/tt-tracetest-core-api
+          kubectl logs deployment/tt-tracetest-core-api
+          kubectl logs deployment/cloudagent-tracetest-agent
+          kubectl get cm tt-tracetest-core -o yaml
+
+          sleep 600

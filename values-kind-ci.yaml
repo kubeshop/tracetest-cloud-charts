@@ -1,0 +1,41 @@
+global:
+  validCertificate: false
+  urls:
+    rootDomain: &rootDomain "tracetest.localdev"
+
+  postgresql:
+    auth:
+      host: "ttdeps-postgresql"
+      username: "postgres"
+      password: "postgres"
+      database: "tracetest"
+
+  mongodb:
+    auth:
+      protocol: "mongodb"
+      host: "ttdeps-tracetest-dependencies-mongodb"
+      username: "mongodb"
+      password: "mongodb"
+      database: "tracetest"
+      options:
+        retryWrites: "true"
+        authSource: admin
+
+
+traefik:
+  service:
+    type: NodePort
+
+  dnsNames:
+    - *rootDomain
+    - "pokeshop.localdev"
+
+  tls:
+    issuerRef:
+      name: issuer-selfsigned
+      kind: ClusterIssuer
+      group: cert-manager.io
+
+tracetest-core:
+  config:
+    collectorEndpoint: "cloudagent-tracetest-agent.default:4317"
