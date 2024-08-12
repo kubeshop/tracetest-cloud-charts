@@ -26,7 +26,7 @@ Here are the detailed instructions to install Tracetest On-prem in your cluster:
 
 ## Configuration (values file specification)
 
-You can see the main configurable parameters of the Tracetest On-prem chart and their default values here: [values.yaml](./charts/tracetest-onprem/values.yaml).
+You can see the main configurable parameters of the Tracetest On-prem chart and their default values here: [values.yaml](https://github.com/kubeshop/tracetest-cloud-charts/blob/main/charts/tracetest-onprem/values.yaml).
 
 <details>
   <summary>Default values.yaml</summary>
