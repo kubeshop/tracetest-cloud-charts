@@ -8,7 +8,7 @@ This repository contains the Helm Charts for the [Tracetest](https://tracetest.i
 
 The main chart for this repository is called `tracetest-onprem` and contains all components necessary to run Tracetest on-premises on a cluster that fits the [prerequisites](./docs/prerequisites.md).
 
-You will need to have a license key to install Tracetest On-prem. If you don't have one, you can request a trial license key [here](https://tracetest.io/).
+You will need to have a license key to install Tracetest On-prem. If you don't have one, you can request a trial license key [here](https://tracetest.io/on-prem-installation).
 
 After you have a cluster that fits the prerequisites, you can install Tracetest On-prem by running the following command:
 
