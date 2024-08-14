@@ -24,7 +24,3 @@ version: v1.13.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: v1.4.4
-dependencies:
-- name: tracetest-common
-  version: v1.4.0
-  repository: file://../tracetest-common
