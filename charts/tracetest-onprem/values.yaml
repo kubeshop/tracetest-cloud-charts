@@ -120,3 +120,23 @@ nats:
             limits:
               memory: 1Gi
 
+tracetest-frontend:
+  enabled: true
+
+tracetest-core:
+  enabled: true
+
+tracetest-cloud:
+  enabled: true
+
+tracetest-agent-operator:
+  enabled: true
+
+tracetest-monitor-operator:
+  enabled: true
+
+tracetest-auth:
+  enabled: true
+
+tracetest-common:
+  enabled: true
