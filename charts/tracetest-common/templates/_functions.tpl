@@ -55,6 +55,6 @@ Create a URI from a given object containing protocol, hostname, port, and path.
 {{- else }}
   {{- $releaseName := .Release.Name -}}
   {{- $releaseNamespace := .Release.Namespace -}}
-  {{- printf "nats://%s-nats-headless.%s" $releaseName $releaseNamespace }}
+  {{- printf "nats://%s-nats.%s" $releaseName $releaseNamespace }}
 {{- end }}
 {{- end }}
