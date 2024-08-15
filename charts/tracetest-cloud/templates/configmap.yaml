@@ -14,10 +14,10 @@ data:
   DEBUG: "true"
   DEV_MODE: "true"
   ENTERPRISE_MODE: "true"
-  KETO_ADMIN_URL: "http://{{ .Release.Name }}-keto-write.{{ .Release.Namespace }}"
-  KETO_API_URL: "http://{{ .Release.Name }}-keto-read.{{ .Release.Namespace }}"
-  KRATOS_ADMIN_API_URL: "http://{{ .Release.Name }}-kratos-admin.{{ .Release.Namespace }}"
-  KRATOS_PUBLIC_API_URL: "http://{{ .Release.Name }}-kratos-public.{{ .Release.Namespace }}"
+  KETO_ADMIN_URL: {{ .Values.config.auth.keto.adminUrl | default (printf "http://%s-keto-write.%s" .Release.Name .Release.Namespace) | quote }}
+  KETO_API_URL: {{ .Values.config.auth.apiUrl | default (printf "http://%s-keto-read.%s" .Release.Name .Release.Namespace) | quote }}
+  KRATOS_ADMIN_API_URL: {{ .Values.config.auth.kratos.adminUrl | default (printf "http://%s-kratos-admin.%s" .Release.Name .Release.Namespace) | quote }}
+  KRATOS_PUBLIC_API_URL: {{ .Values.config.auth.kratos.apiUrl | default (printf "http://%s-kratos-public.%s" .Release.Name .Release.Namespace) | quote }}
   NATS_URI: {{ include "tracetest-common.nats_endpoint" . }}
   OAUTH_ENABLED: "false"
   OSS_ENDPOINT: "http://{{ .Release.Name }}-tracetest-core.{{ .Release.Namespace }}:{{ .Values.global.tracetestCore.service.httpPort }}"
