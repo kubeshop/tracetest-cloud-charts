@@ -91,6 +91,15 @@ config:
   hubspotApiKey: some-value
   segmentWriteKey: some-value
   
+  # Uncomment the following block to enable custom Auth with Ory Kratos and Keto
+  # auth:
+  #   kratos:
+  #     adminUrl: ""
+  #     apiUrl: ""
+  #   keto:
+  #     adminUrl: ""
+  #     apiUrl: ""
+
   telemetry:
     enabled: false
     collector:
