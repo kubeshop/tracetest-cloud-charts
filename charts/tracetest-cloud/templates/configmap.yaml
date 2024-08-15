@@ -15,7 +15,7 @@ data:
   DEV_MODE: "true"
   ENTERPRISE_MODE: "true"
   KETO_ADMIN_URL: {{ .Values.config.auth.keto.adminUrl | default (printf "http://%s-keto-write.%s" .Release.Name .Release.Namespace) | quote }}
-  KETO_API_URL: {{ .Values.config.auth.apiUrl | default (printf "http://%s-keto-read.%s" .Release.Name .Release.Namespace) | quote }}
+  KETO_API_URL: {{ .Values.config.auth.keto.apiUrl | default (printf "http://%s-keto-read.%s" .Release.Name .Release.Namespace) | quote }}
   KRATOS_ADMIN_API_URL: {{ .Values.config.auth.kratos.adminUrl | default (printf "http://%s-kratos-admin.%s" .Release.Name .Release.Namespace) | quote }}
   KRATOS_PUBLIC_API_URL: {{ .Values.config.auth.kratos.apiUrl | default (printf "http://%s-kratos-public.%s" .Release.Name .Release.Namespace) | quote }}
   NATS_URI: {{ include "tracetest-common.nats_endpoint" . }}
