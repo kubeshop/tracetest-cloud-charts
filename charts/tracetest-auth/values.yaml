@@ -41,6 +41,12 @@ global:
       port: "30000"
       path: "/auth"
 
+# config:
+#   kratos:
+#     postgresDsnOverride: something
+#   keto:
+#     postgresDsnOverride: something
+
 keto:
   image:
     tag: "v0.11.1"
