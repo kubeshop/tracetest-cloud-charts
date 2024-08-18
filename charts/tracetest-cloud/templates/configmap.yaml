@@ -5,6 +5,16 @@ metadata:
   labels:
     {{- include "tracetest-cloud.labels" . | nindent 4 }}
 data:
+  {{- $defaultKetoAdminUrl := (printf "http://%s-keto-write.%s" .Release.Name .Release.Namespace) }}
+  {{- $defaultKetoApiUrl := (printf "http://%s-keto-read.%s" .Release.Name .Release.Namespace) }}
+  {{- $defaultKratosAdminUrl := (printf "http://%s-kratos-admin.%s" .Release.Name .Release.Namespace) }}
+  {{- $defaultKratosApiUrl := (printf "http://%s-kratos-public.%s" .Release.Name .Release.Namespace) }}
+
+  {{- $ketoAdminUrl := (dig "auth" "keto" "adminUrl" $defaultKetoAdminUrl .Values.config  ) }}
+  {{- $ketoApiUrl := (dig "auth" "keto" "apiUrl" $defaultKetoApiUrl .Values.config  ) }}
+  {{- $kratosAdminUrl := (dig "auth" "kratos" "adminUrl" $defaultKratosAdminUrl .Values.config  ) }}
+  {{- $kratosApiUrl := (dig "auth" "kratos" "apiUrl" $defaultKratosApiUrl .Values.config  ) }}
+
   AGENT_HOST: "{{ .Values.global.urls.controlPlane.hostname }}"
   AGENT_PORT: "8091"
   ALLOWED_EXTERNAL_REDIRECT_URIS: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
@@ -14,10 +24,10 @@ data:
   DEBUG: "true"
   DEV_MODE: "true"
   ENTERPRISE_MODE: "true"
-  KETO_ADMIN_URL: {{ .Values.config.auth.keto.adminUrl | default (printf "http://%s-keto-write.%s" .Release.Name .Release.Namespace) | quote }}
-  KETO_API_URL: {{ .Values.config.auth.keto.apiUrl | default (printf "http://%s-keto-read.%s" .Release.Name .Release.Namespace) | quote }}
-  KRATOS_ADMIN_API_URL: {{ .Values.config.auth.kratos.adminUrl | default (printf "http://%s-kratos-admin.%s" .Release.Name .Release.Namespace) | quote }}
-  KRATOS_PUBLIC_API_URL: {{ .Values.config.auth.kratos.apiUrl | default (printf "http://%s-kratos-public.%s" .Release.Name .Release.Namespace) | quote }}
+  KETO_ADMIN_URL: "{{- $ketoAdminUrl }}"
+  KETO_API_URL: "{{- $ketoApiUrl }}"
+  KRATOS_ADMIN_API_URL: "{{- $kratosAdminUrl }}"
+  KRATOS_PUBLIC_API_URL: "{{- $kratosApiUrl }}"
   NATS_URI: {{ include "tracetest-common.nats_endpoint" . }}
   OAUTH_ENABLED: "false"
   OSS_ENDPOINT: "http://{{ .Release.Name }}-tracetest-core.{{ .Release.Namespace }}:{{ .Values.global.tracetestCore.service.httpPort }}"
