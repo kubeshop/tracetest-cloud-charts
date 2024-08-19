@@ -2,50 +2,40 @@ global:
   imagePullSecret: ""
   tracetestImageRegistry: ""
   validCertificate: true
-  
   tracetestFrontend:
     service:
       httpPort: 3000
-  
   nats:
     endpoint: "nats://nats:4222"
-  
   urls:
     web:
       protocol: "https"
       hostname: "tracetest.localdev"
       port: "30000"
       path: "/"
-
     agents:
       domain: "tracetest.localdev"
       port: "30000"
-    
     controlPlane:
       protocol: "https"
       hostname: "tracetest.localdev"
       port: "30000"
       path: "/"
-
 config:
-  targetVersion: v1.4.3
+  targetVersion: v1.4.4
   targetNamespace: agents
-
 deployment:
   replicas: 1
-
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-
   resources:
     limits:
       memory: 512Mi
     requests:
       cpu: 200m
       memory: 256Mi
-
 image:
   repository: kubeshop/tracetest-agent-operator
