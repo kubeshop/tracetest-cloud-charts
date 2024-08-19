@@ -35,7 +35,7 @@ data:
   ISSUER_URL: {{ include "tracetest-common.url" .Values.global.urls.auth }}
   BASE_AUTH_URL: {{ include "tracetest-common.url" .Values.global.urls.auth }}
   DEFAULT_BROWSER_RETURN_URL: {{ include "tracetest-common.url" .Values.global.urls.web }}
-  ERROR_UI_URL: {{ include "tracetest-common.url" .Values.global.urls.web }}error
+  ERROR_UI_URL: {{ include "tracetest-common.url" .Values.global.urls.web }}/error
   LOGIN_URL: {{ include "tracetest-common.url" .Values.global.urls.auth }}/oathkeeper/login
   LOGIN_AFTER_HOOK_URL: http://{{ .Release.Name }}-tracetest-cloud.{{ .Release.Namespace }}:{{ .Values.global.tracetestCloud.service.httpPort}}/webhook/login
   CORS_ALLOWED_ORIGINS: '["{{ include "tracetest-common.url" .Values.global.urls.web }}"]' #this must be in json format
