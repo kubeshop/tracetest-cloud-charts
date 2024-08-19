@@ -404,26 +404,6 @@ oathkeeper:
         level: debug
         format: json
 
-      serve:
-        proxy:
-          cors:
-            enabled: true
-            allowed_origins:
-              - "*"
-            allowed_methods:
-              - POST
-              - GET
-              - PUT
-              - PATCH
-              - DELETE
-            allowed_headers:
-              - Authorization
-              - Content-Type
-            exposed_headers:
-              - Content-Type
-            allow_credentials: true
-            debug: true
-
       errors:
         fallback:
           - json
