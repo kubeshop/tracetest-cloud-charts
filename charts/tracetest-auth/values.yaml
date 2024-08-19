@@ -41,6 +41,7 @@ global:
       port: "30000"
       path: "/auth"
 
+# Uncomment this code if you want to override the DNS for Kratos and Keto
 # config:
 #   kratos:
 #     postgresDsnOverride: something
