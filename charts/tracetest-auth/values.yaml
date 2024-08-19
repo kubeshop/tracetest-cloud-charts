@@ -175,23 +175,27 @@ kratos:
             name: kratos-secrets
             key: GOOGLE_CLIENT_SECRET
           
-      - name: SECRETS_COOKIE
-        valueFrom:
-          secretKeyRef:
-            name: kratos-secrets
-            key: CIPHER
+      # - name: SECRETS_COOKIE
+      #   valueFrom:
+      #     secretKeyRef:
+      #       name: kratos-secrets
+      #       key: CIPHER
 
-      - name: DSN
-        valueFrom:
-          secretKeyRef:
-            name: kratos-secrets
-            key: DSN
+      # - name: DSN
+      #   valueFrom:
+      #     secretKeyRef:
+      #       name: kratos-secrets
+      #       key: DSN
 
-      - name: COURIER_SMTP_CONNECTION_URI
-        valueFrom:
-          secretKeyRef:
-            name: kratos-secrets
-            key: SMTP_URI
+      # - name: COURIER_SMTP_CONNECTION_URI
+      #   valueFrom:
+      #     secretKeyRef:
+      #       name: kratos-secrets
+      #       key: SMTP_URI
+
+  secret:
+    nameOverride: "kratos-secrets"
+    enabled: false
 
   kratos:
     automigration:
