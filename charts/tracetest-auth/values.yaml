@@ -61,14 +61,15 @@ keto:
     - name: keto-namespace-config
       mountPath: /home/ory/namespaces.keto.ts
 
-  keto:
-    deployment:
+  deployment:
       extraEnv:
         - name: DSN
           valueFrom:
             secretKeyRef:
               name: keto-secrets
               key: DSN
+
+  keto:
     automigration:
       enabled: true
       type: initContainer
