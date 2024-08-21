@@ -10,9 +10,9 @@
   {{- end -}}
 {{- end -}}
 {{- if $options_str }}
-  {{- printf "postgresql://%s:%s@%s:%s/%s?%s" $global.user $global.password $global.host $global.port $global.dbname $options_str -}}
+  {{- printf "postgresql://%s:%s@%s:%s/%s?%s" $global.username $global.password $global.host $global.port $global.dbname $options_str -}}
 {{- else }}
-  {{- printf "postgresql://%s:%s@%s:%s/%s" $global.user $global.password $global.host $global.port $global.dbname -}}
+  {{- printf "postgresql://%s:%s@%s:%s/%s" $global.username $global.password $global.host $global.port $global.dbname -}}
 {{- end -}}
 {{- end -}}
 
