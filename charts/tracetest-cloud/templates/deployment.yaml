@@ -70,11 +70,6 @@ spec:
                 configMapKeyRef:
                   name: {{ include "tracetest-cloud.fullname" . }}-config
                   key: DEV_MODE
-            - name: ENTERPRISE_MODE
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "tracetest-cloud.fullname" . }}-config
-                  key: ENTERPRISE_MODE
             - name: KETO_ADMIN_URL
               valueFrom:
                 configMapKeyRef:

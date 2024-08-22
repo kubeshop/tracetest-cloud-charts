@@ -23,7 +23,6 @@ data:
   DASHBOARD_ADDRESS: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
   DEBUG: "true"
   DEV_MODE: "true"
-  ENTERPRISE_MODE: "true"
   KETO_ADMIN_URL: "{{- $ketoAdminUrl }}"
   KETO_API_URL: "{{- $ketoApiUrl }}"
   KRATOS_ADMIN_API_URL: "{{- $kratosAdminUrl }}"
