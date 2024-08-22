@@ -2,10 +2,10 @@ apiVersion: v2
 name: tracetest-onprem
 description: A Helm chart for tracetest On Prem
 type: application
-version: v1.67.0
+version: v1.68.0
 dependencies:
 - name: tracetest-frontend
-  version: v1.12.0
+  version: v1.13.0
   repository: file://../tracetest-frontend
   condition: tracetest-frontend.enabled
 - name: tracetest-core
@@ -17,11 +17,11 @@ dependencies:
   repository: file://../tracetest-cloud
   condition: tracetest-cloud.enabled
 - name: tracetest-agent-operator
-  version: v1.20.0
+  version: v1.21.0
   repository: file://../tracetest-agent-operator
   condition: tracetest-agent-operator.enabled
 - name: tracetest-monitor-operator
-  version: v1.13.0
+  version: v1.14.0
   repository: file://../tracetest-monitor-operator
   condition: tracetest-monitor-operator.enabled
 - name: tracetest-auth
