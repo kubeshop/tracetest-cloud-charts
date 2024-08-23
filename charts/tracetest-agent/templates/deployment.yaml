@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tracetest-agent.fullname" . }}
+  labels:
+    app: {{ include "tracetest-agent.fullname" . }}
+    {{- include "tracetest-agent.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "tracetest-agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha1sum }}
+      labels:
+        {{- include "tracetest-agent.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: agent
+          image: "kubeshop/tracetest-agent:{{ $.Values.agent.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+
+          args: [
+            {{- if .Values.agent.environmentId }}
+            "--environment",
+            "{{ .Values.agent.environmentId }}",
+            {{- end }}
+
+            {{- if .Values.agent.apiKey }}
+            "--api-key",
+            "$TRACETEST_API_KEY",
+            {{- end}}
+
+            {{- if .Values.agent.serverURL }}
+            "--server-url",
+            "{{ .Values.agent.serverURL }}",
+            {{- end}}
+
+            {{- if .Values.agent.skipVerify }}
+            "--skip-verify",
+            {{- end}}
+          ]
+
+          {{- if .Values.agent.apiKey }}
+          env:
+          - name: TRACETEST_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tracetest-agent.fullname" . }}-secret
+                key: apiKey
+          {{- end }}

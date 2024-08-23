@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "tracetest-agent.fullname" . }}
+  labels:
+    {{- include "tracetest-agent.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "tracetest-agent.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: grpc-collector-entrypoint
+      protocol: TCP
+      port: 4317
+      targetPort: 4317
+    - name: http-collector-entrypoint
+      protocol: TCP
+      port: 4318
+      targetPort: 4318
