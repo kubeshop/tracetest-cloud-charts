@@ -1,5 +1,6 @@
 agent:
   apiKey: "apiKey"
-  environmentId: "aaa"
-  serverURL: "https://app-stage.tracetest.io"
-  skipVerify: true
+  environmentId: "environment-id"
+  serverURL: "https://app.tracetest.io"
+  skipVerify: false
+  
