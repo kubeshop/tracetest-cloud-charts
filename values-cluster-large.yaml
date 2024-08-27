@@ -1,6 +1,7 @@
 # tracetest relies on NATS as a service bus for communication between its components.
 nats:
-  cluster:
+  config:
+    cluster:
       enabled: true
       name: "nats"
       replicas: 3
@@ -32,7 +33,8 @@ tracetest-core:
       cpu: 250m
       memory: 512Mi
 
-# tracetest-cloud handles accounts, environments and non test related data.
+# tracetest-cloud handles accounts, environments and non test related data, but more importantly
+# it serves as the control plane for the agents, so it is better to have it highly available.
 tracetest-cloud:
   deployment:
     replicas: 3

@@ -1,8 +1,11 @@
 # tracetest relies on NATS as a service bus for communication between its components.
 # for a production workload we recommend using a cluster nats for HA
+# tracetest relies on NATS as a service bus for communication between its components.
 nats:
-  cluster:
-    enabled: false
+  config:
+    cluster:
+      enabled: false
+      replicas: 1
 
 # tracetest-frontend is a simple frontend service that serves the UI.
 # it is a static web app serving service, so the load is minimal.
@@ -31,7 +34,8 @@ tracetest-core:
       cpu: 100m
       memory: 128Mi
 
-# tracetest-cloud handles accounts, environments and non test related data.
+# tracetest-cloud handles accounts, environments and non test related data, but more importantly
+# it serves as the control plane for the agents, so it is better to have it highly available.
 tracetest-cloud:
   deployment:
     replicas: 1

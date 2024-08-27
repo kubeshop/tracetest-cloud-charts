@@ -218,6 +218,27 @@ global:
 ```
 </details>
 
+## Cluster sizing
+
+Depending on the size of your organization, your deployment might require different sizes. We provide a `small` and `large` deployment sizing examples.
+To use it you can:
+
+```
+# large cluster
+helm install my-tracetest tracetestcloud/tracetest-onprem \
+  --set global.licenseKey=YOUR-TRACETEST-LICENSE \
+  --values <your-values.yaml> \
+  --values https://raw.githubusercontent.com/kubeshop/tracetest-cloud-charts/main/values-cluster-large.yaml
+```
+
+```
+# small cluster
+helm install my-tracetest tracetestcloud/tracetest-onprem \
+  --set global.licenseKey=YOUR-TRACETEST-LICENSE \
+  --values <your-values.yaml> \
+  --values https://raw.githubusercontent.com/kubeshop/tracetest-cloud-charts/main/values-cluster-small.yaml
+```
+
 ## Questions
 
 Feel free to contact us at [our Slack](https://dub.sh/tracetest-community) if you have any questions.
