@@ -218,7 +218,7 @@ global:
 ```
 </details>
 
-## Cluster sizing
+## Cluster Sizing
 
 Depending on the size of your organization, your deployment might require different sizes. We provide a `small` and `large` deployment sizing examples.
 Use the following commands to select the size for your deployment:
