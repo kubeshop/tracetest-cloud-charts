@@ -2,7 +2,6 @@ global:
   licenseKey: ""
   imagePullSecret: ""
   tracetestImageRegistry: ""
-  replicasPerService: 1
 
   tracetestCore:
     service:
@@ -35,33 +34,48 @@ server:
 image:
   repository: kubeshop/tracetest-core
 
+# this value applies to all deployments, unless a deployment overrides it
+deploymentReplicas: 1
+deploymentResources: {}
 deployments:
   - name: api
+    # uncomment if you want this service to override the global deploymentReplicas
+    # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_ENABLED: false
 
   - name: worker-trigger
+    # uncomment if you want this service to override the global deploymentReplicas
+    # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: trigger_resolver trigger_result
   - name: worker-poller
+    # uncomment if you want this service to override the global deploymentReplicas
+    # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: poll_start poll_evaluate
   - name: worker-results
+    # uncomment if you want this service to override the global deploymentReplicas
+    # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: linter_runner assertion_runner
   - name: worker-monitors
+    # uncomment if you want this service to override the global deploymentReplicas
+    # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: monitor_runner monitor_alerts
   - name: worker-suites
+    # uncomment if you want this service to override the global deploymentReplicas
+    # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
