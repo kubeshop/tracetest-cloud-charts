@@ -1,0 +1,108 @@
+# tracetest relies on NATS as a service bus for communication between its components.
+# for a production workload we recommend using a cluster nats for HA
+nats:
+  cluster:
+    enabled: false
+
+# tracetest-frontend is a simple frontend service that serves the UI.
+# it is a static web app serving service, so the load is minimal.
+tracetest-frontend:
+  replicaCount: 1
+  resources: 
+    limits:
+      cpu: 250m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# tracetest-core handles most of the API requests and test workloads.
+# It is composed of 6 services. Each of those can be individually configured with replicas and limits,
+# but in general they all require the same resources.
+tracetest-core:
+  # deploymentReplicas defines the replica count for each service if not overridden in the deployments section.
+  deploymentReplicas: 1
+  # deploymentResources defines the default resources for each service if not overridden in the deployments section.
+  deploymentResources:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# tracetest-cloud handles accounts, environments and non test related data.
+tracetest-cloud:
+  deployment:
+    replicas: 1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+# tracetest-agent-operator is the service in charge of launching and stoppin serverless agents.
+# This service is very lightway, and in general doesn't require multiple replicas.
+tracetest-agent-operator:
+  deployment:
+    replicas: 1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+# tracetest-monitor-operator is the service in charge of scheduling synthetic monitoring tasks.
+# This service is very lightway, and in general doesn't require multiple replicas.
+tracetest-monitor-operator:
+  deployment:
+    replicas: 1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+# tracetest-auth is a collection of services that handle authentication and authorization.
+tracetest-auth:
+  # keto manages authorization
+  keto:
+    replicaCount: 1
+    deployment:
+      resources:
+        limits:
+          cpu: 250m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+  
+  # kratos handles authentication and SSO
+  kratos:
+    replicaCount: 1
+    deployment:
+      resources:
+        limits:
+          cpu: 250m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
+  # oathkeeper is a reverse proxy that handles authentication and authorization
+  oathkeeper:
+    replicaCount: 1
+    deployment:
+      resources:
+        limits:
+          cpu: 250m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
