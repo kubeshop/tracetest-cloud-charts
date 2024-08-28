@@ -22,7 +22,7 @@ global:
       port: "30000"
       path: "/"
 config:
-  targetVersion: v1.4.4
+  targetVersion: v1.5.0
   targetNamespace: agents
 deployment:
   replicas: 1
