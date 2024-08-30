@@ -15,8 +15,9 @@ global:
 
 config:
   targetNamespace: monitors
-  # collectorEndpoint: "collector-opentelemetry-collector.otel:4317"
-  collectorEndpoint: ""
+  telemetry:
+    collector:
+      endpoint: ""
 
 deployment:
   replicas: 1

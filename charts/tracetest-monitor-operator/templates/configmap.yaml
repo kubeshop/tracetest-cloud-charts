@@ -8,5 +8,5 @@ data:
   TRACETEST_NATS_ENDPOINT: {{ include "tracetest-common.nats_endpoint" . }}
   TRACETEST_TARGET_NAMESPACE: "{{ .Values.config.targetNamespace }}"
   TRACETEST_TARGET_SERVERURL: {{ include "tracetest-common.url" .Values.global.urls.api }}
-  TRACETEST_TRACING_COLLECTORENDPOINT: "{{ .Values.config.collectorEndpoint }}"
+  TRACETEST_TRACING_COLLECTORENDPOINT: "{{ .Values.config.telemetry.collector.endpoint }}"
   TRACETEST_AGENT_SKIP_VERIFY: "{{ not .Values.global.validCertificate }}"
