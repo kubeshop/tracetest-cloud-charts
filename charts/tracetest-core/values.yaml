@@ -24,6 +24,13 @@ config:
     samplingRate: 50
     endpoint: some-value
     environment: development
+  telemetry:
+    enabled: false
+    collector:
+      endpoint: collector-opentelemetry-collector.otel:4318
+    metricsReaderInterval: 60s
+    batchTimeout: 5s
+    sampling: 50
 
   analytics: false
 
