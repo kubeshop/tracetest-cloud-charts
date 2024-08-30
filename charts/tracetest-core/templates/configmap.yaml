@@ -20,23 +20,28 @@ data:
         samplingRate: {{ .Values.config.profiler.samplingRate }}
         endpoint: {{ .Values.config.profiler.endpoint }}
         environment: {{ .Values.config.profiler.environment }}
-      # exporters:
-      #   collector:
-      #     exporter:
-      #       collector:
-      #         endpoint: collector-opentelemetry-collector.otel:4318
-      #       type: collector
-      #     metricsReaderInterval: 60s
-      #     batchTimeout: 5s
-      #     sampling: 50
-      #     serviceName: tracetest
+      {{- if .Values.config.telemetry.enabled }}
+      exporters:
+        collector:
+          exporter:
+            collector:
+              endpoint: {{ .Values.config.telemetry.collector.endpoint }}
+            type: collector
+          metricsReaderInterval: {{ .Values.config.telemetry.metricsReaderInterval }}
+          batchTimeout: {{ .Values.config.telemetry.batchTimeout }}
+          sampling: {{ .Values.config.telemetry.sampling }}
+          serviceName: tracetest
+          serviceVersion: {{ .Values.image.tag }}
+      {{- end }}
     server:
       httpPort: 11633
-      # telemetry:
-      #   exporter: collector
+      {{- if .Values.config.telemetry.enabled }}
+      telemetry:
+        exporter: collector
+      {{- end }}
 
   provisioning.yaml: |-
       ---
       type: Config
       spec:
-        analyticsEnabled: false
+        analyticsEnabled: {{ .Values.config.analytics }}
