@@ -26,7 +26,7 @@ spec:
             {{- toYaml .Values.pokeshop.streamworker.resources | nindent 12 }}
           env:
             - name: NPM_RUN_COMMAND
-              value: pokeshop-stream-worker
+              value: stream-worker
             - name: SERVICE_NAME
               value: pokeshop-stream-worker
             {{- toYaml .Values.pokeshop.env | nindent 12 }}

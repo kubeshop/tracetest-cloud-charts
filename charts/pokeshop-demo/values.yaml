@@ -9,8 +9,6 @@ pokeshop:
     port: 80
     rpcPort: 8082
 
-  replicaCount: 1
-
   ingress:
     enabled: false
     hostname: pokeshop.localdev
