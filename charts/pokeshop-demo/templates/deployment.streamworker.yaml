@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "pokeshop-demo.streamworker.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.pokeshop.replicaCount }}
+  replicas: {{ .Values.pokeshop.streamworker.replicaCount }}
   selector:
     matchLabels:
       {{- include "pokeshop-demo.streamworker.selectorLabels" . | nindent 6 }}
@@ -23,7 +23,7 @@ spec:
               containerPort: 80
               protocol: TCP
           resources:
-            {{- toYaml .Values.pokeshop.resources.streamworker | nindent 12 }}
+            {{- toYaml .Values.pokeshop.streamworker.resources | nindent 12 }}
           env:
             - name: NPM_RUN_COMMAND
               value: pokeshop-stream-worker

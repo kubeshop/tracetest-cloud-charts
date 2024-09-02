@@ -1,4 +1,5 @@
 hostname: pokeshop.localdev
+allowedCorsOrigins: &allowedCorsOrigins https://*.tracetest.io 
 
 pokeshop:
   image:
@@ -16,11 +17,18 @@ pokeshop:
   ingress:
     enabled: false
 
-  resources:
-    api: {}
-    queueworker: {}
-    stream: {}
-    streamworker: {}
+  api:
+    resources: {}
+    replicaCount: 1
+  queueworker:
+    resources: {}
+    replicaCount: 1
+  stream:
+    resources: {}
+    replicaCount: 1
+  streamworker:
+    resources: {}
+    replicaCount: 1
 
   env:
     - name: COLLECTOR_ENDPOINT
@@ -104,7 +112,7 @@ opentelemetry-collector:
           http:
             cors:
               allowed_origins:
-                - "https://*.tracetest.io"
+                - *allowedCorsOrigins
 
     processors:
       batch:

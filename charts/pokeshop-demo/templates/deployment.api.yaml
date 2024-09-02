@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "pokeshop-demo.api.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.pokeshop.replicaCount }}
+  replicas: {{ .Values.pokeshop.api.replicaCount }}
   selector:
     matchLabels:
       {{- include "pokeshop-demo.api.selectorLabels" . | nindent 6 }}
@@ -23,7 +23,7 @@ spec:
               containerPort: 80
               protocol: TCP
           resources:
-            {{- toYaml .Values.pokeshop.resources | nindent 12 }}
+            {{- toYaml .Values.pokeshop.api.resources | nindent 12 }}
           env:
             - name: NPM_RUN_COMMAND
               value: api
@@ -39,7 +39,7 @@ spec:
               containerPort: {{ .Values.pokeshop.service.rpcPort }}
               protocol: TCP
           resources:
-            {{- toYaml .Values.pokeshop.resources.api | nindent 12 }}
+            {{- toYaml .Values.pokeshop.api.resources | nindent 12 }}
           env:
             - name: NPM_RUN_COMMAND
               value: rpc

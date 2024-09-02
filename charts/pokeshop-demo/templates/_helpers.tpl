@@ -71,11 +71,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Common labels (Worker)
+Common labels (Queue Worker)
 */}}
-{{- define "pokeshop-demo.worker.labels" -}}
+{{- define "pokeshop-demo.queueworker.labels" -}}
 helm.sh/chart: {{ include "pokeshop-demo.chart" . }}
-{{ include "pokeshop-demo.worker.selectorLabels" . }}
+{{ include "pokeshop-demo.queueworker.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -83,9 +83,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Selector labels (Worker)
+Selector labels (Queue Worker)
 */}}
-{{- define "pokeshop-demo.worker.selectorLabels" -}}
+{{- define "pokeshop-demo.queueworker.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "pokeshop-demo.name" . }}-worker
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
