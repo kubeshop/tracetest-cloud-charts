@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pokeshop-demo.fullname" . }}-queueworker
+  name: {{ include "pokeshop-demo.fullname" . }}-streamworker
   labels:
     {{- include "pokeshop-demo.streamworker.labels" . | nindent 4 }}
 spec:
