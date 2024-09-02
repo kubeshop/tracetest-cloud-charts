@@ -1,13 +1,4 @@
-# ---
-# apiVersion: traefik.io/v1alpha1
-# kind: Middleware
-# metadata:
-#   name: {{ include "pokeshop-demo.fullname" . }}-otel-collector-stripprefix
-# spec:
-#   stripPrefix:
-#     prefixes:
-#       - /otc
-# ---
+{{- if .Values.ingress.enabled -}}
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -23,5 +14,4 @@ spec:
       name: {{ .Release.Name }}-opentelemetry-collector
       passHostHeader: true
       port: otlp-http
-      # middlewares:
-      # - name: {{ include "pokeshop-demo.fullname" . }}-otel-collector-stripprefix
+{{- end }}

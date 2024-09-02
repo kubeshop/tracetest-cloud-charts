@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pokeshop-demo.fullname" . }}-queueworker
+  labels:
+    {{- include "pokeshop-demo.streamworker.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.pokeshop.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pokeshop-demo.streamworker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pokeshop-demo.streamworker.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: pokeshop-stream-worker
+          image: "{{ .Values.pokeshop.image.repository }}:{{ .Values.pokeshop.image.tag }}"
+          imagePullPolicy: {{ .Values.pokeshop.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.pokeshop.resources | nindent 12 }}
+          env:
+            - name: NPM_RUN_COMMAND
+              value: pokeshop-stream-worker
+            - name: SERVICE_NAME
+              value: pokeshop-stream-worker
+            {{- toYaml .Values.pokeshop.env | nindent 12 }}

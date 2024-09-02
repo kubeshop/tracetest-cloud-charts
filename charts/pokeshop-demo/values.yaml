@@ -13,6 +13,9 @@ pokeshop:
 
   replicaCount: 1
 
+  ingress:
+    enabled: true
+
   env:
     - name: COLLECTOR_ENDPOINT
       value: http://ttdemo-opentelemetry-collector:44317
@@ -64,7 +67,6 @@ opentelemetry-collector:
 
   image:
     repository: "otel/opentelemetry-collector-contrib"
-
 
   ports:
     otlp:
