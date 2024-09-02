@@ -1,3 +1,7 @@
+pokeshop:
+  ingress:
+    enabled: true
+
 opentelemetry-collector:
   config:
     receivers:

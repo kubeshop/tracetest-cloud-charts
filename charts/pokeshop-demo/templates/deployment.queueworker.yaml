@@ -23,7 +23,7 @@ spec:
               containerPort: 80
               protocol: TCP
           resources:
-            {{- toYaml .Values.pokeshop.resources | nindent 12 }}
+            {{- toYaml .Values.pokeshop.resources.queueworker | nindent 12 }}
           env:
             - name: NPM_RUN_COMMAND
               value: worker

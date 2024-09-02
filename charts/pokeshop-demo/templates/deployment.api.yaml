@@ -39,7 +39,7 @@ spec:
               containerPort: {{ .Values.pokeshop.service.rpcPort }}
               protocol: TCP
           resources:
-            {{- toYaml .Values.pokeshop.resources | nindent 12 }}
+            {{- toYaml .Values.pokeshop.resources.api | nindent 12 }}
           env:
             - name: NPM_RUN_COMMAND
               value: rpc

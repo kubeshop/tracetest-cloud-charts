@@ -14,7 +14,13 @@ pokeshop:
   replicaCount: 1
 
   ingress:
-    enabled: true
+    enabled: false
+
+  resources:
+    api: {}
+    queueworker: {}
+    stream: {}
+    streamworker: {}
 
   env:
     - name: COLLECTOR_ENDPOINT
