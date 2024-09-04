@@ -9,6 +9,9 @@ pokeshop:
     port: 80
     rpcPort: 8082
 
+  # This chart requires Traefik to be installed on the cluster. If you don't have Traefik installed
+  # and don't want to install it, make sure to set `ingress.enabled` as `false`. Otherwise, the installation
+  # will fail.
   ingress:
     enabled: false
     hostname: pokeshop.localdev
