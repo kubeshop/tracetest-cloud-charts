@@ -29,4 +29,8 @@ spec:
               value: stream-worker
             - name: SERVICE_NAME
               value: pokeshop-stream-worker
+            - name: KAFKA_BROKER
+              value: stream:9092
+            - name: KAFKA_TOPIC
+              value: pokeshop
             {{- toYaml .Values.pokeshop.env | nindent 12 }}
