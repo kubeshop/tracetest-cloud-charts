@@ -4,6 +4,9 @@ oss:
 - file: charts/tracetest-agent-operator/values.yaml
   jsonpath: .config.targetVersion
 
+- file: charts/tracetest-agent/Chart.yaml
+  jsonpath: .appVersion
+
 core:
 - file: charts/tracetest-core/Chart.yaml
   jsonpath: .appVersion
