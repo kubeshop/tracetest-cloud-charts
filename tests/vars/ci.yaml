@@ -1,0 +1,25 @@
+type: VariableSet
+spec:
+  id: helm-ci
+  name: Helm CI
+  values:
+  - key: BASE_URL
+    value: https://tracetest.localdev:30000
+    type: raw
+  - key: TOKEN
+    value: "%TOKEN_PLACEHOLDER%"
+    type: raw
+  - key: ORG_ID
+    value: "%ORG_ID_PLACEHOLDER%"
+    type: raw
+  - key: ENV_ID
+    value: "%ENV_ID_PLACEHOLDER%"
+    type: raw
+  - key: POKESHOP_URL
+    value: https://pokeshop.localdev:30000
+    type: raw
+  # This placeholder exists because when we try to run the tests testsuite,
+  # the cli will ask for the
+  - key: CREATED_TEST_ID
+    value: PLACEHOLDER
+    type: raw

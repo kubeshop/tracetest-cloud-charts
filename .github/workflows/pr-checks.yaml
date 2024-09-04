@@ -9,6 +9,7 @@ jobs:
       TRACETEST_LICENSE: ${{ secrets.TRACETEST_ONPREM_TEST_LICENSE }}
       AGENT_API_KEY: ${{ secrets.AGENT_API_KEY }}
       AGENT_ENV_ID: ${{ secrets.AGENT_ENV_ID }}
+      TESTS_REPO_DIR: "/tmp/tests"
 
     steps:
       - name: Checkout
@@ -18,21 +19,93 @@ jobs:
         uses: helm/kind-action@v1
         with:
           cluster_name: tracetest
-          # install_only: true
+          install_only: true
 
       - name: Test public images
         run: |
           kubectl config get-contexts
           ./scripts/setup_kind_cluster.sh --ci --build-deps  --install-demo --force-setup
+          
+          kind get kubeconfig --name tracetest > ~/.kube/config
 
-          helm install cloudagent -n default ./charts/tracetest-agent --set agent.apiKey="$AGENT_API_KEY" --set agent.environmentId="$AGENT_ENV_ID"
+          helm upgrade --install cloudagent ./charts/tracetest-agent \
+            -n default \
+            --set agent.apiKey="$AGENT_API_KEY" \
+            --set agent.environmentId="$AGENT_ENV_ID"
           
           kubectl wait --for=condition=available --timeout=60s deployment/cloudagent-tracetest-agent
           echo "Cloudagent deployed"
 
-          kubectl wait --for=condition=available --timeout=60s deployment/tt-tracetest-core-api
-          kubectl logs deployment/tt-tracetest-core-api
-          kubectl logs deployment/cloudagent-tracetest-agent
-          kubectl get cm tt-tracetest-core -o yaml
+      - name: Configure Custom DNS
+        run: |
+          # setup custom DNS resolve
+          sudo echo "127.0.0.1 tracetest.localdev" | sudo tee -a /etc/hosts
+          sudo echo "127.0.0.1 pokeshop.localdev" | sudo tee -a /etc/hosts
 
-          sleep 600
+      - name: Install Playwright
+        run: |
+          npx playwright install --with-deps
+      
+      - name: Configure intial org and env
+        env:
+          TRACETEST_TEST_REPO_CLONE_PAT: ${{ secrets.TRACETEST_TEST_REPO_CLONE_PAT }}
+          TRACETEST_TEST_REPO: ${{ secrets.TRACETEST_TEST_REPO }}
+          GH_USERNAME: ${{ secrets.TRACETEST_USER_GH_USERNAME }}
+          GH_PASSWORD: ${{ secrets.TRACETEST_USER_GH_PASSWORD }}
+          GH_SECRET: ${{ secrets.TRACETEST_USER_GH_SECRET }}
+          TRACETEST_ENDPOINT: https://tracetest.localdev:30000/
+          OUTPUT_TOKEN_FILE: "/tmp/token.json"
+        run: |
+          BASEDIR=$(pwd)
+
+          # sparse checkout of the testing directory
+          git clone --depth 1 --filter=blob:none --sparse https://$TRACETEST_TEST_REPO_CLONE_PAT@github.com/$TRACETEST_TEST_REPO.git $TESTS_REPO_DIR
+          cd $TESTS_REPO_DIR
+          git sparse-checkout init --cone
+          git sparse-checkout set testing
+
+          cd testing/e2e-tracetesting
+
+
+          npm install
+          npx playwright test tests/setup/extract-default-token.manual.ts --grep '@manual'
+
+          ############################################
+          ############################################
+
+          cd $BASEDIR
+
+          # run script for initial configuration
+
+          export VARS_TOKEN=$(cat $OUTPUT_TOKEN_FILE | jq -r '.token')
+          sed -i 's/%TOKEN_PLACEHOLDER%/'"$VARS_TOKEN"'/g' tests/vars/ci.yaml
+
+          export VARS_ORG_ID=$(cat $OUTPUT_TOKEN_FILE | jq -r '.orgId')
+          sed -i 's/%ORG_ID_PLACEHOLDER%/'"$VARS_ORG_ID"'/g' tests/vars/ci.yaml
+
+          export VARS_ENV_ID=$(cat $OUTPUT_TOKEN_FILE | jq -r '.envId')
+          sed -i 's/%ENV_ID_PLACEHOLDER%/'"$VARS_ENV_ID"'/g' tests/vars/ci.yaml
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-output
+          path: /tmp/tests/
+
+      - name: Configure Tracetest CLI
+        uses: kubeshop/tracetest-github-action@v1
+        with:
+          token: ${{secrets.TRACETEST_CLI_TOKEN}}
+      
+      - name: run tracetests
+        run: |
+          # tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features --vars ./tests/vars/ci.yaml
+
+          #tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/enviromment_tokens --vars ./tests/vars/ci.yaml
+          #tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/environment_members --vars ./tests/vars/ci.yaml
+          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/environments --vars ./tests/vars/ci.yaml
+          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/organization_invites --vars ./tests/vars/ci.yaml
+          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/organizations --vars ./tests/vars/ci.yaml
+          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/polling_profiles --vars ./tests/vars/ci.yaml
+          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/tests --vars ./tests/vars/ci.yaml
+          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/variable_sets --vars ./tests/vars/ci.yaml

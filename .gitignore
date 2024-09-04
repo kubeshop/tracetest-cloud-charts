@@ -1,6 +1,6 @@
 **/*/Chart.lock
 **/*/charts/*
 cluster.env
-tracetest.kubeconfig
-.env
+*.env
+*tracetest.kubeconfig
 *.bkp
