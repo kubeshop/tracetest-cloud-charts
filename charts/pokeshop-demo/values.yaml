@@ -65,9 +65,6 @@ redis:
 rabbitmq:
   fullnameOverride: rabbitmq
   image:
-    registry: docker.io
-    repository: rabbitmq
-    tag: 3.10.5
     debug: false
     pullPolicy: IfNotPresent
     pullSecrets: []
