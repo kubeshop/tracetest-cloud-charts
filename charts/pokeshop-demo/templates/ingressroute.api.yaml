@@ -1,3 +1,4 @@
+{{- if .Values.pokeshop.ingress.enabled -}}
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -8,7 +9,7 @@ spec:
     - websecure
   routes:
   - kind: Rule
-    match: Host(`{{ .Values.hostname }}`)
+    match: Host(`{{ .Values.pokeshop.ingress.hostname }}`)
     services:
     - kind: Service
       name: {{ include "pokeshop-demo.fullname" . }}-api
@@ -24,10 +25,11 @@ spec:
     - websecure
   routes:
   - kind: Rule
-    match: Host(`{{ .Values.hostname }}`) && Headers(`Content-Type`, `application/grpc`)
+    match: Host(`{{ .Values.pokeshop.ingress.hostname }}`) && Headers(`Content-Type`, `application/grpc`)
     services:
     - kind: Service
       name: {{ include "pokeshop-demo.fullname" . }}-api
       passHostHeader: true
       port: grpc
       scheme: h2c
+{{- end }}

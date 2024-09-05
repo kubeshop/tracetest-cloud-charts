@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pokeshop-demo.fullname" . }}-streamworker
+  labels:
+    {{- include "pokeshop-demo.streamworker.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.pokeshop.streamworker.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pokeshop-demo.streamworker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pokeshop-demo.streamworker.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: pokeshop-stream-worker
+          image: "{{ .Values.pokeshop.image.repository }}:{{ .Values.pokeshop.image.tag }}"
+          imagePullPolicy: {{ .Values.pokeshop.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.pokeshop.streamworker.resources | nindent 12 }}
+          env:
+            - name: NPM_RUN_COMMAND
+              value: stream-worker
+            - name: SERVICE_NAME
+              value: pokeshop-stream-worker
+            - name: KAFKA_BROKER
+              value: stream:9092
+            - name: KAFKA_TOPIC
+              value: pokeshop
+            {{- toYaml .Values.pokeshop.env | nindent 12 }}

@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "pokeshop-demo.stream.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.pokeshop.replicaCount }}
+  replicas: {{ .Values.pokeshop.stream.replicaCount }}
   selector:
     matchLabels:
       {{- include "pokeshop-demo.stream.selectorLabels" . | nindent 6 }}
@@ -26,7 +26,7 @@ spec:
               name: controller
               protocol: TCP
           resources:
-            {{- toYaml .Values.pokeshop.resources | nindent 12 }}
+            {{- toYaml .Values.pokeshop.stream.resources | nindent 12 }}
           env:
             - name: KAFKA_ADVERTISED_LISTENERS
               value: PLAINTEXT://stream.{{ .Release.Namespace }}:9092

@@ -1,5 +1,3 @@
-hostname: pokeshop.localdev
-
 pokeshop:
   image:
     repository: kubeshop/demo-pokemon-api
@@ -11,7 +9,25 @@ pokeshop:
     port: 80
     rpcPort: 8082
 
-  replicaCount: 1
+  # This chart requires Traefik to be installed on the cluster. If you don't have Traefik installed
+  # and don't want to install it, make sure to set `ingress.enabled` as `false`. Otherwise, the installation
+  # will fail.
+  ingress:
+    enabled: false
+    hostname: pokeshop.localdev
+
+  api:
+    resources: {}
+    replicaCount: 1
+  queueworker:
+    resources: {}
+    replicaCount: 1
+  stream:
+    resources: {}
+    replicaCount: 1
+  streamworker:
+    resources: {}
+    replicaCount: 1
 
   env:
     - name: COLLECTOR_ENDPOINT
@@ -65,7 +81,6 @@ opentelemetry-collector:
   image:
     repository: "otel/opentelemetry-collector-contrib"
 
-
   ports:
     otlp:
       enabled: true
@@ -96,7 +111,7 @@ opentelemetry-collector:
           http:
             cors:
               allowed_origins:
-                - "https://*.tracetest.io"
+                - "*"
 
     processors:
       batch:
