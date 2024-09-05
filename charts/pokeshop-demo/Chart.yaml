@@ -28,7 +28,7 @@ dependencies:
   version: 12.1.6
   repository: https://charts.bitnami.com/bitnami
 - name: rabbitmq
-  version: 11.2.2
+  version: 14.6.9
   repository: https://charts.bitnami.com/bitnami
 - name: redis
   version: 17.3.17
