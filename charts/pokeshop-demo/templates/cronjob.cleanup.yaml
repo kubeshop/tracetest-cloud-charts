@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "pokeshop-demo.api.labels" . | nindent 4 }}
 spec:
-  schedule: "* * * * *"
+  schedule: "0 0 * * *"
   jobTemplate:
     spec:
       template:
