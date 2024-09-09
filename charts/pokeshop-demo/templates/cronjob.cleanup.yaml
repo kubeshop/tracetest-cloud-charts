@@ -1,0 +1,28 @@
+{{- if .Values.pokeshop.cleanup.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "pokeshop-demo.fullname" . }}-cleanup
+  labels:
+    {{- include "pokeshop-demo.api.labels" . | nindent 4 }}
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pg-cleanup
+              image: jbergknoff/postgresql-client
+              imagePullPolicy: IfNotPresent
+              command: 
+              - psql
+              args:
+              - "-d"
+              - "$(DATABASE_URL)"
+              - -c
+              - delete from pokemon where "createdAt" < current_timestamp - interval '1 day'
+              env:
+                {{- toYaml .Values.pokeshop.env | nindent 16 }}
+          restartPolicy: OnFailure
+{{- end -}}
