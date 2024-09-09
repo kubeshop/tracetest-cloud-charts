@@ -16,6 +16,9 @@ pokeshop:
     enabled: false
     hostname: pokeshop.localdev
 
+  cleanup:
+    enabled: false
+
   api:
     resources: {}
     replicaCount: 1
@@ -33,7 +36,7 @@ pokeshop:
     - name: COLLECTOR_ENDPOINT
       value: http://ttdemo-opentelemetry-collector:44317
     - name: DATABASE_URL
-      value: postgresql://ashketchum:squirtle123@postgresql:5432/pokeshop?schema=public
+      value: postgresql://ashketchum:squirtle123@postgresql:5432/pokeshop
     - name: REDIS_URL
       value: redis-headless
     - name: RABBITMQ_HOST
