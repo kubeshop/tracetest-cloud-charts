@@ -110,6 +110,7 @@ opentelemetry-collector:
       otlp:
         protocols:
           http:
+            include_metadata: true
             cors:
               allowed_origins:
                 - "http://*"
