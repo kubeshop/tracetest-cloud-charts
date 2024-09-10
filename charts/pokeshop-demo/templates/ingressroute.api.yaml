@@ -32,4 +32,18 @@ spec:
       passHostHeader: true
       port: grpc
       scheme: h2c
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: {{ include "demo-pokeshop.fullname" . }}-stream
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: HostSNI(`*`)
+    services:
+    - name: {{ include "pokeshop-demo.fullname" . }}-stream
+      port: plaintext
+
 {{- end }}
