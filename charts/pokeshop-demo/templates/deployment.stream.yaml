@@ -29,7 +29,7 @@ spec:
             {{- toYaml .Values.pokeshop.stream.resources | nindent 12 }}
           env:
             - name: KAFKA_ADVERTISED_LISTENERS
-              value: PLAINTEXT://{{ .Values.pokeshop.ingress.hostname }}:9092
+              value: PLAINTEXT://stream.{{ .Release.Namespace }}:9092
             - name: KAFKA_LISTENERS
               value: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
             - name: KAFKA_CONTROLLER_QUORUM_VOTERS
