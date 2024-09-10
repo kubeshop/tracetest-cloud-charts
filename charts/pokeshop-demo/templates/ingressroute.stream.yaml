@@ -5,7 +5,7 @@ metadata:
   name: {{ include "pokeshop-demo.fullname" . }}-stream
 spec:
   entryPoints:
-    - {{ .Values.pokeshop.ingress.kafka.entrypoint | default "websecure" }}
+    - websecure
   routes:
   - match: HostSNI(`*`)
     services:
