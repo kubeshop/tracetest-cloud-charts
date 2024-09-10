@@ -18,6 +18,7 @@ pokeshop:
 
   cleanup:
     enabled: false
+    cronExpression: "0 0 * * *"
 
   api:
     resources: {}
