@@ -105,6 +105,7 @@ opentelemetry-collector:
     zipkin:
       enabled: false
 
+  config:
     processors:
       batch:
         timeout: 5s
