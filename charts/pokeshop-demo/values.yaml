@@ -112,7 +112,8 @@ opentelemetry-collector:
           http:
             cors:
               allowed_origins:
-                - "*"
+                - "http://*"
+                - "https://*"
 
     processors:
       batch:
