@@ -105,17 +105,6 @@ opentelemetry-collector:
     zipkin:
       enabled: false
 
-  config:
-    receivers:
-      otlp:
-        protocols:
-          http:
-            include_metadata: true
-            cors:
-              allowed_origins:
-                - "http://*"
-                - "https://*"
-
     processors:
       batch:
         timeout: 5s
