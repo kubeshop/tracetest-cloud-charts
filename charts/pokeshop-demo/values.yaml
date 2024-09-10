@@ -16,6 +16,9 @@ pokeshop:
     enabled: false
     hostname: pokeshop.localdev
 
+    kafka:
+      entrypoint: websecure
+
   cleanup:
     enabled: false
     cronExpression: "0 0 * * *"
