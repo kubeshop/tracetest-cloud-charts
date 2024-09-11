@@ -3,3 +3,5 @@ agent:
   environmentId: "environment-id"
   serverURL: "https://app.tracetest.io"
   skipVerify: false
+
+resources: {}

@@ -44,7 +44,8 @@ spec:
             "--mode",
             "verbose"
           ]
-
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.agent.apiKey }}
           env:
           - name: TRACETEST_API_KEY
