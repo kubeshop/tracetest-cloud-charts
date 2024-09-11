@@ -32,5 +32,5 @@ spec:
             - name: KAFKA_BROKER
               value: stream:9092
             - name: KAFKA_TOPIC
-              value: pokeshop
+              value: pokemon
             {{- toYaml .Values.pokeshop.env | nindent 12 }}
