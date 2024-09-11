@@ -40,6 +40,9 @@ spec:
             {{- if .Values.agent.skipVerify }}
             "--skip-verify",
             {{- end}}
+
+            "--mode",
+            "verbose"
           ]
 
           {{- if .Values.agent.apiKey }}
