@@ -106,6 +106,13 @@ opentelemetry-collector:
       enabled: false
 
   config:
+    receivers:
+      otlp:
+        protocols:
+          http:
+            cors:
+              allowed_origins:
+                - "*"
     processors:
       batch:
         timeout: 5s
