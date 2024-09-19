@@ -7,13 +7,13 @@ spec:
     value: https://tracetest.localdev:30000
     type: raw
   - key: TOKEN
-    value: "%TOKEN_PLACEHOLDER%"
+    value: "LfUFWNRNR"
     type: raw
   - key: ORG_ID
-    value: "%ORG_ID_PLACEHOLDER%"
+    value: "x8FZHRNR"
     type: raw
   - key: ENV_ID
-    value: "%ENV_ID_PLACEHOLDER%"
+    value: "ttenv_7892386645cf2885"
     type: raw
   - key: POKESHOP_URL
     value: https://pokeshop.localdev:30000

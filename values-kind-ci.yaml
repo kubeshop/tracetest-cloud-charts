@@ -42,3 +42,22 @@ tracetest-core:
       enabled: true
       collector:
         endpoint: "cloudagent-tracetest-agent.default:4318"
+
+tracetest-cloud:
+  config:
+    telemetry:
+      enabled: true
+      collector:
+        endpoint: "cloudagent-tracetest-agent.default:4317"
+
+tracetest-agent-operator:
+  config:
+    telemetry:
+      collector:
+        endpoint: "cloudagent-tracetest-agent.default:4317"
+
+tracetest-monitor-operator:
+  config:
+    telemetry:
+      collector:
+        endpoint: "cloudagent-tracetest-agent.default:4317"
