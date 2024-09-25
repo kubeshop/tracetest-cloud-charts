@@ -50,11 +50,14 @@ jobs:
           
           $BASE_DIR/scripts/prepare_ci_env.sh --debug
 
+          pwd
+          tree
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: /tmp/tests/testing/e2e-tracetesting/test-results
+          name: /tmp/tests/testing/
           path: artifacts
           retention-days: 90
 
