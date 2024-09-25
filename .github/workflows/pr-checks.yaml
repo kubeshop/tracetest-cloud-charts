@@ -25,21 +25,7 @@ jobs:
       - name: Test public images
         run: |
           ./scripts/setup_kind_cluster.sh --ci --build-deps  --install-demo --force-setup
-          
-          kind get kubeconfig --name tracetest > ~/.kube/config
-
-          kubectl wait --for=condition=available --timeout=60s deployment/cloudagent-tracetest-agent
-          echo "Cloudagent deployed"
-
-      - name: Configure Custom DNS
-        run: |
-          # setup custom DNS resolve
-          sudo echo "127.0.0.1 tracetest.localdev" | sudo tee -a /etc/hosts
-          sudo echo "127.0.0.1 pokeshop.localdev" | sudo tee -a /etc/hosts
-
-      - name: Install Playwright
-        run: |
-          npx playwright install --with-deps
+          ./scripts/setup_ci_host.sh
       
       - name: Configure intial org and env
         env:
