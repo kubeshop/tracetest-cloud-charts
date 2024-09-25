@@ -49,11 +49,7 @@ jobs:
           git sparse-checkout set testing/
           
           
-          echo $TEST_REPO_DIR
-          echo $OUTPUT_TOKEN_FILE
-          TEST_REPO_DIR=$TEST_REPO_DIR \
-          OUTPUT_TOKEN_FILE=$OUTPUT_TOKEN_FILE \
-            $BASE_DIR/scripts/prepare_ci_env.sh --debug
+          $BASE_DIR/scripts/prepare_ci_env.sh --debug
 
       - name: Configure Tracetest CLI
         uses: kubeshop/tracetest-github-action@v1

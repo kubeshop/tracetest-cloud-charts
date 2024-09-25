@@ -16,6 +16,8 @@ function show_help() {
   echo ""
   echo "Environment variables that might be read:"
   echo "  TRACETEST_LICENSE    OnPrem license key (if not provided, the script will prompt for it)"
+  echo "  AGENT_API_KEY        Cloud Agent API key"
+  echo "  AGENT_ENV_ID         Cloud Agent environment ID"
 }
 
 if [[ "$@" == *"--help"* ]]; then

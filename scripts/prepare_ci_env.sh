@@ -6,8 +6,8 @@ fi
 
 BASE_DIR=$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")
 
-if [ -z "$TEST_REPO_DIR" ]; then
-  echo "Error: TEST_REPO_DIR is not set."
+if [ -z "$TESTS_REPO_DIR" ]; then
+  echo "Error: TESTS_REPO_DIR is not set."
   exit 1
 fi
 
@@ -18,7 +18,7 @@ fi
 
 
 
-cd $TEST_REPO_DIR/testing/e2e-tracetesting
+cd $TESTS_REPO_DIR/testing/e2e-tracetesting
 
 if [[ "$*" != *"--skip-playwright"* ]]; then
   npm install
