@@ -48,17 +48,14 @@ jobs:
           cd $TESTS_REPO_DIR
           git sparse-checkout set testing/
           
-          $BASE_DIR/scripts/prepare_ci_env.sh --debug
-
-          pwd
-          tree
+          $BASE_DIR/scripts/prepare_ci_env.sh
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: /tmp/tests/testing/
-          path: artifacts
+          name: images
+          path: /tmp/tests/testing/e2e-tracetesting/test-results
           retention-days: 90
 
       - name: Configure Tracetest CLI
