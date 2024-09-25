@@ -7,6 +7,7 @@ jobs:
     name: Run tracetests on a KinD cluster
     runs-on: ubuntu-latest
     env:
+      TESTS_REPO_DIR: "/tmp/tests"
       TRACETEST_LICENSE: ${{ secrets.TRACETEST_ONPREM_TEST_LICENSE }}
       AGENT_API_KEY: ${{ secrets.AGENT_API_KEY }}
       AGENT_ENV_ID: ${{ secrets.AGENT_ENV_ID }}
@@ -39,7 +40,6 @@ jobs:
           GH_MEMBER_SECRET: ${{ secrets.TRACETEST_MEMBER_GH_SECRET }}
           TRACETEST_ENDPOINT: https://tracetest.localdev:30000/
           OUTPUT_TOKEN_FILE: "/tmp/token.json"
-          TESTS_REPO_DIR: "/tmp/tests"
         run: |
           BASE_DIR=$(pwd)
 
@@ -50,13 +50,19 @@ jobs:
           
           $BASE_DIR/scripts/prepare_ci_env.sh --debug
 
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: /tmp/tests/testing/e2e-tracetesting/test-results
+          path: artifacts
+          retention-days: 90
+
       - name: Configure Tracetest CLI
         uses: kubeshop/tracetest-github-action@v1
         with:
           token: ${{secrets.TRACETEST_CLI_TOKEN}}
       
       - name: run tracetests
-        env:
-          TESTS_REPO_DIR: "/tmp/tests"
         run: |
           tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features --vars ./tests/vars/ci.yaml
