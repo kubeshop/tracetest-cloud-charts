@@ -41,13 +41,15 @@ jobs:
           TRACETEST_ENDPOINT: https://tracetest.localdev:30000/
           OUTPUT_TOKEN_FILE: "/tmp/token.json"
         run: |
-          BASEDIR=$(pwd)
+          BASE_DIR=$(pwd)
 
           # sparse checkout of the testing directory
           git clone --depth 1 --filter=blob:none --sparse https://$TRACETEST_TEST_REPO_CLONE_PAT@github.com/$TRACETEST_TEST_REPO.git $TESTS_REPO_DIR
+          cd $TESTS_REPO_DIR
           git sparse-checkout set testing/
           
-          ./scripts/prepare_ci_env.sh
+          
+          $BASE_DIR/scripts/prepare_ci_env.sh
 
       - name: Configure Tracetest CLI
         uses: kubeshop/tracetest-github-action@v1
