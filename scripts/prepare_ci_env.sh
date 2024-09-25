@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [[ "$*" == *"--debug"* ]]; then
   set -x
 fi

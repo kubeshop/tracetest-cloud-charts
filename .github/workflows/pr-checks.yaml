@@ -48,7 +48,6 @@ jobs:
           cd $TESTS_REPO_DIR
           git sparse-checkout set testing/
           
-          
           $BASE_DIR/scripts/prepare_ci_env.sh --debug
 
       - name: Configure Tracetest CLI
