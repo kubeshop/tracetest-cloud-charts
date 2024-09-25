@@ -7,13 +7,18 @@ spec:
     value: https://tracetest.localdev:30000
     type: raw
   - key: TOKEN
-    value: "LfUFWNRNR"
+    value: "%TOKEN_PLACEHOLDER%"
+    type: raw
+  - key: INVITE_EMAIL
+    value: "%INVITE_EMAIL_PLACEHOLDER%"
+  - key: INVITED_COOKIE
+    value: "%COOKIE_PLACEHOLDER%"
     type: raw
   - key: ORG_ID
-    value: "x8FZHRNR"
+    value: "%ORG_ID_PLACEHOLDER%"
     type: raw
   - key: ENV_ID
-    value: "ttenv_7892386645cf2885"
+    value: "%ENV_ID_PLACEHOLDER%"
     type: raw
   - key: POKESHOP_URL
     value: https://pokeshop.localdev:30000

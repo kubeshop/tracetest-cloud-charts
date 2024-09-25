@@ -154,6 +154,27 @@ if [[ "$SETUP_CLUSTER" == true || "$@" == *"--config-coredns"* ]]; then
   printf "\n"
 fi
 
+if [[ "$@" == *"--ci"* ]]; then
+  printf "\n\e[42m\e[1mInstalling CI Agent\e[0m\e[0m\n"
+  # Validate required environment variables
+  if [[ -z "$AGENT_API_KEY" ]]; then
+    printf "\e[41mError: AGENT_API_KEY environment variable is not set\e[0m\n"
+    exit 1
+  fi
+
+  if [[ -z "$AGENT_ENV_ID" ]]; then
+    printf "\e[41mError: AGENT_ENV_ID environment variable is not set\e[0m\n"
+    exit 1
+  fi
+
+  helm upgrade --install cloudagent ./charts/tracetest-agent \
+    -n default \
+    --set agent.apiKey="$AGENT_API_KEY" \
+    --set agent.environmentId="$AGENT_ENV_ID"
+  
+  printf "\n"
+fi
+
 # Capturing the end time
 end_time=$(date +%s)
 

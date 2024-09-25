@@ -28,11 +28,6 @@ jobs:
           
           kind get kubeconfig --name tracetest > ~/.kube/config
 
-          helm upgrade --install cloudagent ./charts/tracetest-agent \
-            -n default \
-            --set agent.apiKey="$AGENT_API_KEY" \
-            --set agent.environmentId="$AGENT_ENV_ID"
-          
           kubectl wait --for=condition=available --timeout=60s deployment/cloudagent-tracetest-agent
           echo "Cloudagent deployed"
 
@@ -60,39 +55,8 @@ jobs:
 
           # sparse checkout of the testing directory
           git clone https://$TRACETEST_TEST_REPO_CLONE_PAT@github.com/$TRACETEST_TEST_REPO.git $TESTS_REPO_DIR
-          cd $TESTS_REPO_DIR
-
-          #TODO USE MAIN
-          git fetch origin fix-tests
-          git switch fix-tests
-
-          cd testing/e2e-tracetesting
-
-
-          npm install
-          npx playwright test tests/setup/extract-default-token.manual.ts --grep '@manual'
-
-          ############################################
-          ############################################
-
-          cd $BASEDIR
-
-          # run script for initial configuration
-
-          export VARS_TOKEN=$(cat $OUTPUT_TOKEN_FILE | jq -r '.token')
-          sed -i 's/%TOKEN_PLACEHOLDER%/'"$VARS_TOKEN"'/g' tests/vars/ci.yaml
-
-          export VARS_ORG_ID=$(cat $OUTPUT_TOKEN_FILE | jq -r '.orgId')
-          sed -i 's/%ORG_ID_PLACEHOLDER%/'"$VARS_ORG_ID"'/g' tests/vars/ci.yaml
-
-          export VARS_ENV_ID=$(cat $OUTPUT_TOKEN_FILE | jq -r '.envId')
-          sed -i 's/%ENV_ID_PLACEHOLDER%/'"$VARS_ENV_ID"'/g' tests/vars/ci.yaml
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-output
-          path: /tmp/tests/
+          
+          ./scripts/prepare_ci_env.sh
 
       - name: Configure Tracetest CLI
         uses: kubeshop/tracetest-github-action@v1
@@ -101,13 +65,4 @@ jobs:
       
       - name: run tracetests
         run: |
-          # tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features --vars ./tests/vars/ci.yaml
-
-          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/enviromment_tokens --vars ./tests/vars/ci.yaml
-          #tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/environment_members --vars ./tests/vars/ci.yaml
-          #tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/environments --vars ./tests/vars/ci.yaml
-          #tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/organization_invites --vars ./tests/vars/ci.yaml
-          #tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/organizations --vars ./tests/vars/ci.yaml
-          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/polling_profiles --vars ./tests/vars/ci.yaml
-          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/tests --vars ./tests/vars/ci.yaml
-          #tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features/variable_sets --vars ./tests/vars/ci.yaml
+          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features --vars ./tests/vars/ci.yaml
