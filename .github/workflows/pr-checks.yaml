@@ -49,7 +49,7 @@ jobs:
           git sparse-checkout set testing/
           
           
-          $BASE_DIR/scripts/prepare_ci_env.sh
+          $BASE_DIR/scripts/prepare_ci_env.sh --debug
 
       - name: Configure Tracetest CLI
         uses: kubeshop/tracetest-github-action@v1

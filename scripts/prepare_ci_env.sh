@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ "$*" == *"--debug"* ]]; then
+  set -x
+fi
+
 BASE_DIR=$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")
 
 if [ -z "$TEST_REPO_DIR" ]; then
