@@ -3,7 +3,8 @@ name: Create Cluster
 on: pull_request
 
 jobs:
-  create-cluster:
+  tracetests:
+    name: Run tracetests on a KinD cluster
     runs-on: ubuntu-latest
     env:
       TRACETEST_LICENSE: ${{ secrets.TRACETEST_ONPREM_TEST_LICENSE }}
@@ -23,7 +24,6 @@ jobs:
 
       - name: Test public images
         run: |
-          kubectl config get-contexts
           ./scripts/setup_kind_cluster.sh --ci --build-deps  --install-demo --force-setup
           
           kind get kubeconfig --name tracetest > ~/.kube/config
@@ -48,6 +48,10 @@ jobs:
           GH_USERNAME: ${{ secrets.TRACETEST_USER_GH_USERNAME }}
           GH_PASSWORD: ${{ secrets.TRACETEST_USER_GH_PASSWORD }}
           GH_SECRET: ${{ secrets.TRACETEST_USER_GH_SECRET }}
+          GH_MEMBER_EMAIL: ${{ secrets.TRACETEST_MEMBER_GH_EMAIL }}
+          GH_MEMBER_USERNAME: ${{ secrets.TRACETEST_MEMBER_GH_USERNAME }}
+          GH_MEMBER_PASSWORD: ${{ secrets.TRACETEST_MEMBER_GH_PASSWORD }}
+          GH_MEMBER_SECRET: ${{ secrets.TRACETEST_MEMBER_GH_SECRET }}
           TRACETEST_ENDPOINT: https://tracetest.localdev:30000/
           OUTPUT_TOKEN_FILE: "/tmp/token.json"
         run: |
