@@ -54,7 +54,8 @@ jobs:
           BASEDIR=$(pwd)
 
           # sparse checkout of the testing directory
-          git clone https://$TRACETEST_TEST_REPO_CLONE_PAT@github.com/$TRACETEST_TEST_REPO.git $TESTS_REPO_DIR
+          git clone --depth 1 --filter=blob:none --sparse https://$TRACETEST_TEST_REPO_CLONE_PAT@github.com/$TRACETEST_TEST_REPO.git $TESTS_REPO_DIR
+          git sparse-checkout set testing/
           
           ./scripts/prepare_ci_env.sh
 

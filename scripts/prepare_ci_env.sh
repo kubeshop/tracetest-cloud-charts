@@ -16,9 +16,10 @@ fi
 
 cd $TEST_REPO_DIR/testing/e2e-tracetesting
 
-
-# npm install
-# npx playwright test tests/setup/extract-default-token.manual.ts --grep '@manual'
+if [[ "$*" != *"--skip-playwright"* ]]; then
+  npm install
+  npx playwright test tests/setup/extract-default-token.manual.ts --grep '@manual'
+fi
 
 ############################################
 ############################################
@@ -36,7 +37,7 @@ sed -i.bkp 's/%ORG_ID_PLACEHOLDER%/'"$VARS_ORG_ID"'/g' tests/vars/ci.yaml
 export VARS_ENV_ID=$(cat $OUTPUT_TOKEN_FILE | jq -r '.envId')
 sed -i.bkp 's/%ENV_ID_PLACEHOLDER%/'"$VARS_ENV_ID"'/g' tests/vars/ci.yaml
 
-export VARS_COOKIE=$(cat $OUTPUT_TOKEN_FILE | jq -r '.cookieHeader')
+export VARS_COOKIE=$(cat $OUTPUT_TOKEN_FILE | jq -r '.cookieHeader' | sed 's/[&/\]/\\&/g')
 sed -i.bkp 's/%COOKIE_PLACEHOLDER%/'"$VARS_COOKIE"'/g' tests/vars/ci.yaml
 
 export VARS_INVITE_EMAIL=$(cat $OUTPUT_TOKEN_FILE | jq -r '.inviteEmail')
