@@ -50,6 +50,7 @@ deployments:
     # uncomment if you want this service to override the global deploymentReplicas
     # replicaCount: 1
     env:
+      TRACETEST_OTLPSERVER_ENABLED: true
       TRACETEST_SERVER_API_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_ENABLED: false
 
