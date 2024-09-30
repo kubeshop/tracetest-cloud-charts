@@ -25,7 +25,7 @@ dependencies:
   repository: file://../tracetest-monitor-operator
   condition: tracetest-monitor-operator.enabled
 - name: tracetest-auth
-  version: v1.31.0
+  version: v1.32.0
   repository: file://../tracetest-auth
   condition: tracetest-auth.enabled
 - name: tracetest-common
