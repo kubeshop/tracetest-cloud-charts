@@ -105,6 +105,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "tracetest-cloud.fullname" . }}-config
                   key: OSS_ENDPOINT
+            - name: OSS_OTLP_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: OSS_OTLP_ENDPOINT
             - name: ROOT_DOMAIN
               valueFrom:
                 configMapKeyRef:

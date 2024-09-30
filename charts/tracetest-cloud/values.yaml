@@ -6,6 +6,7 @@ global:
   tracetestCore:
     service:
       httpPort: 11633
+      otlpGrpcPort: 4317
 
   tracetestCloud:
     service:

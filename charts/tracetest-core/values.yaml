@@ -6,6 +6,7 @@ global:
   tracetestCore:
     service:
       httpPort: &httpPort 11633
+      otlpGrpcPort: &otlpGrpcPort 4317
 
   nats:
     endpoint: "nats://nats:4222"
@@ -36,7 +37,7 @@ config:
 
 server:
   httpPort: *httpPort
-
+  otlpGrpcPort: *otlpGrpcPort
 
 image:
   repository: kubeshop/tracetest-core
