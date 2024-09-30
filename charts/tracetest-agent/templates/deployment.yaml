@@ -53,7 +53,7 @@ spec:
                 name: {{ include "tracetest-agent.fullname" . }}-secret
                 key: apiKey
           {{- end }}
-          {{- range $key, $value := .env }}
+          {{- range $key, $value := .Values.env }}
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
