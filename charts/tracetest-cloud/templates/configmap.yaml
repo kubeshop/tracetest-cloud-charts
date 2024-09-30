@@ -30,7 +30,7 @@ data:
   NATS_URI: {{ include "tracetest-common.nats_endpoint" . }}
   OAUTH_ENABLED: "false"
   OSS_ENDPOINT: "http://{{ .Release.Name }}-tracetest-core.{{ .Release.Namespace }}:{{ .Values.global.tracetestCore.service.httpPort }}"
-  OSS_OTLP_ENDPOINT: "http://{{ .Release.Name }}-tracetest-core.{{ .Release.Namespace }}:{{ .Values.global.tracetestCore.service.otlpGrpcPort }}"
+  OSS_OTLP_ENDPOINT: "{{ .Release.Name }}-tracetest-core.{{ .Release.Namespace }}:{{ .Values.global.tracetestCore.service.otlpGrpcPort }}"
   ROOT_DOMAIN: "{{ .Values.global.urls.rootDomain }}"
   UI_ENDPOINT: "{{ include "tracetest-common.url" .Values.global.urls.web }}"
   DEMO_ORG_ID: "{{ .Values.config.demoOrgID }}"
