@@ -9,11 +9,11 @@ dependencies:
   repository: file://../tracetest-frontend
   condition: tracetest-frontend.enabled
 - name: tracetest-core
-  version: v1.27.0
+  version: v1.28.0
   repository: file://../tracetest-core
   condition: tracetest-core.enabled
 - name: tracetest-cloud
-  version: v1.34.0
+  version: v1.35.0
   repository: file://../tracetest-cloud
   condition: tracetest-cloud.enabled
 - name: tracetest-agent-operator
