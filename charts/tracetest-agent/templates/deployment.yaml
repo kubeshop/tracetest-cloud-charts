@@ -40,17 +40,20 @@ spec:
             {{- if .Values.agent.skipVerify }}
             "--skip-verify",
             {{- end}}
-
-            "--mode",
-            "verbose"
           ]
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.agent.apiKey }}
           env:
+          - name: TRACETEST_MODE
+            value: "verbose"
+          {{- if .Values.agent.apiKey }}
           - name: TRACETEST_API_KEY
             valueFrom:
               secretKeyRef:
                 name: {{ include "tracetest-agent.fullname" . }}-secret
                 key: apiKey
+          {{- end }}
+          {{- range $key, $value := .env }}
+          - name: {{ $key }}
+            value: "{{ $value }}"
           {{- end }}
