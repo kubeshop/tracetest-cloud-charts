@@ -55,8 +55,6 @@ spec:
               value: "{{ $.Values.global.postgresql.auth.port}}"
             - name: TRACETEST_DEV
               value: ""
-            - name: TRACETEST_OTLPSERVER_ENABLED
-              value: "false"
             - name: TRACETEST_ANALYTICS_SERVERKEY
               valueFrom:
                 secretKeyRef:

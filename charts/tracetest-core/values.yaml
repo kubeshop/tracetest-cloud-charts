@@ -59,6 +59,7 @@ deployments:
     # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_OTLPSERVER_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: trigger_resolver trigger_result
   - name: worker-poller
@@ -66,6 +67,7 @@ deployments:
     # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_OTLPSERVER_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: poll_start poll_evaluate
   - name: worker-results
@@ -73,6 +75,7 @@ deployments:
     # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_OTLPSERVER_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: linter_runner assertion_runner
   - name: worker-monitors
@@ -80,6 +83,7 @@ deployments:
     # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_OTLPSERVER_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: monitor_runner monitor_alerts
   - name: worker-suites
@@ -87,5 +91,6 @@ deployments:
     # replicaCount: 1
     env:
       TRACETEST_SERVER_API_ENABLED: false
+      TRACETEST_OTLPSERVER_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
       TRACETEST_SERVER_WORKFLOW_STEPS: suite_runner
