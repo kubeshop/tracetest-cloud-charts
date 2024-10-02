@@ -20,7 +20,7 @@ global:
 
 config:
   tracetestAnalyticsServerKey: some-value
-  tracetestSecurityEncryptionKey: some-value
+  tracetestSecurityEncryptionKey: dfb353ef74f19945f140a60795537b196b105fe1da166985cde10c151317f1b3 # CHANGE ME
   profiler:
     samplingRate: 50
     endpoint: some-value
