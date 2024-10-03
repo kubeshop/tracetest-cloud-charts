@@ -22,7 +22,7 @@ global:
       port: "30000"
       path: "/"
 config:
-  targetVersion: v1.6.2
+  targetVersion: v1.7.0
   targetNamespace: agents
   telemetry:
     collector:
