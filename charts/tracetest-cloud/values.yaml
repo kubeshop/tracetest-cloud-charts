@@ -85,6 +85,7 @@ deployment:
 
 image:
   repository: kubeshop/tracetest-cloud
+  pullPolicy: IfNotPresent
 
 config:
   sendgridApiKey: some-value
