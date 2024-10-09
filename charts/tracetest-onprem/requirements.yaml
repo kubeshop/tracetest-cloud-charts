@@ -1,6 +1,6 @@
 dependencies:
 - name: tracetest-frontend
-  version: v1.13.0
+  version: v1.14.0
   repository: file://../tracetest-frontend
   condition: tracetest-frontend.enabled
 - name: tracetest-core
@@ -8,7 +8,7 @@ dependencies:
   repository: file://../tracetest-core
   condition: tracetest-core.enabled
 - name: tracetest-cloud
-  version: v1.38.0
+  version: v1.39.0
   repository: file://../tracetest-cloud
   condition: tracetest-cloud.enabled
 - name: tracetest-agent-operator
@@ -20,7 +20,7 @@ dependencies:
   repository: file://../tracetest-monitor-operator
   condition: tracetest-monitor-operator.enabled
 - name: tracetest-auth
-  version: v1.33.0
+  version: v1.34.0
   repository: file://../tracetest-auth
   condition: tracetest-auth.enabled
 - name: tracetest-common
