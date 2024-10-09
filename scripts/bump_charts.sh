@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ONPREM_CHART_FILE="charts/tracetest-onprem/Chart.yaml"
+ONPREM_REQUIREMENTS_FILE="charts/tracetest-onprem/requirements.yaml"
 ONPREM_CHART_NAME="tracetest-onprem"
 
 changed_charts=$(git --no-pager diff --name-only HEAD~1 charts | grep '/' | cut -d'/' -f1-2 | uniq)
@@ -37,6 +38,7 @@ for chart in $changed_charts; do
 
   echo "Update $chartName to $newChartVersion in $ONPREM_CHART_FILE"
   yq eval '.dependencies[] |= (select(.name == "'"$chartName"'").version = "'"$newChartVersion"'")' "$ONPREM_CHART_FILE" -i
+  yq eval '.dependencies[] |= (select(.name == "'"$chartName"'").version = "'"$newChartVersion"'")' "$ONPREM_REQUIREMENTS_FILE" -i
 
   if [[ $? -ne 0 ]]; then
     echo "Error occurred while updating $chartName in $ONPREM_CHART_FILE"

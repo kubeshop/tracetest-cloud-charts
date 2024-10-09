@@ -23,7 +23,7 @@ if [[ "$@" == *"--help"* ]]; then
 fi
 
 PROJECT_ROOT=$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")
-KUBECONFIG_FILE=$(pwd)/tracetest.kubeconfig
+KUBECONFIG_FILE=$PROJECT_ROOT/tracetest.kubeconfig
 ENV_FILE=$PROJECT_ROOT/cluster.env
 HELM_EXTRA_FLAGS=()
 
