@@ -2,3 +2,5 @@
 **/*/charts/*
 cluster.env
 tracetest.kubeconfig
+.env
+*.bkp

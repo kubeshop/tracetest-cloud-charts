@@ -11,3 +11,5 @@ data:
   REACT_APP_AGENT_URL:  "{{ .Values.global.urls.agents.domain }}:{{ .Values.global.urls.agents.port }}"
   REACT_APP_UI_URL: {{ include "tracetest-common.url" .Values.global.urls.web | quote}}
   REACT_APP_DISABLE_TELEMETRY: "{{ .Values.global.urls.api }}"
+  REACT_APP_FEATURE_FLAG_MONITORS: "true"
+  
