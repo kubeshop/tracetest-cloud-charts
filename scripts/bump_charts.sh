@@ -74,7 +74,7 @@ if [[ $? -ne 0 ]]; then
 fi
 echo "Updated version: $newVersion"
 
-git add $ONPREM_CHART_FILE
+git add $ONPREM_CHART_FILE $ONPREM_REQUIREMENTS_FILE
 
 git status
 git commit -m "Update tracetest-onprem version to $newVersion"
