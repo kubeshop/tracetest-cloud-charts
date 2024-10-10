@@ -24,6 +24,10 @@ dependencies:
   version: v1.14.0
   repository: file://../tracetest-monitor-operator
   condition: tracetest-monitor-operator.enabled
+- name: tracetest-public-endpoint
+  version: v1.0.0
+  repository: file://../tracetest-public-endpoint
+  condition: tracetest-public-endpoint.enabled
 - name: tracetest-auth
   version: v1.34.0
   repository: file://../tracetest-auth
