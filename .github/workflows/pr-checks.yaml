@@ -1,0 +1,68 @@
+name: Create Cluster
+
+on: pull_request
+
+jobs:
+  tracetests:
+    name: Run tracetests on a KinD cluster
+    runs-on: ubuntu-latest
+    env:
+      TESTS_REPO_DIR: "/tmp/tests"
+      TRACETEST_LICENSE: ${{ secrets.TRACETEST_ONPREM_TEST_LICENSE }}
+      AGENT_API_KEY: ${{ secrets.AGENT_API_KEY }}
+      AGENT_ENV_ID: ${{ secrets.AGENT_ENV_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup KinD
+        uses: helm/kind-action@v1
+        with:
+          cluster_name: tracetest
+          install_only: true
+
+      - name: Test public images
+        run: |
+          ./scripts/setup_kind_cluster.sh --ci --build-deps  --install-demo --force-setup
+          ./scripts/setup_ci_host.sh
+      
+      - name: Configure intial org and env
+        env:
+          TRACETEST_TEST_REPO_CLONE_PAT: ${{ secrets.TRACETEST_TEST_REPO_CLONE_PAT }}
+          TRACETEST_TEST_REPO: ${{ secrets.TRACETEST_TEST_REPO }}
+          GH_USERNAME: ${{ secrets.TRACETEST_USER_GH_USERNAME }}
+          GH_PASSWORD: ${{ secrets.TRACETEST_USER_GH_PASSWORD }}
+          GH_SECRET: ${{ secrets.TRACETEST_USER_GH_SECRET }}
+          GH_MEMBER_EMAIL: ${{ secrets.TRACETEST_MEMBER_GH_EMAIL }}
+          GH_MEMBER_USERNAME: ${{ secrets.TRACETEST_MEMBER_GH_USERNAME }}
+          GH_MEMBER_PASSWORD: ${{ secrets.TRACETEST_MEMBER_GH_PASSWORD }}
+          GH_MEMBER_SECRET: ${{ secrets.TRACETEST_MEMBER_GH_SECRET }}
+          TRACETEST_ENDPOINT: https://tracetest.localdev:30000/
+          OUTPUT_TOKEN_FILE: "/tmp/token.json"
+        run: |
+          BASE_DIR=$(pwd)
+
+          # sparse checkout of the testing directory
+          git clone --depth 1 --filter=blob:none --sparse https://$TRACETEST_TEST_REPO_CLONE_PAT@github.com/$TRACETEST_TEST_REPO.git $TESTS_REPO_DIR
+          cd $TESTS_REPO_DIR
+          git sparse-checkout set testing/
+          
+          $BASE_DIR/scripts/prepare_ci_env.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: images
+          path: /tmp/tests/testing/e2e-tracetesting/test-results
+          retention-days: 90
+
+      - name: Configure Tracetest CLI
+        uses: kubeshop/tracetest-github-action@v1
+        with:
+          token: ${{secrets.TRACETEST_CLI_TOKEN}}
+      
+      - name: run tracetests
+        run: |
+          tracetest run testsuite -f $TESTS_REPO_DIR/testing/server-tracetesting/features --vars ./tests/vars/ci.yaml

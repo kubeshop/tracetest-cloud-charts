@@ -22,6 +22,9 @@ spec:
           imagePullPolicy: IfNotPresent
 
           args: [
+            "--mode", "ci",
+            "-v",
+            
             {{- if .Values.agent.environmentId }}
             "--environment",
             "{{ .Values.agent.environmentId }}",
