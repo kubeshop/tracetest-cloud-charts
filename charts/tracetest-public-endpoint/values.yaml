@@ -20,8 +20,6 @@ opentelemetry-collector:
       enabled: false
     zipkin:
       enabled: false
-    metrics:
-      enabled: false
 
   config:
     receivers:
