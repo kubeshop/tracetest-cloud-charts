@@ -156,6 +156,9 @@ tracetest-agent-operator:
 tracetest-monitor-operator:
   enabled: true
 
+tracetest-public-endpoint:
+  enabled: true
+
 tracetest-auth:
   enabled: true
 
