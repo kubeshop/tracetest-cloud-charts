@@ -20,6 +20,8 @@ opentelemetry-collector:
       enabled: false
     zipkin:
       enabled: false
+    metrics:
+      enabled: false
 
   config:
     receivers:
@@ -47,6 +49,6 @@ opentelemetry-collector:
           processors: [batch/traces]
           exporters: [debug]
 
-        metrics: {}
+        metrics: null
 
-        logs: {}
+        logs: null
