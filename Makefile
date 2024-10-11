@@ -18,7 +18,11 @@ onprem/delete-cluster: ## delete current onprem cluster
 
 .PHONY: onprem/private-cluster
 onprem/private-cluster: ## create onprem private cluster
-	@sh ./scripts/setup_kind_cluster.sh --reset --private
+	@sh ./scripts/setup_kind_cluster.sh --reset --private --build-deps
+
+.PHONY: onprem/cluster
+onprem/cluster: ## create onprem cluster
+	@sh ./scripts/setup_kind_cluster.sh --reset --build-deps
 
 .PHONY: onprem/k9s
 onprem/k9s: ## run k9s on onprem cluster locally installed

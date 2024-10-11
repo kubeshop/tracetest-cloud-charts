@@ -15,6 +15,8 @@ function show_help() {
   echo ""
   echo "Environment variables that might be read:"
   echo "  TRACETEST_LICENSE    OnPrem license key (if not provided, the script will prompt for it)"
+  echo "  GITHUB_USERNAME      Github user name used o fetch private images (if not provided, the script will prompt for it)"
+  echo "  GITHUB_DOCKER_PAT    Github Private Access Token used o fetch private images (if not provided, the script will prompt for it)"
 }
 
 if [[ "$@" == *"--help"* ]]; then
@@ -39,13 +41,16 @@ printf "\n\e[42m\e[1mStarting cluster setup...\e[0m\e[0m\n"
 
 if [[ "$@" == *"--build-deps"* ]]; then
   printf "\n\e[42m\e[1mBuilding dependencies for tracetest-dependencies\e[0m\e[0m\n"
+  rm -rf "$PROJECT_ROOT/charts/tracetest-dependencies/charts/*"
   helm dependency update "$PROJECT_ROOT/charts/tracetest-dependencies"
 
   printf "\n\e[42m\e[1mBuilding dependencies for tracetest-onprem\e[0m\e[0m\n"
+  rm -rf "$PROJECT_ROOT/charts/tracetest-onprem/charts/*"
   helm dependency update "$PROJECT_ROOT/charts/tracetest-onprem"
 
   if [[ "$@" == *"--install-demo"* ]]; then
     printf "\n\e[42m\e[1mBuilding dependencies for pokeshop-demo\e[0m\e[0m\n"
+    rm -rf "$PROJECT_ROOT/charts/pokeshop-demo/charts/*"
     helm dependency update $PROJECT_ROOT/charts/pokeshop-demo
   fi
 fi
@@ -79,6 +84,9 @@ if [[ "$SETUP_CLUSTER" == true ]]; then
 
     for chart_dir in $PROJECT_ROOT/charts/*; do
       printf "\n\e[42m\e[1mBuilding dependencies for $(basename "$chart_dir")\e[0m\e[0m\n"
+      if [[ -d "$chart_dir/charts" ]]; then
+        rm -rf "$chart_dir/charts/*"
+      fi
       helm dependency update "$chart_dir"
     done
 

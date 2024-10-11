@@ -33,7 +33,7 @@ opentelemetry-collector:
             max_request_body_size: 40971520
 
     processors:
-      batch/traces:
+      batch:
         send_batch_size: 1024
         send_batch_max_size: 2048
         timeout: 500ms
@@ -46,9 +46,18 @@ opentelemetry-collector:
       pipelines:
         traces:
           receivers: [otlp]
-          processors: [batch/traces]
+          processors: [batch]
           exporters: [debug]
 
-        metrics: null
+        # TODO: due to an issue on Helm (https://github.com/open-telemetry/opentelemetry-helm-charts/issues/223#issuecomment-1697239843)
+        # we are not able to disable metrics and logs pipeline when OTel Collector is a subchart
+        # so we are defining them as simple as possible
+        metrics:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [debug]
 
-        logs: null
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [debug]
