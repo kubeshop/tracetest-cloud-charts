@@ -89,6 +89,12 @@ global:
       port: *port
       path: "/"
 
+    otlpingest:
+      protocol: *protocol
+      hostname: *rootDomain
+      port: *port
+      path: "/"
+
 nats:
   credentials:
     username: admin

@@ -7,7 +7,7 @@ spec:
     - websecure
   routes:
   - kind: Rule
-    match: Host(`{{ .Values.global.urls.api.hostname }}`) && PathPrefix(`/otlp`) && Headers(`Content-Type`, `application/grpc`)
+    match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`) && PathPrefix(`/opentelemetry.proto.collector.trace.v1.TraceService/Export`)
     services:
     - kind: Service
       name: {{ .Release.Name }}-public-endpoint-otel-collector
@@ -15,7 +15,7 @@ spec:
       port: otlp
       scheme: h2c
   - kind: Rule
-    match: Host(`{{ .Values.global.urls.api.hostname }}`) && PathPrefix(`/otlp`)
+    match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`)
     services:
     - kind: Service
       name: {{ .Release.Name }}-public-endpoint-otel-collector
