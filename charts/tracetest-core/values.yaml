@@ -69,7 +69,7 @@ deployments:
       TRACETEST_SERVER_API_ENABLED: false
       TRACETEST_OTLPSERVER_ENABLED: false
       TRACETEST_SERVER_WORKFLOW_ENABLED: true
-      TRACETEST_SERVER_WORKFLOW_STEPS: poll_start poll_evaluate
+      TRACETEST_SERVER_WORKFLOW_STEPS: poll_start poll_fetch poll_evaluate
   - name: worker-results
     # uncomment if you want this service to override the global deploymentReplicas
     # replicaCount: 1
