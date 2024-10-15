@@ -15,10 +15,9 @@ spec:
       port: otlp
       scheme: h2c
   - kind: Rule
-    match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`)
+    match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`) && PathPrefix(`/v1/traces`)
     services:
     - kind: Service
       name: {{ .Release.Name }}-public-endpoint-otel-collector
       passHostHeader: true
       port: otlp-http
-      scheme: h2c

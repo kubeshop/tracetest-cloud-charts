@@ -27,3 +27,4 @@ onprem/cluster: ## create onprem cluster
 .PHONY: onprem/k9s
 onprem/k9s: ## run k9s on onprem cluster locally installed
 	@sh ./scripts/start_k9s.sh
+	
