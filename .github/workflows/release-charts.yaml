@@ -32,7 +32,7 @@ jobs:
           pip install pybump
 
       - name: Update Helm deps
-        run: sh scripts/update_chart_deps.sh
+        run: sh scripts/update_helm_repos.sh
 
       - name: Bump Chart Versions
         run: sh scripts/bump_charts.sh
