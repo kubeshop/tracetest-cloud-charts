@@ -20,8 +20,8 @@ TRACETEST_COMMON_NAME="tracetest-common"
 TRACETEST_COMMON_NEW_VERSION=""
 
 # Loop through the unique charts and run pybump on each Chart.yaml
-for chart in "${changed_charts[@]}"; do
-  chartName=$(basename "$chart")
+for chartName in "${changed_charts[@]}"; do
+  chart="charts/$chartName"
   if [[ "$chartName" == "$ONPREM_CHART_NAME" ]]; then
     continue
   fi
