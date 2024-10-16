@@ -31,10 +31,11 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install pybump
 
+      - name: Update Helm deps
+        run: scripts/update_chart_deps.sh
+
       - name: Bump Chart Versions
-        run: |
-          scripts/update_chart_deps.sh
-          scripts/bump_charts.sh
+        run: scripts/bump_charts.sh
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
