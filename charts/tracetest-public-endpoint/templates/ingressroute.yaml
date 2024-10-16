@@ -1,0 +1,23 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "tracetest-public-endpoint.fullname" . }}-ingressroute
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`) && PathPrefix(`/opentelemetry.proto.collector.trace.v1.TraceService/Export`)
+    services:
+    - kind: Service
+      name: {{ .Release.Name }}-public-endpoint-otel-collector
+      passHostHeader: true
+      port: otlp
+      scheme: h2c
+  - kind: Rule
+    match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`) && PathPrefix(`/v1/traces`)
+    services:
+    - kind: Service
+      name: {{ .Release.Name }}-public-endpoint-otel-collector
+      passHostHeader: true
+      port: otlp-http
