@@ -6,21 +6,14 @@ ONPREM_CHART_NAME="tracetest-onprem"
 
 # due to a problem on our helm build process, if we don't bump the version of charts
 # that have dependencies, the build process doesn't not add the dependencies to tracetest-onprem
-changed_charts=(tracetest-common tracetest-auth tracetest-core tracetest-monitor-operator tracetest-agent tracetest-cloud tracetest-agent-operator tracetest-frontend tracetest-public-endpoint)
-# changed_charts=$(git --no-pager diff --name-only HEAD~1 charts | grep '/' | cut -d'/' -f1-2 | uniq)
-
-# If no changed charts, exit with a message
-if [[ -z "$changed_charts" ]]; then
-  echo "No charts have been changed."
-  exit 0
-fi
+all_charts=(tracetest-common tracetest-auth tracetest-core tracetest-monitor-operator tracetest-agent tracetest-cloud tracetest-agent-operator tracetest-frontend tracetest-public-endpoint pokeshop-demo)
 
 # Assuming TRACETEST_COMMON_NAME is the name of the tracetest-common chart
 TRACETEST_COMMON_NAME="tracetest-common"
 TRACETEST_COMMON_NEW_VERSION=""
 
 # Loop through the unique charts and run pybump on each Chart.yaml
-for chartName in "${changed_charts[@]}"; do
+for chartName in "${all_charts[@]}"; do
   chart="charts/$chartName"
   if [[ "$chartName" == "$ONPREM_CHART_NAME" ]]; then
     continue
@@ -36,6 +29,7 @@ for chartName in "${changed_charts[@]}"; do
 
   # Store the new version of tracetest-common
   if [[ "$chartName" == "$TRACETEST_COMMON_NAME" ]]; then
+    echo "tracetest-common updated to $newChartVersion"
     TRACETEST_COMMON_NEW_VERSION=$newChartVersion
   fi
 
@@ -53,8 +47,8 @@ done
 
 # If tracetest-common was updated, loop through all charts to update its version
 if [[ -n "$TRACETEST_COMMON_NEW_VERSION" ]]; then
-  for chart in $all_charts; do
-    chartName=$(basename "$chart")
+  for chartName in "${all_charts[@]}"; do
+    chart="charts/$chartName"
     # Skip updating tracetest-common itself
     if [[ "$chartName" == "$TRACETEST_COMMON_NAME" ]]; then
       continue
