@@ -4,6 +4,7 @@ ONPREM_CHART_FILE="charts/tracetest-onprem/Chart.yaml"
 ONPREM_REQUIREMENTS_FILE="charts/tracetest-onprem/requirements.yaml"
 ONPREM_CHART_NAME="tracetest-onprem"
 
+all_charts=$(ls -d charts/*/ | grep -v 'tracetest-onprem')
 changed_charts=$(git --no-pager diff --name-only HEAD~1 charts | grep '/' | cut -d'/' -f1-2 | uniq)
 
 # If no changed charts, exit with a message
