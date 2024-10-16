@@ -936,6 +936,30 @@ entries:
   tracetest-auth:
   - apiVersion: v2
     appVersion: v1.3.0
+    created: "2024-10-16T19:45:52.962137082Z"
+    dependencies:
+    - name: tracetest-common
+      repository: file://../tracetest-common
+      version: v1.8.0
+    - name: keto
+      repository: https://k8s.ory.sh/helm/charts
+      version: 0.46.0
+    - name: kratos
+      repository: https://k8s.ory.sh/helm/charts
+      version: 0.46.0
+    - name: oathkeeper
+      repository: https://k8s.ory.sh/helm/charts
+      version: 0.46.0
+    description: A Helm chart for Tracetest authentication services
+    digest: e14329d27b633d47d02236a8999d8e1533303c9e912682716986e1aea864fa0d
+    home: https://github.com/kubeshop/tracetest-cloud-charts
+    name: tracetest-auth
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-auth-v1.43.0/tracetest-auth-v1.43.0.tgz
+    version: v1.43.0
+  - apiVersion: v2
+    appVersion: v1.3.0
     created: "2024-10-16T19:06:09.279559973Z"
     dependencies:
     - name: tracetest-common
@@ -2939,6 +2963,56 @@ entries:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-monitor-operator-v1.1.0/tracetest-monitor-operator-v1.1.0.tgz
     version: v1.1.0
   tracetest-onprem:
+  - apiVersion: v2
+    created: "2024-10-16T19:45:53.113661777Z"
+    dependencies:
+    - condition: tracetest-frontend.enabled
+      name: tracetest-frontend
+      repository: file://../tracetest-frontend
+      version: v1.19.0
+    - condition: tracetest-core.enabled
+      name: tracetest-core
+      repository: file://../tracetest-core
+      version: v1.37.0
+    - condition: tracetest-cloud.enabled
+      name: tracetest-cloud
+      repository: file://../tracetest-cloud
+      version: v1.42.0
+    - condition: tracetest-agent-operator.enabled
+      name: tracetest-agent-operator
+      repository: file://../tracetest-agent-operator
+      version: v1.24.0
+    - condition: tracetest-monitor-operator.enabled
+      name: tracetest-monitor-operator
+      repository: file://../tracetest-monitor-operator
+      version: v1.17.0
+    - condition: tracetest-public-endpoint.enabled
+      name: tracetest-public-endpoint
+      repository: file://../tracetest-public-endpoint
+      version: v1.10.0
+    - condition: tracetest-auth.enabled
+      name: tracetest-auth
+      repository: file://../tracetest-auth
+      version: v1.43.0
+    - name: tracetest-common
+      repository: file://../tracetest-common
+      version: v1.8.0
+    - condition: nats.enabled
+      name: nats
+      repository: https://nats-io.github.io/k8s/helm/charts/
+      version: 1.1.11
+    description: A Helm chart for tracetest On Prem
+    digest: 5863da9ffafde3f9a7f2b75b1c205b8bff56e1efb673291ff2bbd0962dd33fb3
+    home: https://github.com/kubeshop/tracetest-cloud-charts
+    icon: https://cdn.prod.website-files.com/625f135a8e554e44ad158913/625f1d8ab2348b3c4e3fa870_logo.svg
+    maintainers:
+    - name: tracetest
+      url: https://tracetest.io
+    name: tracetest-onprem
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-onprem-v1.125.0/tracetest-onprem-v1.125.0.tgz
+    version: v1.125.0
   - apiVersion: v2
     created: "2024-10-16T19:32:25.759376473Z"
     dependencies:
@@ -7518,6 +7592,25 @@ entries:
   tracetest-public-endpoint:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2024-10-16T19:45:53.234978464Z"
+    dependencies:
+    - name: opentelemetry-collector
+      repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+      version: 0.105.1
+    description: A Helm chart for Tracetest Public OTLP Endpoint
+    digest: 50c18f54f0d541214bd71874a538af5139a2894ed9a81e67407f5d9aca62cb9e
+    home: https://github.com/kubeshop/tracetest-cloud-charts
+    icon: https://cdn.prod.website-files.com/625f135a8e554e44ad158913/625f1d8ab2348b3c4e3fa870_logo.svg
+    maintainers:
+    - name: tracetest
+      url: https://tracetest.io
+    name: tracetest-public-endpoint
+    type: application
+    urls:
+    - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-public-endpoint-v1.10.0/tracetest-public-endpoint-v1.10.0.tgz
+    version: v1.10.0
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2024-10-16T19:06:10.14009081Z"
     dependencies:
     - name: opentelemetry-collector
@@ -7592,4 +7685,4 @@ entries:
     urls:
     - https://github.com/kubeshop/tracetest-cloud-charts/releases/download/tracetest-public-endpoint-v1.1.0/tracetest-public-endpoint-v1.1.0.tgz
     version: v1.1.0
-generated: "2024-10-16T19:32:25.759877661Z"
+generated: "2024-10-16T19:45:53.235615723Z"
