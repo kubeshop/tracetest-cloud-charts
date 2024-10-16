@@ -4,7 +4,8 @@ ONPREM_CHART_FILE="charts/tracetest-onprem/Chart.yaml"
 ONPREM_REQUIREMENTS_FILE="charts/tracetest-onprem/requirements.yaml"
 ONPREM_CHART_NAME="tracetest-onprem"
 
-changed_charts=$(git --no-pager diff --name-only HEAD~1 charts | grep '/' | cut -d'/' -f1-2 | uniq)
+changed_charts=(tracetest-auth tracetest-core tracetest-monitor-operator tracetest-agent tracetest-cloud tracetest-common tracetest-agent-operator tracetest-frontend tracetest-public-endpoint)
+# changed_charts=$(git --no-pager diff --name-only HEAD~1 charts | grep '/' | cut -d'/' -f1-2 | uniq)
 
 # If no changed charts, exit with a message
 if [[ -z "$changed_charts" ]]; then
