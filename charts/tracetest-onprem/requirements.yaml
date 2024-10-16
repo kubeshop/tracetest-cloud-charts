@@ -1,34 +1,34 @@
 dependencies:
   - name: tracetest-frontend
-    version: v1.17.0
+    version: v1.18.0
     repository: file://../tracetest-frontend
     condition: tracetest-frontend.enabled
   - name: tracetest-core
-    version: v1.35.0
+    version: v1.36.0
     repository: file://../tracetest-core
     condition: tracetest-core.enabled
   - name: tracetest-cloud
-    version: v1.40.0
+    version: v1.41.0
     repository: file://../tracetest-cloud
     condition: tracetest-cloud.enabled
   - name: tracetest-agent-operator
-    version: v1.22.0
+    version: v1.23.0
     repository: file://../tracetest-agent-operator
     condition: tracetest-agent-operator.enabled
   - name: tracetest-monitor-operator
-    version: v1.15.0
+    version: v1.16.0
     repository: file://../tracetest-monitor-operator
     condition: tracetest-monitor-operator.enabled
   - name: tracetest-public-endpoint
-    version: v1.6.0
+    version: v1.7.0
     repository: file://../tracetest-public-endpoint
     condition: tracetest-public-endpoint.enabled
   - name: tracetest-auth
-    version: v1.39.0
+    version: v1.40.0
     repository: file://../tracetest-auth
     condition: tracetest-auth.enabled
   - name: tracetest-common
-    version: v1.6.0
+    version: v1.7.0
     repository: file://../tracetest-common
   - name: nats
     version: 1.1.11
