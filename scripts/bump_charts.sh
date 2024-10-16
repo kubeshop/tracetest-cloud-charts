@@ -6,7 +6,7 @@ ONPREM_CHART_NAME="tracetest-onprem"
 
 # due to a problem on our helm build process, if we don't bump the version of charts
 # that have dependencies, the build process doesn't not add the dependencies to tracetest-onprem
-changed_charts=(tracetest-auth tracetest-core tracetest-monitor-operator tracetest-agent tracetest-cloud tracetest-common tracetest-agent-operator tracetest-frontend tracetest-public-endpoint)
+changed_charts=(tracetest-common tracetest-auth tracetest-core tracetest-monitor-operator tracetest-agent tracetest-cloud tracetest-agent-operator tracetest-frontend tracetest-public-endpoint)
 # changed_charts=$(git --no-pager diff --name-only HEAD~1 charts | grep '/' | cut -d'/' -f1-2 | uniq)
 
 # If no changed charts, exit with a message
