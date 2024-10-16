@@ -4,6 +4,8 @@ ONPREM_CHART_FILE="charts/tracetest-onprem/Chart.yaml"
 ONPREM_REQUIREMENTS_FILE="charts/tracetest-onprem/requirements.yaml"
 ONPREM_CHART_NAME="tracetest-onprem"
 
+# due to a problem on our helm build process, if we don't bump the version of charts
+# that have dependencies, the build process doesn't not add the dependencies to tracetest-onprem
 changed_charts=(tracetest-auth tracetest-core tracetest-monitor-operator tracetest-agent tracetest-cloud tracetest-common tracetest-agent-operator tracetest-frontend tracetest-public-endpoint)
 # changed_charts=$(git --no-pager diff --name-only HEAD~1 charts | grep '/' | cut -d'/' -f1-2 | uniq)
 
@@ -18,7 +20,7 @@ TRACETEST_COMMON_NAME="tracetest-common"
 TRACETEST_COMMON_NEW_VERSION=""
 
 # Loop through the unique charts and run pybump on each Chart.yaml
-for chart in $changed_charts; do
+for chart in "${changed_charts[@]}"; do
   chartName=$(basename "$chart")
   if [[ "$chartName" == "$ONPREM_CHART_NAME" ]]; then
     continue
