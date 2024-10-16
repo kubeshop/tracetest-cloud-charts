@@ -32,7 +32,9 @@ jobs:
           pip install pybump
 
       - name: Bump Chart Versions
-        run: scripts/bump_charts.sh
+        run: |
+          scripts/update_chart_deps.sh
+          scripts/bump_charts.sh
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
