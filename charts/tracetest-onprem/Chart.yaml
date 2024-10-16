@@ -2,7 +2,7 @@ apiVersion: v2
 name: tracetest-onprem
 description: A Helm chart for tracetest On Prem
 type: application
-version: v1.116.0
+version: v1.117.0
 dependencies:
 - name: tracetest-frontend
   version: v1.16.0
@@ -29,7 +29,7 @@ dependencies:
   repository: file://../tracetest-public-endpoint
   condition: tracetest-public-endpoint.enabled
 - name: tracetest-auth
-  version: v1.34.0
+  version: v1.36.0
   repository: file://../tracetest-auth
   condition: tracetest-auth.enabled
 - name: tracetest-common

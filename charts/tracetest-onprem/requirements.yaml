@@ -24,7 +24,7 @@ dependencies:
     repository: file://../tracetest-public-endpoint
     condition: tracetest-public-endpoint.enabled
   - name: tracetest-auth
-    version: v1.34.0
+    version: v1.36.0
     repository: file://../tracetest-auth
     condition: tracetest-auth.enabled
   - name: tracetest-common
