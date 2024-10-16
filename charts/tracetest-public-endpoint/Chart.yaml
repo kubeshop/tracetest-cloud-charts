@@ -23,8 +23,8 @@ appVersion: v1.0.0
 
 dependencies:
 - name: opentelemetry-collector
-  version: 0.105.1
-  repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  version: 0.108.0
+  repository: "https://open-telemetry.github.io/opentelemetry-helm-charts"
 
 maintainers:
 - name: tracetest
