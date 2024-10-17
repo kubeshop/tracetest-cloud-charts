@@ -83,6 +83,6 @@ helm dependency update $ONPREM_CHART
 
 git add $ONPREM_CHART $ONPREM_REQUIREMENTS_FILE
 
-# git status
-# git commit -m "Update tracetest-onprem version to $newVersion"
-# git push --force-with-lease
+git status
+git commit -m "Update tracetest-onprem version to $newVersion"
+git push --force-with-lease
