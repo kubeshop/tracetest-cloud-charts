@@ -156,6 +156,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "tracetest-cloud.fullname" . }}-config
                   key: PROFILER_ENVIRONMENT
+            - name: OTLP_SERVER_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "tracetest-cloud.fullname" . }}-config
+                  key: OTLP_SERVER_ENABLED
 
             # Variables defined as secrets
             - name: AGENT_TOKEN_CERTIFICATE

@@ -36,6 +36,7 @@ data:
   DEMO_ORG_ID: "{{ .Values.config.demoOrgID }}"
   DEMO_INVITE_ID: "{{ .Values.config.demoInviteID }}"
   DISABLE_TELEMETRY: "{{ not .Values.config.telemetry.enabled }}"
+  OTLP_SERVER_ENABLED: "{{ .Values.config.otlpServer.enabled }}"
   COLLECTOR_ENDPOINT: "{{ .Values.config.telemetry.collector.endpoint }}"
   PROFILER_COLLECTOR_ENDPOINT: "{{ .Values.config.telemetry.profiler.endpoint }}"
   PROFILER_SAMPLING_PERCENTAGE: "{{ .Values.config.telemetry.profiler.samplingRate }}"
