@@ -6,7 +6,7 @@ global:
     otlpingest:
       hostname: *rootDomain
 
-opentelemetry:
+opentelemetry-collector:
   nameOverride: public-endpoint-otel-collector
 
   mode: deployment
