@@ -23,5 +23,13 @@ spec:
       targetPort: metrics
       protocol: TCP
       port: {{ .Values.service.metricsPort }}
+    - name: otlp-grpc
+      targetPort: otlp-grpc
+      protocol: TCP
+      port: {{ .Values.service.otlpGrpcPort }}
+    - name: otlp-http
+      targetPort: otlp-http
+      protocol: TCP
+      port: {{ .Values.service.otlpHttpPort }}
   selector:
     {{- include "tracetest-cloud.selectorLabels" . | nindent 4 }}

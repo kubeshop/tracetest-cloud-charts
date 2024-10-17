@@ -14,6 +14,8 @@ global:
       httpPort: &httpPort 8090
       controlPlanePort: &controlPlanePort 8091
       metricsPort: &metricsPort 9100
+      otlpGrpcPort: &otlpGrpcPort 4317
+      otlpHttpPort: &otlpHttpPort 4318
 
   urls:
     rootDomain: "tracetest.localdev"
@@ -68,6 +70,8 @@ service:
   httpPort: *httpPort
   controlPlanePort: *controlPlanePort
   metricsPort: *metricsPort
+  otlpGrpcPort: *otlpGrpcPort
+  otlpHttpPort: *otlpHttpPort
 
 deployment:
   replicas: 1
