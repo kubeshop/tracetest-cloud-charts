@@ -8,7 +8,7 @@ dependencies:
     repository: file://../tracetest-core
     condition: tracetest-core.enabled
   - name: tracetest-cloud
-    version: v1.42.0
+    version: v1.43.0
     repository: file://../tracetest-cloud
     condition: tracetest-cloud.enabled
   - name: tracetest-agent-operator
