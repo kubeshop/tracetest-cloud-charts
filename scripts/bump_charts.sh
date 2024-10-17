@@ -1,4 +1,5 @@
 #!/bin/bash
+
 ONPREM_CHART="charts/tracetest-onprem"
 ONPREM_CHART_FILE="$ONPREM_CHART/Chart.yaml"
 ONPREM_REQUIREMENTS_FILE="$ONPREM_CHART/requirements.yaml"
