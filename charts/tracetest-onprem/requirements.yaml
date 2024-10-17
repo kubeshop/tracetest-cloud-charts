@@ -20,7 +20,7 @@ dependencies:
     repository: file://../tracetest-monitor-operator
     condition: tracetest-monitor-operator.enabled
   - name: tracetest-public-endpoint
-    version: v1.16.0
+    version: v1.17.0
     repository: file://../tracetest-public-endpoint
     condition: tracetest-public-endpoint.enabled
   - name: tracetest-auth
