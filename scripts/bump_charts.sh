@@ -46,27 +46,30 @@ for chart in $changed_charts; do
     echo "Error occurred while updating $chartName in $ONPREM_CHART_FILE"
     exit 1
   fi
-
   git add "$chart/Chart.*"
 done
 
-# If tracetest-common was updated, loop through all charts to update its version
-if [[ -n "$TRACETEST_COMMON_NEW_VERSION" ]]; then
-  for chart in $all_charts; do
-    chartName=$(basename "$chart")
-    # Skip updating tracetest-common itself
-    if [[ "$chartName" == "$TRACETEST_COMMON_NAME" ]]; then
-      continue
-    fi
+# go over all charts, build deps, update common if needed
+for chart in $all_charts; do
+  chartName=$(basename "$chart")
+  printf "\e[42mProcessing chart: $chartName\e[0m\n"
+  # Skip updating tracetest-common itself
+  if [[ "$chartName" == "$TRACETEST_COMMON_NAME" ]]; then
+    continue
+  fi
+  rm -rf "$chart/charts"
+  helm dependency update $chart
 
+  # if tracetest-common has been updated, update its version in the chart
+  if [[ -n "$TRACETEST_COMMON_NEW_VERSION" ]]; then
     # Check if the chart has tracetest-common as a dependency and update its version
     if yq eval '.dependencies[] | select(.name == "'"$TRACETEST_COMMON_NAME"'")' "$chart/Chart.yaml" -e; then
       echo "Updating $TRACETEST_COMMON_NAME version in $chartName to $TRACETEST_COMMON_NEW_VERSION"
       yq eval '.dependencies[] |= (select(.name == "'"$TRACETEST_COMMON_NAME"'").version = "'"$TRACETEST_COMMON_NEW_VERSION"'")' "$chart/Chart.yaml" -i
       git add "$chart/Chart.yaml"
     fi
-  done
-fi
+  fi
+done
 
 echo "Bumping version of $ONPREM_CHART_FILE"
 newVersion=$(pybump bump --file "$ONPREM_CHART_FILE" --level minor)
@@ -80,6 +83,6 @@ helm dependency update $ONPREM_CHART
 
 git add $ONPREM_CHART $ONPREM_REQUIREMENTS_FILE
 
-git status
-git commit -m "Update tracetest-onprem version to $newVersion"
-git push --force-with-lease
+# git status
+# git commit -m "Update tracetest-onprem version to $newVersion"
+# git push --force-with-lease
