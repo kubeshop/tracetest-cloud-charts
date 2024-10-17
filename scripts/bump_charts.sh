@@ -1,7 +1,7 @@
 #!/bin/bash
-
-ONPREM_CHART_FILE="charts/tracetest-onprem/Chart.yaml"
-ONPREM_REQUIREMENTS_FILE="charts/tracetest-onprem/requirements.yaml"
+ONPREM_CHART="charts/tracetest-onprem"
+ONPREM_CHART_FILE="$ONPREM_CHART/Chart.yaml"
+ONPREM_REQUIREMENTS_FILE="$ONPREM_CHART/requirements.yaml"
 ONPREM_CHART_NAME="tracetest-onprem"
 
 all_charts=$(ls -d charts/*/ | grep -v 'tracetest-onprem')
@@ -75,6 +75,8 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 echo "Updated version: $newVersion"
+
+helm dependency update $ONPREM_CHART
 
 git add $ONPREM_CHART_FILE $ONPREM_REQUIREMENTS_FILE
 
