@@ -78,7 +78,7 @@ echo "Updated version: $newVersion"
 
 helm dependency update $ONPREM_CHART
 
-git add $ONPREM_CHART_FILE $ONPREM_REQUIREMENTS_FILE
+git add $ONPREM_CHART $ONPREM_REQUIREMENTS_FILE
 
 git status
 git commit -m "Update tracetest-onprem version to $newVersion"
