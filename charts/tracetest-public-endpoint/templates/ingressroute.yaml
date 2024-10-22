@@ -9,7 +9,7 @@ spec:
   - kind: Rule
     match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`) && PathPrefix(`/opentelemetry.proto.collector.trace.v1.TraceService/Export`)
     middlewares:
-    - {{ .Release.Name }}-cors-allowed
+    - name: {{ .Release.Name }}-cors-allowed
     services:
     - kind: Service
       name: {{ .Release.Name }}-public-endpoint-otel-collector
