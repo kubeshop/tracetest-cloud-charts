@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ .Release.Name }}-cors-allowed
+  namespace: default
+spec:
+  headers:
+    accessControlAllowHeaders:
+      - '*'
+    accessControlAllowMethods:
+      - '*'
+    accessControlAllowOriginList:
+      - '*'
+    accessControlMaxAge: 100
+    addVaryHeader: true
