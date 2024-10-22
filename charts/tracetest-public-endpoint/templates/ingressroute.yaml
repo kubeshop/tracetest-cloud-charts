@@ -8,8 +8,6 @@ spec:
   routes:
   - kind: Rule
     match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`) && PathPrefix(`/opentelemetry.proto.collector.trace.v1.TraceService/Export`)
-    middlewares:
-    - name: {{ include "tracetest-cloud.fullname" . }}-cors
     services:
     - kind: Service
       name: {{ .Release.Name }}-public-endpoint-otel-collector
@@ -18,6 +16,8 @@ spec:
       scheme: h2c
   - kind: Rule
     match: Host(`{{ .Values.global.urls.otlpingest.hostname }}`) && PathPrefix(`/v1/traces`)
+    middlewares:
+    - name: {{ include "tracetest-cloud.fullname" . }}-cors
     services:
     - kind: Service
       name: {{ .Release.Name }}-public-endpoint-otel-collector
